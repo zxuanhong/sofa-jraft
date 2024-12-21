@@ -16,13 +16,22 @@
  */
 package com.alipay.sofa.jraft.storage.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-
+import com.alipay.sofa.jraft.FSMCaller;
+import com.alipay.sofa.jraft.JRaftUtils;
 import com.alipay.sofa.jraft.Quorum;
+import com.alipay.sofa.jraft.Status;
 import com.alipay.sofa.jraft.conf.Configuration;
+import com.alipay.sofa.jraft.conf.ConfigurationEntry;
+import com.alipay.sofa.jraft.conf.ConfigurationManager;
+import com.alipay.sofa.jraft.core.NodeMetrics;
 import com.alipay.sofa.jraft.entity.*;
+import com.alipay.sofa.jraft.entity.codec.v2.LogEntryV2CodecFactory;
+import com.alipay.sofa.jraft.option.LogManagerOptions;
+import com.alipay.sofa.jraft.option.RaftOptions;
+import com.alipay.sofa.jraft.storage.BaseStorageTest;
+import com.alipay.sofa.jraft.storage.LogManager;
+import com.alipay.sofa.jraft.storage.LogStorage;
+import com.alipay.sofa.jraft.test.TestUtils;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -31,27 +40,11 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.alipay.sofa.jraft.FSMCaller;
-import com.alipay.sofa.jraft.JRaftUtils;
-import com.alipay.sofa.jraft.Status;
-import com.alipay.sofa.jraft.conf.ConfigurationEntry;
-import com.alipay.sofa.jraft.conf.ConfigurationManager;
-import com.alipay.sofa.jraft.core.NodeMetrics;
-import com.alipay.sofa.jraft.entity.codec.v2.LogEntryV2CodecFactory;
-import com.alipay.sofa.jraft.option.LogManagerOptions;
-import com.alipay.sofa.jraft.option.RaftOptions;
-import com.alipay.sofa.jraft.storage.BaseStorageTest;
-import com.alipay.sofa.jraft.storage.LogManager;
-import com.alipay.sofa.jraft.storage.LogStorage;
-import com.alipay.sofa.jraft.test.TestUtils;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertThrows;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 @RunWith(value = MockitoJUnitRunner.class)
 public class LogManagerTest extends BaseStorageTest {

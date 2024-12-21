@@ -16,11 +16,11 @@
  */
 package com.alipay.sofa.jraft.entity;
 
-import java.nio.ByteBuffer;
-import java.util.List;
-
 import com.alipay.sofa.jraft.entity.codec.v2.LogOutter;
 import com.alipay.sofa.jraft.util.CrcUtil;
+
+import java.nio.ByteBuffer;
+import java.util.List;
 
 /**
  * A replica log entry.

@@ -16,12 +16,12 @@
  */
 package com.alipay.sofa.jraft.rpc.impl;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.Map;
-
 import com.alipay.sofa.jraft.rpc.CliRequests;
 import com.alipay.sofa.jraft.rpc.RpcRequests;
 import com.google.protobuf.Message;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Not thread safe.
