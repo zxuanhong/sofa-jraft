@@ -47,7 +47,7 @@ public class SimpleCluster {
 //            nodeOptions.setApplyTaskMode(ApplyTaskMode.Blocking);
             nodeOptions.setInitialConf(conf);
             RaftOptions raftOptions = new RaftOptions();
-            raftOptions.setDisruptorBufferSize(1024 * 2 * 2 * 2 * 2 * 2 * 2);
+            raftOptions.setDisruptorBufferSize(1024 * 2 * 2 * 2 * 2 * 2 * 2 * 2 * 2);
             nodeOptions.setRaftOptions(raftOptions);
             // here use same RPC server for raft and business. It also can be seperated generally
             // 初始化状态机
