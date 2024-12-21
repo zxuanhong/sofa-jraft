@@ -49,6 +49,7 @@ public class SimpleCluster {
             RaftOptions raftOptions = new RaftOptions();
             raftOptions.setDisruptorBufferSize(1024 * 2 * 2 * 2 * 2 * 2 * 2 * 2 * 2);
             nodeOptions.setRaftOptions(raftOptions);
+            nodeOptions.setSnapshotIntervalSecs(60);
             // here use same RPC server for raft and business. It also can be seperated generally
             // 初始化状态机
             SimpleStateMachineAdapter fsm = new SimpleStateMachineAdapter();
