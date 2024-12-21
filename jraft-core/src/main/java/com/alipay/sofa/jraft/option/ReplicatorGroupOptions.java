@@ -20,8 +20,10 @@ import com.alipay.sofa.jraft.core.BallotBox;
 import com.alipay.sofa.jraft.core.NodeImpl;
 import com.alipay.sofa.jraft.core.Scheduler;
 import com.alipay.sofa.jraft.rpc.RaftClientService;
+import com.alipay.sofa.jraft.rpc.RaftMessageClientService;
 import com.alipay.sofa.jraft.storage.LogManager;
 import com.alipay.sofa.jraft.storage.SnapshotStorage;
+import com.anyilanxin.kunpeng.atomix.cluster.messaging.MessagingService;
 
 /**
  * Replicator group options.
@@ -38,7 +40,7 @@ public class ReplicatorGroupOptions {
     private BallotBox         ballotBox;
     private NodeImpl          node;
     private SnapshotStorage   snapshotStorage;
-    private RaftClientService raftRpcClientService;
+    private RaftMessageClientService raftRpcClientService;
     private RaftOptions       raftOptions;
     private Scheduler         timerManager;
 
@@ -58,11 +60,11 @@ public class ReplicatorGroupOptions {
         this.raftOptions = raftOptions;
     }
 
-    public RaftClientService getRaftRpcClientService() {
+    public RaftMessageClientService getRaftRpcClientService() {
         return this.raftRpcClientService;
     }
 
-    public void setRaftRpcClientService(RaftClientService raftRpcService) {
+    public void setRaftRpcClientService(RaftMessageClientService raftRpcService) {
         this.raftRpcClientService = raftRpcService;
     }
 

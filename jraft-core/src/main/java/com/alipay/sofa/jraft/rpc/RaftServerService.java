@@ -39,7 +39,7 @@ public interface RaftServerService {
      * @param request   data of the pre vote
      * @return the response message
      */
-    Message handlePreVoteRequest(RequestVoteRequest request);
+    RpcRequests.RequestVoteResponse handlePreVoteRequest(RequestVoteRequest request);
 
     /**
      * Handle request-vote request.
@@ -47,43 +47,39 @@ public interface RaftServerService {
      * @param request   data of the vote
      * @return the response message
      */
-    Message handleRequestVoteRequest(RequestVoteRequest request);
+    RpcRequests.RequestVoteResponse handleRequestVoteRequest(RequestVoteRequest request);
 
     /**
      * Handle append-entries request, return response message or
      * called done.run() with response.
      *
      * @param request   data of the entries to append
-     * @param done      callback
      * @return the response message
      */
-    Message handleAppendEntriesRequest(AppendEntriesRequest request, RpcRequestClosure done);
+    RpcRequests.AppendEntriesResponse handleAppendEntriesRequest(AppendEntriesRequest request);
 
     /**
      * Handle install-snapshot request, return response message or
      * called done.run() with response.
      *
      * @param request   data of the install snapshot request
-     * @param done      callback
      * @return the response message
      */
-    Message handleInstallSnapshot(InstallSnapshotRequest request, RpcRequestClosure done);
+    RpcRequests.InstallSnapshotResponse handleInstallSnapshot(InstallSnapshotRequest request);
 
     /**
      * Handle time-out-now request, return response message or
      * called done.run() with response.
      *
      * @param request   data of the timeout now request
-     * @param done      callback
      * @return the response message
      */
-    Message handleTimeoutNowRequest(TimeoutNowRequest request, RpcRequestClosure done);
+    RpcRequests.TimeoutNowResponse handleTimeoutNowRequest(TimeoutNowRequest request);
 
     /**
      * Handle read-index request, call the RPC closure with response.
      *
      * @param request   data of the readIndex read
-     * @param done      callback
      */
-    void handleReadIndexRequest(ReadIndexRequest request, RpcResponseClosure<ReadIndexResponse> done);
+    RpcRequests.ReadIndexResponse handleReadIndexRequest(ReadIndexRequest request);
 }

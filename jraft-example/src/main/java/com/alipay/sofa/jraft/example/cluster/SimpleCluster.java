@@ -65,7 +65,7 @@ public class SimpleCluster {
             // 初始化 raft group 服务框架
             RaftGroupService raftGroupService = new RaftGroupService(raftGroupName + "-" + partitionId, serverId, nodeOptions, rpcServer, true);
 
-            Node start = raftGroupService.start(false);
+            Node start = raftGroupService.start();
             fsm.setStart(start);
             return start;
         } catch (Exception e) {

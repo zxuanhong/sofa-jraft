@@ -8,8 +8,10 @@ import com.alipay.sofa.jraft.conf.Configuration;
 import com.alipay.sofa.jraft.core.StateMachineAdapter;
 import com.alipay.sofa.jraft.core.TimerManager;
 import com.alipay.sofa.jraft.entity.LeaderChangeContext;
+import com.alipay.sofa.jraft.entity.RaftOutter;
 import com.alipay.sofa.jraft.entity.Task;
 import com.alipay.sofa.jraft.error.RaftException;
+import com.alipay.sofa.jraft.storage.snapshot.SnapshotReader;
 import com.alipay.sofa.jraft.storage.snapshot.SnapshotWriter;
 
 import java.nio.ByteBuffer;
@@ -104,5 +106,10 @@ public class SimpleStateMachineAdapter extends StateMachineAdapter {
     @Override
     public void onSnapshotSave(final SnapshotWriter writer, final Closure done) {
         done.run(Status.OK());
+    }
+
+    @Override
+    public boolean onSnapshotLoad(SnapshotReader reader) {
+        return super.onSnapshotLoad(reader);
     }
 }

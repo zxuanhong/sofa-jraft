@@ -23,6 +23,7 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicLong;
 
+import com.alipay.sofa.jraft.rpc.RpcRequests;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,7 +82,7 @@ public final class FileService {
     /**
      * Handle GetFileRequest, run the response or set the response with done.
      */
-    public Message handleGetFile(final GetFileRequest request, final RpcRequestClosure done) {
+    public RpcRequests.GetFileResponse handleGetFile(final GetFileRequest request) {
         if (request.getCount() <= 0 || request.getOffset() < 0) {
             return RpcFactoryHelper //
                 .responseFactory() //

@@ -16,6 +16,7 @@
  */
 package com.alipay.sofa.jraft;
 
+import com.anyilanxin.kunpeng.atomix.cluster.messaging.MessagingService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,66 +34,58 @@ import com.alipay.sofa.jraft.util.Utils;
  * A framework to implement a raft group service.
  *
  * @author boyan (boyan@alibaba-inc.com)
- *
+ * <p>
  * 2018-Apr-08 7:53:03 PM
  */
 public class RaftGroupService {
 
-    private static final Logger LOG     = LoggerFactory.getLogger(RaftGroupService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(RaftGroupService.class);
 
     static {
         ProtobufMsgFactory.load();
     }
 
-    private volatile boolean    started = false;
+    private volatile boolean started = false;
 
     /**
      * This node serverId
      */
-    private PeerId              serverId;
+    private PeerId serverId;
 
     /**
      * Node options
      */
-    private NodeOptions         nodeOptions;
+    private NodeOptions nodeOptions;
 
-    /**
-     * The raft RPC server
-     */
-    private RpcServer           rpcServer;
+    private MessagingService rpcServer;
 
     /**
      * If we want to share the rpcServer instance, then we can't stop it when shutdown.
      */
-    private final boolean       sharedRpcServer;
+    private final boolean sharedRpcServer;
 
     /**
      * The raft group id
      */
-    private String              groupId;
+    private String groupId;
     /**
      * The raft node.
      */
-    private Node                node;
+    private Node node;
 
-    public RaftGroupService(final String groupId, final PeerId serverId, final NodeOptions nodeOptions) {
-        this(groupId, serverId, nodeOptions, RaftRpcServerFactory.createRaftRpcServer(serverId.getEndpoint(),
-            JRaftUtils.createExecutor("RAFT-RPC-executor-", nodeOptions.getRaftRpcThreadPoolSize()),
-            JRaftUtils.createExecutor("CLI-RPC-executor-", nodeOptions.getCliRpcThreadPoolSize())));
+
+    public RaftGroupService(final String groupId, final PeerId serverId, final NodeOptions nodeOptions,
+                            final MessagingService messagingService) {
+        this(groupId, serverId, nodeOptions, messagingService, false);
     }
 
     public RaftGroupService(final String groupId, final PeerId serverId, final NodeOptions nodeOptions,
-                            final RpcServer rpcServer) {
-        this(groupId, serverId, nodeOptions, rpcServer, false);
-    }
-
-    public RaftGroupService(final String groupId, final PeerId serverId, final NodeOptions nodeOptions,
-                            final RpcServer rpcServer, final boolean sharedRpcServer) {
+                            final MessagingService messagingService, final boolean sharedRpcServer) {
         super();
         this.groupId = groupId;
         this.serverId = serverId;
         this.nodeOptions = nodeOptions;
-        this.rpcServer = rpcServer;
+        this.rpcServer = messagingService;
         this.sharedRpcServer = sharedRpcServer;
     }
 
@@ -100,24 +93,17 @@ public class RaftGroupService {
         return this.node;
     }
 
-    /**
-     * Starts the raft group service, returns the raft node.
-     */
-    public synchronized Node start() {
-        return start(true);
-    }
 
     /**
      * Starts the raft group service, returns the raft node.
      *
-     * @param startRpcServer whether to start RPC server.
      */
-    public synchronized Node start(final boolean startRpcServer) {
+    public synchronized Node start() {
         if (this.started) {
             return this.node;
         }
         if (this.serverId == null || this.serverId.getEndpoint() == null
-            || this.serverId.getEndpoint().equals(new Endpoint(Utils.IP_ANY, 0))) {
+                || this.serverId.getEndpoint().equals(new Endpoint(Utils.IP_ANY, 0))) {
             throw new IllegalArgumentException("Blank serverId:" + this.serverId);
         }
         if (StringUtils.isBlank(this.groupId)) {
@@ -127,11 +113,6 @@ public class RaftGroupService {
         NodeManager.getInstance().addAddress(this.serverId.getEndpoint());
 
         this.node = RaftServiceFactory.createAndInitRaftNode(this.groupId, this.serverId, this.nodeOptions);
-        if (startRpcServer) {
-            this.rpcServer.init(null);
-        } else {
-            LOG.warn("RPC server is not started in RaftGroupService.");
-        }
         this.started = true;
         LOG.info("Start the RaftGroupService successfully.");
         return this.node;
@@ -141,7 +122,7 @@ public class RaftGroupService {
      * Block thread to wait the server shutdown.
      *
      * @throws InterruptedException if the current thread is interrupted
-     *         while waiting
+     *                              while waiting
      */
     public synchronized void join() throws InterruptedException {
         if (this.node != null) {
@@ -153,16 +134,6 @@ public class RaftGroupService {
     public synchronized void shutdown() {
         if (!this.started) {
             return;
-        }
-        if (this.rpcServer != null) {
-            try {
-                if (!this.sharedRpcServer) {
-                    this.rpcServer.shutdown();
-                }
-            } catch (final Exception ignored) {
-                // ignore
-            }
-            this.rpcServer = null;
         }
         this.node.shutdown();
         NodeManager.getInstance().removeAddress(this.serverId.getEndpoint());
@@ -235,22 +206,19 @@ public class RaftGroupService {
     /**
      * Returns the rpc server instance.
      */
-    public RpcServer getRpcServer() {
+    public MessagingService getRpcServer() {
         return this.rpcServer;
     }
 
     /**
      * Set rpc server.
      */
-    public void setRpcServer(final RpcServer rpcServer) {
+    public void setRpcServer(final MessagingService rpcServer) {
         if (this.started) {
             throw new IllegalStateException("Raft group service already started");
         }
         if (this.serverId == null) {
             throw new IllegalStateException("Please set serverId at first");
-        }
-        if (rpcServer.boundPort() != this.serverId.getPort()) {
-            throw new IllegalArgumentException("RPC server port mismatch");
         }
         this.rpcServer = rpcServer;
     }
