@@ -19,17 +19,7 @@ package com.alipay.sofa.jraft.rpc;
 import java.util.concurrent.Executor;
 
 import com.alipay.sofa.jraft.rpc.impl.PingRequestProcessor;
-import com.alipay.sofa.jraft.rpc.impl.cli.AddLearnersRequestProcessor;
-import com.alipay.sofa.jraft.rpc.impl.cli.AddPeerRequestProcessor;
-import com.alipay.sofa.jraft.rpc.impl.cli.ChangePeersRequestProcessor;
-import com.alipay.sofa.jraft.rpc.impl.cli.GetLeaderRequestProcessor;
-import com.alipay.sofa.jraft.rpc.impl.cli.GetPeersRequestProcessor;
-import com.alipay.sofa.jraft.rpc.impl.cli.RemoveLearnersRequestProcessor;
-import com.alipay.sofa.jraft.rpc.impl.cli.RemovePeerRequestProcessor;
-import com.alipay.sofa.jraft.rpc.impl.cli.ResetLearnersRequestProcessor;
-import com.alipay.sofa.jraft.rpc.impl.cli.ResetPeerRequestProcessor;
-import com.alipay.sofa.jraft.rpc.impl.cli.SnapshotRequestProcessor;
-import com.alipay.sofa.jraft.rpc.impl.cli.TransferLeaderRequestProcessor;
+import com.alipay.sofa.jraft.rpc.impl.cli.*;
 import com.alipay.sofa.jraft.rpc.impl.core.AppendEntriesRequestProcessor;
 import com.alipay.sofa.jraft.rpc.impl.core.GetFileRequestProcessor;
 import com.alipay.sofa.jraft.rpc.impl.core.InstallSnapshotRequestProcessor;
@@ -144,6 +134,7 @@ public class RaftRpcServerFactory {
         rpcServer.registerProcessor(new AddLearnersRequestProcessor(cliExecutor));
         rpcServer.registerProcessor(new RemoveLearnersRequestProcessor(cliExecutor));
         rpcServer.registerProcessor(new ResetLearnersRequestProcessor(cliExecutor));
+        rpcServer.registerProcessor(new ResetFactorRequestProcessor(cliExecutor));
     }
 
     /**

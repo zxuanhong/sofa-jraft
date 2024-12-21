@@ -16,6 +16,10 @@
  */
 package com.alipay.sofa.jraft.entity;
 
+import com.alipay.sofa.jraft.Quorum;
+import com.alipay.sofa.jraft.conf.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +33,10 @@ import com.alipay.sofa.jraft.conf.Configuration;
  * 2018-Mar-15 2:29:11 PM
  */
 public class Ballot {
+    private static final Logger LOG = LoggerFactory.getLogger(Ballot.class);
+
+    public Ballot() {
+    }
 
     public static final class PosHint {
         int pos0 = -1; // position in current peers
@@ -65,13 +73,13 @@ public class Ballot {
         this.oldPeers.clear();
         this.quorum = this.oldQuorum = 0;
         int index = 0;
-        if (conf != null) {
+        if (conf != null && !conf.isEmpty()) {
             for (final PeerId peer : conf) {
                 this.peers.add(new UnfoundPeerId(peer, index++, false));
             }
+            quorum = conf.getQuorum().getW();
         }
 
-        this.quorum = this.peers.size() / 2 + 1;
         if (oldConf == null) {
             return true;
         }
@@ -80,7 +88,9 @@ public class Ballot {
             this.oldPeers.add(new UnfoundPeerId(peer, index++, false));
         }
 
-        this.oldQuorum = this.oldPeers.size() / 2 + 1;
+        if (!oldConf.isEmpty()) {
+            this.oldQuorum = oldConf.getQuorum().getW();
+        }
         return true;
     }
 
@@ -137,5 +147,11 @@ public class Ballot {
      */
     public boolean isGranted() {
         return this.quorum <= 0 && this.oldQuorum <= 0;
+    }
+
+    public void refreshBallot(Configuration conf, Configuration oldConf) {
+        if (!this.init(conf, oldConf)) {
+            LOG.error("An error occurred while refreshing the configuration");
+        }
     }
 }

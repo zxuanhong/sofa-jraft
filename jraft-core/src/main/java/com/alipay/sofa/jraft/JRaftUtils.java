@@ -21,6 +21,7 @@ import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 
+import com.alipay.sofa.jraft.entity.BallotFactory;
 import org.apache.commons.lang.StringUtils;
 
 import com.alipay.sofa.jraft.conf.Configuration;
@@ -112,6 +113,9 @@ public final class JRaftUtils {
             return conf;
         }
         if (conf.parse(s)) {
+            conf.setEnableFlexible(false);
+            Quorum quorum = BallotFactory.buildMajorityQuorum(conf.size());
+            conf.setQuorum(quorum);
             return conf;
         }
         throw new IllegalArgumentException("Invalid conf str:" + s);

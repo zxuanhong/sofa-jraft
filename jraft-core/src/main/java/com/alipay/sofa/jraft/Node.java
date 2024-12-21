@@ -220,6 +220,18 @@ public interface Node extends Lifecycle<NodeOptions>, Describer {
     void changePeers(final Configuration newPeers, final Closure done);
 
     /**
+     * This method can be called to reset the size of the read or write factor
+     * <p>
+     * It should be noted that we cannot change the factory size while changing
+     * the number of cluster nodes.
+     *
+     * @param readFactor  read factor for flexible raft
+     * @param writeFactor write factor for flexible raft
+     * @since 1.3.14
+     */
+    void resetFactor(final int readFactor, final int writeFactor, final Closure done);
+
+    /**
      * Reset the configuration of this node individually, without any replication
      * to other peers before this node becomes the leader. This function is
      * supposed to be invoked when the majority of the replication group are
@@ -343,32 +355,6 @@ public interface Node extends Lifecycle<NodeOptions>, Describer {
      * @return node's replicatorStatueListeners which have been added by users.
      */
     List<Replicator.ReplicatorStateListener> getReplicatorStatueListeners();
-
-    /**
-     * SOFAJRaft users can implement the NodeStateListener interface by themselves.
-     * So users can do their own logical operator in this listener when node error, destroyed or had some errors.
-     *
-     * @param nodeStateListener added NodeStateListener which is implemented by users.
-     */
-    void addNodeStateListener(final Node.NodeStateListener nodeStateListener);
-
-    /**
-     * End User can remove their implement the NodeStateListener interface by themselves.
-     *
-     * @param nodeStateListener need to remove the NodeStateListener which has been added by users.
-     */
-    void removeNodeStateListener(final Node.NodeStateListener nodeStateListener);
-
-    /**
-     * Remove all the NodeStateListener which have been added by users.
-     */
-    void clearNodeStateListener();
-
-    /**
-     * Get the NodeStateListener which have been added by users.
-     * @return node's nodeStateListener which have been added by users.
-     */
-    List<Node.NodeStateListener> getNodeStateListeners();
 
     /**
      * Get the node's target election priority value.

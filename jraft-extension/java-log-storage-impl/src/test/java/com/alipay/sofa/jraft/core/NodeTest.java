@@ -34,6 +34,7 @@ import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.alipay.sofa.jraft.entity.*;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -59,10 +60,6 @@ import com.alipay.sofa.jraft.closure.ReadIndexClosure;
 import com.alipay.sofa.jraft.closure.SynchronizedClosure;
 import com.alipay.sofa.jraft.closure.TaskClosure;
 import com.alipay.sofa.jraft.conf.Configuration;
-import com.alipay.sofa.jraft.entity.EnumOutter;
-import com.alipay.sofa.jraft.entity.PeerId;
-import com.alipay.sofa.jraft.entity.Task;
-import com.alipay.sofa.jraft.entity.UserLog;
 import com.alipay.sofa.jraft.error.LogIndexOutOfBoundsException;
 import com.alipay.sofa.jraft.error.LogNotFoundException;
 import com.alipay.sofa.jraft.error.RaftError;
@@ -1947,7 +1944,9 @@ public class NodeTest {
         final List<PeerId> peers = new ArrayList<>();
         peers.add(bootPeer);
         // reset peers from empty
-        assertTrue(nodes.get(0).resetPeers(new Configuration(peers)).isOk());
+        Configuration conf = new Configuration(peers);
+        conf.setQuorum(BallotFactory.buildMajorityQuorum(conf.size()));
+        assertTrue(nodes.get(0).resetPeers(conf).isOk());
         cluster.waitLeader();
         assertNotNull(cluster.getLeader());
 
@@ -2003,10 +2002,14 @@ public class NodeTest {
         newPeers.add(new PeerId(leaderAddr, 0));
 
         // new peers equal to current conf
-        assertTrue(leader.resetPeers(new Configuration(peers)).isOk());
+        Configuration conf = new Configuration(peers);
+        conf.setQuorum(BallotFactory.buildMajorityQuorum(conf.size()));
+        assertTrue(leader.resetPeers(conf).isOk());
         // set peer when quorum die
         LOG.warn("Set peers to {}", leaderAddr);
-        assertTrue(leader.resetPeers(new Configuration(newPeers)).isOk());
+        Configuration newConf = new Configuration(newPeers);
+        newConf.setQuorum(BallotFactory.buildMajorityQuorum(newConf.size()));
+        assertTrue(leader.resetPeers(newConf).isOk());
 
         cluster.waitLeader();
         leader = cluster.getLeader();

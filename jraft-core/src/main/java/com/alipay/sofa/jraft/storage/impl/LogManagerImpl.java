@@ -16,10 +16,7 @@
  */
 package com.alipay.sofa.jraft.storage.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -27,6 +24,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import com.alipay.sofa.jraft.Quorum;
 import com.alipay.sofa.jraft.util.ThreadPoolsFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -318,12 +316,19 @@ public class LogManagerImpl implements LogManager {
                     entry.setChecksum(entry.checksum());
                 }
                 if (entry.getType() == EntryType.ENTRY_TYPE_CONFIGURATION) {
+                    Quorum quorum = new Quorum(entry.getQuorum().getW(), entry.getQuorum().getR());
+                    Configuration newConf = new Configuration(entry.getPeers(), entry.getLearners(), quorum,
+                            entry.getReadFactor(), entry.getWriteFactor(), entry.getEnableFlexible());
                     Configuration oldConf = new Configuration();
                     if (entry.getOldPeers() != null) {
-                        oldConf = new Configuration(entry.getOldPeers(), entry.getOldLearners());
+                        Quorum oldQuorum = null;
+                        if (Objects.nonNull(entry.getOldQuorum())) {
+                            oldQuorum = new Quorum(entry.getOldQuorum().getW(), entry.getOldQuorum().getR());
+                        }
+                        oldConf = new Configuration(entry.getOldPeers(), entry.getOldLearners(), oldQuorum, entry.getOldReadFactor(), entry.getOldWriteFactor(), entry.getEnableFlexible());
                     }
                     final ConfigurationEntry conf = new ConfigurationEntry(entry.getId(),
-                        new Configuration(entry.getPeers(), entry.getLearners()), oldConf);
+                            newConf, oldConf);
                     this.configManager.add(conf);
                 }
             }
@@ -670,6 +675,14 @@ public class LogManagerImpl implements LogManager {
             peer.parse(meta.getOldLearners(i));
             oldConf.addLearner(peer);
         }
+        // load old factor from meta
+        oldConf.setReadFactor(meta.getOldReadFactor());
+        oldConf.setWriteFactor(meta.getOldWriteFactor());
+        oldConf.setEnableFlexible(meta.getIsEnableFlexible());
+        if (meta.hasOldQuorum()) {
+            Quorum oldQuorum = new Quorum(meta.getOldQuorum().getW(), meta.getOldQuorum().getR());
+            oldConf.setQuorum(oldQuorum);
+        }
         return oldConf;
     }
 
@@ -685,6 +698,12 @@ public class LogManagerImpl implements LogManager {
             peer.parse(meta.getLearners(i));
             conf.addLearner(peer);
         }
+        conf.setEnableFlexible(meta.getIsEnableFlexible());
+        if (meta.hasReadFactor() || meta.hasWriteFactor()) {
+            conf.setReadFactor(meta.getReadFactor());
+            conf.setWriteFactor(meta.getWriteFactor());
+        }
+        conf.setQuorum(new Quorum(meta.getQuorum().getW(), meta.getQuorum().getR()));
         return conf;
     }
 

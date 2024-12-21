@@ -115,9 +115,9 @@ public class BallotBox implements Lifecycle<BallotBoxOptions>, Describer {
             final long startAt = Math.max(this.pendingIndex, firstLogIndex);
             Ballot.PosHint hint = new Ballot.PosHint();
             for (long logIndex = startAt; logIndex <= lastLogIndex; logIndex++) {
-                final Ballot bl = this.pendingMetaQueue.get((int) (logIndex - this.pendingIndex));
-                hint = bl.grant(peer, hint);
-                if (bl.isGranted()) {
+                final Ballot ballot = this.pendingMetaQueue.get((int) (logIndex - this.pendingIndex));
+                hint = ballot.grant(peer, hint);
+                if (ballot.isGranted()) {
                     lastCommittedIndex = logIndex;
                 }
             }
@@ -202,7 +202,8 @@ public class BallotBox implements Lifecycle<BallotBoxOptions>, Describer {
      */
     public boolean appendPendingTask(final Configuration conf, final Configuration oldConf, final Closure done) {
         final Ballot bl = new Ballot();
-        if (!bl.init(conf, oldConf)) {
+        final Ballot ballot = new Ballot();
+        if (!ballot.init(conf, oldConf)) {
             LOG.error("Fail to init ballot.");
             return false;
         }
@@ -212,7 +213,7 @@ public class BallotBox implements Lifecycle<BallotBoxOptions>, Describer {
                 LOG.error("Node {} fail to appendingTask, pendingIndex={}.", this.opts.getNodeId(), this.pendingIndex);
                 return false;
             }
-            this.pendingMetaQueue.add(bl);
+            this.pendingMetaQueue.add(ballot);
             this.closureQueue.appendPendingClosure(done);
             return true;
         } finally {

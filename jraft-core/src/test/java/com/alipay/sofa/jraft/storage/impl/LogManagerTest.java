@@ -20,6 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
+import com.alipay.sofa.jraft.Quorum;
+import com.alipay.sofa.jraft.conf.Configuration;
+import com.alipay.sofa.jraft.entity.*;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -34,10 +37,6 @@ import com.alipay.sofa.jraft.Status;
 import com.alipay.sofa.jraft.conf.ConfigurationEntry;
 import com.alipay.sofa.jraft.conf.ConfigurationManager;
 import com.alipay.sofa.jraft.core.NodeMetrics;
-import com.alipay.sofa.jraft.entity.EnumOutter;
-import com.alipay.sofa.jraft.entity.LogEntry;
-import com.alipay.sofa.jraft.entity.LogId;
-import com.alipay.sofa.jraft.entity.RaftOutter;
 import com.alipay.sofa.jraft.entity.codec.v2.LogEntryV2CodecFactory;
 import com.alipay.sofa.jraft.option.LogManagerOptions;
 import com.alipay.sofa.jraft.option.RaftOptions;
@@ -283,13 +282,16 @@ public class LogManagerTest extends BaseStorageTest {
         final List<LogEntry> entries = new ArrayList<>(2);
         final LogEntry confEntry1 = new LogEntry(EnumOutter.EntryType.ENTRY_TYPE_CONFIGURATION);
         confEntry1.setId(new LogId(0, 1));
-        confEntry1.setPeers(JRaftUtils.getConfiguration("localhost:8081,localhost:8082").listPeers());
+        Configuration conf1 = JRaftUtils.getConfiguration("localhost:8081,localhost:8082");
+        BallotFactory.convertConfigToLogEntry(confEntry1, conf1);
 
         final LogEntry confEntry2 = new LogEntry(EnumOutter.EntryType.ENTRY_TYPE_CONFIGURATION);
         confEntry2.setId(new LogId(0, 2));
-        confEntry2.setPeers(JRaftUtils.getConfiguration("localhost:8081,localhost:8082,localhost:8083").listPeers());
+        Configuration conf2 = JRaftUtils.getConfiguration("localhost:8081,localhost:8082,localhost:8083");
         confEntry2.setOldPeers(confEntry1.getPeers());
 
+        BallotFactory.convertConfigToLogEntry(confEntry2, conf2);
+        BallotFactory.convertOldConfigToLogOuterEntry(confEntry2, conf1);
         entries.add(confEntry1);
         entries.add(confEntry2);
 
@@ -304,12 +306,18 @@ public class LogManagerTest extends BaseStorageTest {
         });
         latch.await();
         ConfigurationEntry entry = this.logManager.getConfiguration(1);
-        assertEquals("localhost:8081,localhost:8082", entry.getConf().toString());
+        assertEquals(
+                "localhost:8081,localhost:8082,enableFlexible:false,readFactor:0,writeFactor:0,quorum:Quorum{w=2, r=2}",
+                entry.getConf().toString());
         assertTrue(entry.getOldConf().isEmpty());
 
         entry = this.logManager.getConfiguration(2);
-        assertEquals("localhost:8081,localhost:8082,localhost:8083", entry.getConf().toString());
-        assertEquals("localhost:8081,localhost:8082", entry.getOldConf().toString());
+        assertEquals(
+                "localhost:8081,localhost:8082,localhost:8083,enableFlexible:false,readFactor:0,writeFactor:0,quorum:Quorum{w=2, r=2}",
+                entry.getConf().toString());
+        assertEquals(
+                "localhost:8081,localhost:8082,enableFlexible:false,readFactor:0,writeFactor:0,quorum:Quorum{w=2, r=2}",
+                entry.getOldConf().toString());
     }
 
     @Test
@@ -407,14 +415,22 @@ public class LogManagerTest extends BaseStorageTest {
         assertNull(this.logManager.checkAndSetConfiguration(null));
         final ConfigurationEntry entry = new ConfigurationEntry();
         entry.setId(new LogId(0, 1));
-        entry.setConf(JRaftUtils.getConfiguration("localhost:8081,localhost:8082"));
+        Configuration conf = JRaftUtils.getConfiguration("localhost:8081,localhost:8082");
+        Quorum quorum = BallotFactory.buildMajorityQuorum(conf.size());
+        conf.setQuorum(quorum);
+        conf.setEnableFlexible(false);
+        entry.setConf(conf);
         assertSame(entry, this.logManager.checkAndSetConfiguration(entry));
 
         testGetConfiguration();
         final ConfigurationEntry lastEntry = this.logManager.checkAndSetConfiguration(entry);
         assertNotSame(entry, lastEntry);
-        assertEquals("localhost:8081,localhost:8082,localhost:8083", lastEntry.getConf().toString());
-        assertEquals("localhost:8081,localhost:8082", lastEntry.getOldConf().toString());
+        assertEquals(
+                "localhost:8081,localhost:8082,localhost:8083,enableFlexible:false,readFactor:0,writeFactor:0,quorum:Quorum{w=2, r=2}",
+                lastEntry.getConf().toString());
+        assertEquals(
+                "localhost:8081,localhost:8082,enableFlexible:false,readFactor:0,writeFactor:0,quorum:Quorum{w=2, r=2}",
+                lastEntry.getOldConf().toString());
     }
 
     @Test

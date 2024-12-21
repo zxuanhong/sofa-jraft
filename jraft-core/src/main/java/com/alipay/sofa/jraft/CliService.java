@@ -32,6 +32,16 @@ import com.alipay.sofa.jraft.option.CliOptions;
  * 2018-Apr-09 4:05:35 PM
  */
 public interface CliService extends Lifecycle<CliOptions> {
+    /**
+     * Reset the size of the read or write factor of a raft group in flexible mode
+     *
+     * @param groupId     the raft group id
+     * @param conf        current configuration
+     * @param readFactor  read factor in flexible raft mode
+     * @param writeFactor write factor in flexible raft mode
+     * @return operation status
+     */
+    Status resetFactor(final String groupId, final Configuration conf, final int readFactor, final int writeFactor);
 
     /**
      * Add a new peer into the replicating group which consists of |conf|.

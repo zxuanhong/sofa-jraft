@@ -165,9 +165,15 @@ public abstract class BaseLogStorageTest extends BaseStorageTest {
         confEntry1.setId(new LogId(99, 1));
         confEntry1.setPeers(JRaftUtils.getConfiguration("localhost:8081,localhost:8082").listPeers());
 
+        confEntry1.setEnableFlexible(false);
+        confEntry1.setQuorum(LogOutter.Quorum.newBuilder().setR(2).setW(2).build());
+
         final LogEntry confEntry2 = new LogEntry(EnumOutter.EntryType.ENTRY_TYPE_CONFIGURATION);
         confEntry2.setId(new LogId(100, 2));
         confEntry2.setPeers(JRaftUtils.getConfiguration("localhost:8081,localhost:8082,localhost:8083").listPeers());
+
+        confEntry2.setEnableFlexible(false);
+        confEntry2.setQuorum(LogOutter.Quorum.newBuilder().setR(2).setW(2).build());
 
         assertTrue(this.logStorage.appendEntry(confEntry1));
         assertEquals(1, this.logStorage.appendEntries(Arrays.asList(confEntry2)));
@@ -178,12 +184,17 @@ public abstract class BaseLogStorageTest extends BaseStorageTest {
 
         ConfigurationEntry conf = this.confManager.getLastConfiguration();
         assertNotNull(conf);
+        System.out.println("conf:" + conf);
         assertFalse(conf.isEmpty());
-        assertEquals("localhost:8081,localhost:8082,localhost:8083", conf.getConf().toString());
+        assertEquals(
+                "localhost:8081,localhost:8082,localhost:8083,enableFlexible:false,readFactor:0,writeFactor:0,quorum:Quorum{w=2, r=2}",
+                conf.getConf().toString());
         conf = this.confManager.get(99);
         assertNotNull(conf);
         assertFalse(conf.isEmpty());
-        assertEquals("localhost:8081,localhost:8082", conf.getConf().toString());
+        assertEquals(
+                "localhost:8081,localhost:8082,enableFlexible:false,readFactor:0,writeFactor:0,quorum:Quorum{w=2, r=2}",
+                conf.getConf().toString());
     }
 
     @Test
