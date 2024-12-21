@@ -6,6 +6,7 @@ import com.alipay.sofa.jraft.RaftGroupService;
 import com.alipay.sofa.jraft.conf.Configuration;
 import com.alipay.sofa.jraft.entity.PeerId;
 import com.alipay.sofa.jraft.option.NodeOptions;
+import com.alipay.sofa.jraft.option.RaftOptions;
 import com.alipay.sofa.jraft.rpc.RaftRpcServerFactory;
 import com.alipay.sofa.jraft.rpc.RpcServer;
 import org.apache.commons.io.FileUtils;
@@ -43,7 +44,11 @@ public class SimpleCluster {
             File file = new File(path + File.separator + nodeId + File.separator + raftGroupName + File.separator + partitionId + File.separator + serverId.toString());
             FileUtils.forceMkdir(file);
             NodeOptions nodeOptions = new NodeOptions();
+//            nodeOptions.setApplyTaskMode(ApplyTaskMode.Blocking);
             nodeOptions.setInitialConf(conf);
+            RaftOptions raftOptions = new RaftOptions();
+            raftOptions.setDisruptorBufferSize(1024 * 2 * 2 * 2 * 2 * 2 * 2);
+            nodeOptions.setRaftOptions(raftOptions);
             // here use same RPC server for raft and business. It also can be seperated generally
             // 初始化状态机
             SimpleStateMachineAdapter fsm = new SimpleStateMachineAdapter();

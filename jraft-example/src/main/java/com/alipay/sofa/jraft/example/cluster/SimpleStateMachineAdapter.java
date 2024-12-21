@@ -34,22 +34,35 @@ public class SimpleStateMachineAdapter extends StateMachineAdapter {
         timerManager.scheduleAtFixedRate(() -> {
             if (leader) {
                 long startTime = System.currentTimeMillis();
-                for (int i = 0; i < 10000; i++) {
+                for (int i = 0; i < 1000000; i++) {
                     Task task = new Task();
-                    task.setData(ByteBuffer.wrap((start.getGroupId() + "-测试数据").getBytes()));
+                    int finalI = i;
+                    task.setDone(status -> {
+                        long endTime = System.currentTimeMillis();
+                        if (finalI > 999990) {
+                            System.out.println("---成功提交-" + finalI + "-" + status.isOk());
+                            System.out.println("-----耗时------" + (endTime - startTime) / 1000 + "s");
+                            System.out.println();
+                        }
+                    });
+                    task.setData(ByteBuffer.wrap((start.getGroupId() + "-测试数据+" + finalI).getBytes()));
                     start.apply(task);
                 }
-                long endTime = System.currentTimeMillis();
-                System.out.println("-----耗时------" + (endTime - startTime) / 1000 + "s");
+
             }
-        }, 60, 1, TimeUnit.SECONDS);
+        }, 10, 1000, TimeUnit.SECONDS);
     }
+
 
     @Override
     public void onApply(Iterator iter) {
-        if (iter.hasNext()) {
-            ByteBuffer next = iter.next();
-            System.out.println("----收到数据----" + new String(next.array()));
+        while (iter.hasNext()) {
+            ByteBuffer data = iter.getData();
+//            System.out.println("----收到数据----(" + start.getNodeId() + ")" + new String(data.array()));
+            if (iter.done() != null) {
+                iter.done().run(Status.OK());
+            }
+            iter.next();
         }
     }
 
