@@ -58,9 +58,10 @@ public class SimpleCluster {
             nodeOptions.setSnapshotUri(file.getPath() + File.separator + "snapshot");
             // 初始化 raft group 服务框架
             RaftGroupService raftGroupService = new RaftGroupService(raftGroupName + "-" + partitionId, serverId, nodeOptions, rpcServer, true);
-            fsm.setStart(raftGroupService.getRaftNode());
 
-            return raftGroupService.start(false);
+            Node start = raftGroupService.start(false);
+            fsm.setStart(start);
+            return start;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

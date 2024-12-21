@@ -29,6 +29,7 @@ public class SimpleStateMachineAdapter extends StateMachineAdapter {
         sendLog();
     }
 
+
     private void sendLog() {
         timerManager.scheduleAtFixedRate(() -> {
             if (leader) {
@@ -48,7 +49,7 @@ public class SimpleStateMachineAdapter extends StateMachineAdapter {
     public void onApply(Iterator iter) {
         if (iter.hasNext()) {
             ByteBuffer next = iter.next();
-            System.out.println("----收到数据----");
+            System.out.println("----收到数据----" + new String(next.array()));
         }
     }
 
