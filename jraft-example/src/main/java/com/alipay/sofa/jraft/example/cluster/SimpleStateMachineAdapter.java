@@ -34,12 +34,12 @@ public class SimpleStateMachineAdapter extends StateMachineAdapter {
         timerManager.scheduleAtFixedRate(() -> {
             if (leader) {
                 long startTime = System.currentTimeMillis();
-                for (int i = 0; i < 200000; i++) {
+                for (int i = 0; i < 10000; i++) {
                     Task task = new Task();
                     int finalI = i;
                     task.setDone(status -> {
                         long endTime = System.currentTimeMillis();
-                        if (finalI > 999990) {
+                        if (finalI > 9990) {
                             System.out.println("---成功提交-" + finalI + "-" + status.isOk());
                             System.out.println("-----耗时------" + (endTime - startTime) / 1000 + "s");
                             System.out.println();
@@ -50,7 +50,7 @@ public class SimpleStateMachineAdapter extends StateMachineAdapter {
                 }
 
             }
-        }, 10, 1000, TimeUnit.SECONDS);
+        }, 10, 2, TimeUnit.SECONDS);
     }
 
 
@@ -75,6 +75,7 @@ public class SimpleStateMachineAdapter extends StateMachineAdapter {
     @Override
     public void onLeaderStop(Status status) {
         super.onLeaderStop(status);
+        this.leader = false;
     }
 
     @Override
