@@ -42,7 +42,7 @@ public class SimpleStateMachineAdapter extends StateMachineAdapter {
                 long endTime = System.currentTimeMillis();
                 System.out.println("-----耗时------" + (endTime - startTime) / 1000 + "s");
             }
-        }, 60, 10, TimeUnit.SECONDS);
+        }, 60, 1, TimeUnit.SECONDS);
     }
 
     @Override
