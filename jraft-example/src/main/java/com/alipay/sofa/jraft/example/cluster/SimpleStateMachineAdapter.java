@@ -34,7 +34,7 @@ public class SimpleStateMachineAdapter extends StateMachineAdapter {
         timerManager.scheduleAtFixedRate(() -> {
             if (leader) {
                 long startTime = System.currentTimeMillis();
-                for (int i = 0; i < 400000; i++) {
+                for (int i = 0; i < 200000; i++) {
                     Task task = new Task();
                     int finalI = i;
                     task.setDone(status -> {
