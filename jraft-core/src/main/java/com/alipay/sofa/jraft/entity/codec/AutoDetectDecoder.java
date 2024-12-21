@@ -17,8 +17,6 @@
 package com.alipay.sofa.jraft.entity.codec;
 
 import com.alipay.sofa.jraft.entity.LogEntry;
-import com.alipay.sofa.jraft.entity.codec.v1.V1Decoder;
-import com.alipay.sofa.jraft.entity.codec.v2.LogEntryV2CodecFactory;
 import com.alipay.sofa.jraft.entity.codec.v2.V2Decoder;
 
 /**
@@ -40,11 +38,7 @@ public class AutoDetectDecoder implements LogEntryDecoder {
             return null;
         }
 
-        if (bs[0] == LogEntryV2CodecFactory.MAGIC_BYTES[0]) {
-            return V2Decoder.INSTANCE.decode(bs);
-        } else {
-            return V1Decoder.INSTANCE.decode(bs);
-        }
+        return V2Decoder.INSTANCE.decode(bs);
     }
 
 }

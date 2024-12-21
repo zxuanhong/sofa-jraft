@@ -218,7 +218,7 @@ public class NodeImpl implements Node, RaftServerService {
     private final CopyOnWriteArrayList<Replicator.ReplicatorStateListener> replicatorStateListeners = new CopyOnWriteArrayList<>();
 
     /** nodeStateListeners */
-    private final CopyOnWriteArrayList<Node.NodeStateListener> nodeStateListeners = new CopyOnWriteArrayList<>();
+    private final CopyOnWriteArrayList<Node.NodeStateListener>             nodeStateListeners       = new CopyOnWriteArrayList<>();
 
     /** Node's target leader election priority value */
     private volatile int                                                   targetPriority;

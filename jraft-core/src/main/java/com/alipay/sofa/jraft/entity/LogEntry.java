@@ -19,11 +19,6 @@ package com.alipay.sofa.jraft.entity;
 import java.nio.ByteBuffer;
 import java.util.List;
 
-import com.alipay.sofa.jraft.entity.codec.LogEntryDecoder;
-import com.alipay.sofa.jraft.entity.codec.LogEntryEncoder;
-import com.alipay.sofa.jraft.entity.codec.v1.LogEntryV1CodecFactory;
-import com.alipay.sofa.jraft.entity.codec.v1.V1Decoder;
-import com.alipay.sofa.jraft.entity.codec.v1.V1Encoder;
 import com.alipay.sofa.jraft.util.CrcUtil;
 
 /**
@@ -97,38 +92,6 @@ public class LogEntry implements Checksum {
             c = checksum(c, CrcUtil.crc64(this.data));
         }
         return c;
-    }
-
-    /**
-     * Please use {@link LogEntryEncoder} instead.
-     *
-     * @deprecated
-     * @return encoded byte array
-     */
-    @SuppressWarnings("DeprecatedIsStillUsed")
-    @Deprecated
-    public byte[] encode() {
-        return V1Encoder.INSTANCE.encode(this);
-    }
-
-    /**
-     * Please use {@link LogEntryDecoder} instead.
-     *
-     * @deprecated
-     * @return whether success to decode
-     */
-    @SuppressWarnings("DeprecatedIsStillUsed")
-    @Deprecated
-    public boolean decode(final byte[] content) {
-        if (content == null || content.length == 0) {
-            return false;
-        }
-        if (content[0] != LogEntryV1CodecFactory.MAGIC) {
-            // Corrupted log
-            return false;
-        }
-        V1Decoder.INSTANCE.decode(this, content);
-        return true;
     }
 
     /**
