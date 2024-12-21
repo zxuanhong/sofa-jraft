@@ -14,30 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alipay.sofa.jraft.storage.snapshot;
-
-import java.io.Closeable;
-
-import com.alipay.sofa.jraft.Lifecycle;
-import com.alipay.sofa.jraft.entity.RaftOutter.SnapshotMeta;
+package com.alipay.sofa.jraft.error;
 
 /**
- * Snapshot reader.<strong>Note: it's not thread-safe.</strong>
- *
- * @author boyan (boyan@alibaba-inc.com)
- *
- * 2018-Mar-12 4:53:40 PM
+ * Rpc connection failure exception.
  */
-public abstract class SnapshotReader extends Snapshot implements Closeable, Lifecycle<Void> {
+public class ConnectionFailureException extends RemotingException {
+    private static final long serialVersionUID = -5958618149334588246L;
 
-    /**
-     * Load the snapshot metadata.
-     */
-    public abstract SnapshotMeta load();
+    public ConnectionFailureException() {
+        super();
+    }
 
-    /**
-     * Generate uri for other peers to copy this snapshot.
-     * Return an empty string if some error has occur.
-     */
-    public abstract String generateURIForCopy();
+    public ConnectionFailureException(String message) {
+        super(message);
+    }
+
+    public ConnectionFailureException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public ConnectionFailureException(Throwable cause) {
+        super(cause);
+    }
+
+    public ConnectionFailureException(String message, Throwable cause, boolean enableSuppression,
+                                      boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
 }
