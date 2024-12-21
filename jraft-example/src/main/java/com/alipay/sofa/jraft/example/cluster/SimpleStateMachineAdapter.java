@@ -7,6 +7,7 @@ import com.alipay.sofa.jraft.conf.Configuration;
 import com.alipay.sofa.jraft.core.StateMachineAdapter;
 import com.alipay.sofa.jraft.core.TimerManager;
 import com.alipay.sofa.jraft.entity.LeaderChangeContext;
+import com.alipay.sofa.jraft.entity.Task;
 import com.alipay.sofa.jraft.error.RaftException;
 
 import java.nio.ByteBuffer;
@@ -30,7 +31,16 @@ public class SimpleStateMachineAdapter extends StateMachineAdapter {
 
     private void sendLog() {
         timerManager.scheduleAtFixedRate(() -> {
-
+            if (leader) {
+                long startTime = System.currentTimeMillis();
+                for (int i = 0; i < 100000; i++) {
+                    Task task = new Task();
+                    task.setData(ByteBuffer.wrap((start.getGroupId() + "-测试数据").getBytes()));
+                    start.apply(task);
+                }
+                long endTime = System.currentTimeMillis();
+                System.out.println("-----耗时------" + (endTime - startTime) / 1000 + "s");
+            }
         }, 60, 10, TimeUnit.SECONDS);
     }
 
