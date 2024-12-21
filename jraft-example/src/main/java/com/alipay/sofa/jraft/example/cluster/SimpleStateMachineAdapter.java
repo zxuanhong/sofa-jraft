@@ -1,5 +1,6 @@
 package com.alipay.sofa.jraft.example.cluster;
 
+import com.alipay.sofa.jraft.Closure;
 import com.alipay.sofa.jraft.Iterator;
 import com.alipay.sofa.jraft.Node;
 import com.alipay.sofa.jraft.Status;
@@ -9,9 +10,11 @@ import com.alipay.sofa.jraft.core.TimerManager;
 import com.alipay.sofa.jraft.entity.LeaderChangeContext;
 import com.alipay.sofa.jraft.entity.Task;
 import com.alipay.sofa.jraft.error.RaftException;
+import com.alipay.sofa.jraft.storage.snapshot.SnapshotWriter;
 
 import java.nio.ByteBuffer;
 import java.util.concurrent.TimeUnit;
+
 
 /**
  * @author zxuanhong
@@ -96,5 +99,10 @@ public class SimpleStateMachineAdapter extends StateMachineAdapter {
     @Override
     public void onConfigurationCommitted(Configuration conf) {
         super.onConfigurationCommitted(conf);
+    }
+
+    @Override
+    public void onSnapshotSave(final SnapshotWriter writer, final Closure done) {
+        done.run(Status.OK());
     }
 }
