@@ -34,15 +34,15 @@ import com.anyilanxin.kunpeng.atomix.cluster.messaging.MessagingService;
  */
 public class ReplicatorGroupOptions {
 
-    private int               heartbeatTimeoutMs;
-    private int               electionTimeoutMs;
-    private LogManager        logManager;
-    private BallotBox         ballotBox;
-    private NodeImpl          node;
-    private SnapshotStorage   snapshotStorage;
+    private int                      heartbeatTimeoutMs;
+    private int                      electionTimeoutMs;
+    private LogManager               logManager;
+    private BallotBox                ballotBox;
+    private NodeImpl                 node;
+    private SnapshotStorage          snapshotStorage;
     private RaftMessageClientService raftRpcClientService;
-    private RaftOptions       raftOptions;
-    private Scheduler         timerManager;
+    private RaftOptions              raftOptions;
+    private Scheduler                timerManager;
 
     public Scheduler getTimerManager() {
         return this.timerManager;

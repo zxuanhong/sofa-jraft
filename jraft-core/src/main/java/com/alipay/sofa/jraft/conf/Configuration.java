@@ -42,13 +42,13 @@ public class Configuration implements Iterable<PeerId>, Copiable<Configuration> 
 
     private static final String   LEARNER_POSTFIX = "/learner";
 
-    private Quorum quorum;
+    private Quorum                quorum;
 
-    private int readFactor;
+    private int                   readFactor;
 
-    private int writeFactor;
+    private int                   writeFactor;
 
-    private boolean enableFlexible = false;
+    private boolean               enableFlexible  = false;
 
     private List<PeerId>          peers           = new ArrayList<>();
 
@@ -317,9 +317,9 @@ public class Configuration implements Iterable<PeerId>, Copiable<Configuration> 
             return other.peers == null;
         } else {
             return this.peers.equals(other.peers) && Objects.equals(this.quorum, other.quorum)
-                    && Objects.equals(this.readFactor, other.readFactor)
-                    && Objects.equals(this.writeFactor, other.writeFactor)
-                    && Objects.equals(this.enableFlexible, other.enableFlexible);
+                   && Objects.equals(this.readFactor, other.readFactor)
+                   && Objects.equals(this.writeFactor, other.writeFactor)
+                   && Objects.equals(this.enableFlexible, other.enableFlexible);
         }
     }
 

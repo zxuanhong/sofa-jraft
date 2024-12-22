@@ -415,7 +415,7 @@ public final class RaftOutter {
                                 subBuilder = quorum_.toBuilder();
                             }
                             quorum_ = input.readMessage(com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.PARSER,
-                                    extensionRegistry);
+                                extensionRegistry);
                             if (subBuilder != null) {
                                 subBuilder.mergeFrom(quorum_);
                                 quorum_ = subBuilder.buildPartial();
@@ -429,7 +429,7 @@ public final class RaftOutter {
                                 subBuilder = oldQuorum_.toBuilder();
                             }
                             oldQuorum_ = input.readMessage(
-                                    com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.PARSER, extensionRegistry);
+                                com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.PARSER, extensionRegistry);
                             if (subBuilder != null) {
                                 subBuilder.mergeFrom(oldQuorum_);
                                 oldQuorum_ = subBuilder.buildPartial();
@@ -695,7 +695,7 @@ public final class RaftOutter {
         }
 
         public static final int READ_FACTOR_FIELD_NUMBER = 9;
-        private int readFactor_;
+        private int             readFactor_;
 
         /**
          * <code>optional int32 read_factor = 9;</code>
@@ -712,7 +712,7 @@ public final class RaftOutter {
         }
 
         public static final int WRITE_FACTOR_FIELD_NUMBER = 10;
-        private int writeFactor_;
+        private int             writeFactor_;
 
         /**
          * <code>optional int32 write_factor = 10;</code>
@@ -729,7 +729,7 @@ public final class RaftOutter {
         }
 
         public static final int OLD_READ_FACTOR_FIELD_NUMBER = 11;
-        private int oldReadFactor_;
+        private int             oldReadFactor_;
 
         /**
          * <code>optional int32 old_read_factor = 11;</code>
@@ -746,7 +746,7 @@ public final class RaftOutter {
         }
 
         public static final int OLD_WRITE_FACTOR_FIELD_NUMBER = 12;
-        private int oldWriteFactor_;
+        private int             oldWriteFactor_;
 
         /**
          * <code>optional int32 old_write_factor = 12;</code>
@@ -763,7 +763,7 @@ public final class RaftOutter {
         }
 
         public static final int ISENABLEFLEXIBLE_FIELD_NUMBER = 13;
-        private boolean isEnableFlexible_;
+        private boolean         isEnableFlexible_;
 
         /**
          * <code>optional bool isEnableFlexible = 13;</code>
@@ -779,7 +779,7 @@ public final class RaftOutter {
             return isEnableFlexible_;
         }
 
-        public static final int QUORUM_FIELD_NUMBER = 14;
+        public static final int                                        QUORUM_FIELD_NUMBER = 14;
         private com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum quorum_;
 
         /**
@@ -794,7 +794,7 @@ public final class RaftOutter {
          */
         public com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum getQuorum() {
             return quorum_ == null ? com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.getDefaultInstance()
-                    : quorum_;
+                : quorum_;
         }
 
         /**
@@ -802,10 +802,10 @@ public final class RaftOutter {
          */
         public com.alipay.sofa.jraft.entity.codec.v2.LogOutter.QuorumOrBuilder getQuorumOrBuilder() {
             return quorum_ == null ? com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.getDefaultInstance()
-                    : quorum_;
+                : quorum_;
         }
 
-        public static final int OLD_QUORUM_FIELD_NUMBER = 15;
+        public static final int                                        OLD_QUORUM_FIELD_NUMBER = 15;
         private com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum oldQuorum_;
 
         /**
@@ -820,7 +820,7 @@ public final class RaftOutter {
          */
         public com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum getOldQuorum() {
             return oldQuorum_ == null ? com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.getDefaultInstance()
-                    : oldQuorum_;
+                : oldQuorum_;
         }
 
         /**
@@ -828,7 +828,7 @@ public final class RaftOutter {
          */
         public com.alipay.sofa.jraft.entity.codec.v2.LogOutter.QuorumOrBuilder getOldQuorumOrBuilder() {
             return oldQuorum_ == null ? com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.getDefaultInstance()
-                    : oldQuorum_;
+                : oldQuorum_;
         }
 
         private byte memoizedIsInitialized = -1;
@@ -2295,7 +2295,7 @@ public final class RaftOutter {
                 return this;
             }
 
-            private com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum quorum_ = null;
+            private com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum                                                                                                                                                                            quorum_ = null;
             private com.google.protobuf.SingleFieldBuilderV3<com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum, com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.Builder, com.alipay.sofa.jraft.entity.codec.v2.LogOutter.QuorumOrBuilder> quorumBuilder_;
 
             /**
@@ -2311,7 +2311,7 @@ public final class RaftOutter {
             public com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum getQuorum() {
                 if (quorumBuilder_ == null) {
                     return quorum_ == null ? com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum
-                            .getDefaultInstance() : quorum_;
+                        .getDefaultInstance() : quorum_;
                 } else {
                     return quorumBuilder_.getMessage();
                 }
@@ -2354,9 +2354,9 @@ public final class RaftOutter {
             public Builder mergeQuorum(com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum value) {
                 if (quorumBuilder_ == null) {
                     if (((bitField0_ & 0x00002000) == 0x00002000) && quorum_ != null
-                            && quorum_ != com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.getDefaultInstance()) {
+                        && quorum_ != com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.getDefaultInstance()) {
                         quorum_ = com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.newBuilder(quorum_)
-                                .mergeFrom(value).buildPartial();
+                            .mergeFrom(value).buildPartial();
                     } else {
                         quorum_ = value;
                     }
@@ -2399,7 +2399,7 @@ public final class RaftOutter {
                     return quorumBuilder_.getMessageOrBuilder();
                 } else {
                     return quorum_ == null ? com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum
-                            .getDefaultInstance() : quorum_;
+                        .getDefaultInstance() : quorum_;
                 }
             }
 
@@ -2409,13 +2409,13 @@ public final class RaftOutter {
             private com.google.protobuf.SingleFieldBuilderV3<com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum, com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.Builder, com.alipay.sofa.jraft.entity.codec.v2.LogOutter.QuorumOrBuilder> getQuorumFieldBuilder() {
                 if (quorumBuilder_ == null) {
                     quorumBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum, com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.Builder, com.alipay.sofa.jraft.entity.codec.v2.LogOutter.QuorumOrBuilder>(
-                            getQuorum(), getParentForChildren(), isClean());
+                        getQuorum(), getParentForChildren(), isClean());
                     quorum_ = null;
                 }
                 return quorumBuilder_;
             }
 
-            private com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum oldQuorum_ = null;
+            private com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum                                                                                                                                                                            oldQuorum_ = null;
             private com.google.protobuf.SingleFieldBuilderV3<com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum, com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.Builder, com.alipay.sofa.jraft.entity.codec.v2.LogOutter.QuorumOrBuilder> oldQuorumBuilder_;
 
             /**
@@ -2431,7 +2431,7 @@ public final class RaftOutter {
             public com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum getOldQuorum() {
                 if (oldQuorumBuilder_ == null) {
                     return oldQuorum_ == null ? com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum
-                            .getDefaultInstance() : oldQuorum_;
+                        .getDefaultInstance() : oldQuorum_;
                 } else {
                     return oldQuorumBuilder_.getMessage();
                 }
@@ -2474,9 +2474,9 @@ public final class RaftOutter {
             public Builder mergeOldQuorum(com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum value) {
                 if (oldQuorumBuilder_ == null) {
                     if (((bitField0_ & 0x00004000) == 0x00004000) && oldQuorum_ != null
-                            && oldQuorum_ != com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.getDefaultInstance()) {
+                        && oldQuorum_ != com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.getDefaultInstance()) {
                         oldQuorum_ = com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.newBuilder(oldQuorum_)
-                                .mergeFrom(value).buildPartial();
+                            .mergeFrom(value).buildPartial();
                     } else {
                         oldQuorum_ = value;
                     }
@@ -2519,7 +2519,7 @@ public final class RaftOutter {
                     return oldQuorumBuilder_.getMessageOrBuilder();
                 } else {
                     return oldQuorum_ == null ? com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum
-                            .getDefaultInstance() : oldQuorum_;
+                        .getDefaultInstance() : oldQuorum_;
                 }
             }
 
@@ -2529,7 +2529,7 @@ public final class RaftOutter {
             private com.google.protobuf.SingleFieldBuilderV3<com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum, com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.Builder, com.alipay.sofa.jraft.entity.codec.v2.LogOutter.QuorumOrBuilder> getOldQuorumFieldBuilder() {
                 if (oldQuorumBuilder_ == null) {
                     oldQuorumBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum, com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.Builder, com.alipay.sofa.jraft.entity.codec.v2.LogOutter.QuorumOrBuilder>(
-                            getOldQuorum(), getParentForChildren(), isClean());
+                        getOldQuorum(), getParentForChildren(), isClean());
                     oldQuorum_ = null;
                 }
                 return oldQuorumBuilder_;
@@ -2899,7 +2899,7 @@ public final class RaftOutter {
                                 subBuilder = quorum_.toBuilder();
                             }
                             quorum_ = input.readMessage(com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.PARSER,
-                                    extensionRegistry);
+                                extensionRegistry);
                             if (subBuilder != null) {
                                 subBuilder.mergeFrom(quorum_);
                                 quorum_ = subBuilder.buildPartial();
@@ -2913,7 +2913,7 @@ public final class RaftOutter {
                                 subBuilder = oldQuorum_.toBuilder();
                             }
                             oldQuorum_ = input.readMessage(
-                                    com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.PARSER, extensionRegistry);
+                                com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.PARSER, extensionRegistry);
                             if (subBuilder != null) {
                                 subBuilder.mergeFrom(oldQuorum_);
                                 oldQuorum_ = subBuilder.buildPartial();
@@ -3115,7 +3115,7 @@ public final class RaftOutter {
         }
 
         public static final int READ_FACTOR_FIELD_NUMBER = 7;
-        private int readFactor_;
+        private int             readFactor_;
 
         /**
          * <code>optional int32 read_factor = 7;</code>
@@ -3132,7 +3132,7 @@ public final class RaftOutter {
         }
 
         public static final int WRITE_FACTOR_FIELD_NUMBER = 8;
-        private int writeFactor_;
+        private int             writeFactor_;
 
         /**
          * <code>optional int32 write_factor = 8;</code>
@@ -3149,7 +3149,7 @@ public final class RaftOutter {
         }
 
         public static final int OLD_READ_FACTOR_FIELD_NUMBER = 9;
-        private int oldReadFactor_;
+        private int             oldReadFactor_;
 
         /**
          * <code>optional int32 old_read_factor = 9;</code>
@@ -3166,7 +3166,7 @@ public final class RaftOutter {
         }
 
         public static final int OLD_WRITE_FACTOR_FIELD_NUMBER = 10;
-        private int oldWriteFactor_;
+        private int             oldWriteFactor_;
 
         /**
          * <code>optional int32 old_write_factor = 10;</code>
@@ -3183,7 +3183,7 @@ public final class RaftOutter {
         }
 
         public static final int ISENABLEFLEXIBLE_FIELD_NUMBER = 11;
-        private boolean isEnableFlexible_;
+        private boolean         isEnableFlexible_;
 
         /**
          * <code>optional bool isEnableFlexible = 11;</code>
@@ -3199,7 +3199,7 @@ public final class RaftOutter {
             return isEnableFlexible_;
         }
 
-        public static final int QUORUM_FIELD_NUMBER = 12;
+        public static final int                                        QUORUM_FIELD_NUMBER = 12;
         private com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum quorum_;
 
         /**
@@ -3214,7 +3214,7 @@ public final class RaftOutter {
          */
         public com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum getQuorum() {
             return quorum_ == null ? com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.getDefaultInstance()
-                    : quorum_;
+                : quorum_;
         }
 
         /**
@@ -3222,10 +3222,10 @@ public final class RaftOutter {
          */
         public com.alipay.sofa.jraft.entity.codec.v2.LogOutter.QuorumOrBuilder getQuorumOrBuilder() {
             return quorum_ == null ? com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.getDefaultInstance()
-                    : quorum_;
+                : quorum_;
         }
 
-        public static final int OLD_QUORUM_FIELD_NUMBER = 13;
+        public static final int                                        OLD_QUORUM_FIELD_NUMBER = 13;
         private com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum oldQuorum_;
 
         /**
@@ -3240,7 +3240,7 @@ public final class RaftOutter {
          */
         public com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum getOldQuorum() {
             return oldQuorum_ == null ? com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.getDefaultInstance()
-                    : oldQuorum_;
+                : oldQuorum_;
         }
 
         /**
@@ -3248,7 +3248,7 @@ public final class RaftOutter {
          */
         public com.alipay.sofa.jraft.entity.codec.v2.LogOutter.QuorumOrBuilder getOldQuorumOrBuilder() {
             return oldQuorum_ == null ? com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.getDefaultInstance()
-                    : oldQuorum_;
+                : oldQuorum_;
         }
 
         private byte memoizedIsInitialized = -1;
@@ -4531,7 +4531,7 @@ public final class RaftOutter {
                 return this;
             }
 
-            private com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum quorum_ = null;
+            private com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum                                                                                                                                                                            quorum_ = null;
             private com.google.protobuf.SingleFieldBuilderV3<com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum, com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.Builder, com.alipay.sofa.jraft.entity.codec.v2.LogOutter.QuorumOrBuilder> quorumBuilder_;
 
             /**
@@ -4547,7 +4547,7 @@ public final class RaftOutter {
             public com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum getQuorum() {
                 if (quorumBuilder_ == null) {
                     return quorum_ == null ? com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum
-                            .getDefaultInstance() : quorum_;
+                        .getDefaultInstance() : quorum_;
                 } else {
                     return quorumBuilder_.getMessage();
                 }
@@ -4590,9 +4590,9 @@ public final class RaftOutter {
             public Builder mergeQuorum(com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum value) {
                 if (quorumBuilder_ == null) {
                     if (((bitField0_ & 0x00000800) == 0x00000800) && quorum_ != null
-                            && quorum_ != com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.getDefaultInstance()) {
+                        && quorum_ != com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.getDefaultInstance()) {
                         quorum_ = com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.newBuilder(quorum_)
-                                .mergeFrom(value).buildPartial();
+                            .mergeFrom(value).buildPartial();
                     } else {
                         quorum_ = value;
                     }
@@ -4635,7 +4635,7 @@ public final class RaftOutter {
                     return quorumBuilder_.getMessageOrBuilder();
                 } else {
                     return quorum_ == null ? com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum
-                            .getDefaultInstance() : quorum_;
+                        .getDefaultInstance() : quorum_;
                 }
             }
 
@@ -4645,13 +4645,13 @@ public final class RaftOutter {
             private com.google.protobuf.SingleFieldBuilderV3<com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum, com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.Builder, com.alipay.sofa.jraft.entity.codec.v2.LogOutter.QuorumOrBuilder> getQuorumFieldBuilder() {
                 if (quorumBuilder_ == null) {
                     quorumBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum, com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.Builder, com.alipay.sofa.jraft.entity.codec.v2.LogOutter.QuorumOrBuilder>(
-                            getQuorum(), getParentForChildren(), isClean());
+                        getQuorum(), getParentForChildren(), isClean());
                     quorum_ = null;
                 }
                 return quorumBuilder_;
             }
 
-            private com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum oldQuorum_ = null;
+            private com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum                                                                                                                                                                            oldQuorum_ = null;
             private com.google.protobuf.SingleFieldBuilderV3<com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum, com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.Builder, com.alipay.sofa.jraft.entity.codec.v2.LogOutter.QuorumOrBuilder> oldQuorumBuilder_;
 
             /**
@@ -4667,7 +4667,7 @@ public final class RaftOutter {
             public com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum getOldQuorum() {
                 if (oldQuorumBuilder_ == null) {
                     return oldQuorum_ == null ? com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum
-                            .getDefaultInstance() : oldQuorum_;
+                        .getDefaultInstance() : oldQuorum_;
                 } else {
                     return oldQuorumBuilder_.getMessage();
                 }
@@ -4710,9 +4710,9 @@ public final class RaftOutter {
             public Builder mergeOldQuorum(com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum value) {
                 if (oldQuorumBuilder_ == null) {
                     if (((bitField0_ & 0x00001000) == 0x00001000) && oldQuorum_ != null
-                            && oldQuorum_ != com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.getDefaultInstance()) {
+                        && oldQuorum_ != com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.getDefaultInstance()) {
                         oldQuorum_ = com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.newBuilder(oldQuorum_)
-                                .mergeFrom(value).buildPartial();
+                            .mergeFrom(value).buildPartial();
                     } else {
                         oldQuorum_ = value;
                     }
@@ -4755,7 +4755,7 @@ public final class RaftOutter {
                     return oldQuorumBuilder_.getMessageOrBuilder();
                 } else {
                     return oldQuorum_ == null ? com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum
-                            .getDefaultInstance() : oldQuorum_;
+                        .getDefaultInstance() : oldQuorum_;
                 }
             }
 
@@ -4765,7 +4765,7 @@ public final class RaftOutter {
             private com.google.protobuf.SingleFieldBuilderV3<com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum, com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.Builder, com.alipay.sofa.jraft.entity.codec.v2.LogOutter.QuorumOrBuilder> getOldQuorumFieldBuilder() {
                 if (oldQuorumBuilder_ == null) {
                     oldQuorumBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum, com.alipay.sofa.jraft.entity.codec.v2.LogOutter.Quorum.Builder, com.alipay.sofa.jraft.entity.codec.v2.LogOutter.QuorumOrBuilder>(
-                            getOldQuorum(), getParentForChildren(), isClean());
+                        getOldQuorum(), getParentForChildren(), isClean());
                     oldQuorum_ = null;
                 }
                 return oldQuorumBuilder_;
@@ -4828,25 +4828,25 @@ public final class RaftOutter {
 
     private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
     static {
-        java.lang.String[] descriptorData = {"\n\nraft.proto\022\005jraft\032\nenum.proto\032\tlog.pro"
-                + "to\"\341\002\n\tEntryMeta\022\014\n\004term\030\001 \002(\003\022\036\n\004type\030\002"
-                + " \002(\0162\020.jraft.EntryType\022\r\n\005peers\030\003 \003(\t\022\020\n"
-                + "\010data_len\030\004 \001(\003\022\021\n\told_peers\030\005 \003(\t\022\020\n\010ch"
-                + "ecksum\030\006 \001(\003\022\020\n\010learners\030\007 \003(\t\022\024\n\014old_le"
-                + "arners\030\010 \003(\t\022\023\n\013read_factor\030\t \001(\005\022\024\n\014wri"
-                + "te_factor\030\n \001(\005\022\027\n\017old_read_factor\030\013 \001(\005"
-                + "\022\030\n\020old_write_factor\030\014 \001(\005\022\030\n\020isEnableFl"
-                + "exible\030\r \001(\010\022\035\n\006quorum\030\016 \001(\0132\r.jraft.Quo"
-                + "rum\022!\n\nold_quorum\030\017 \001(\0132\r.jraft.Quorum\"\313"
-                + "\002\n\014SnapshotMeta\022\033\n\023last_included_index\030\001"
-                + " \002(\003\022\032\n\022last_included_term\030\002 \002(\003\022\r\n\005peer"
-                + "s\030\003 \003(\t\022\021\n\told_peers\030\004 \003(\t\022\020\n\010learners\030\005"
-                + " \003(\t\022\024\n\014old_learners\030\006 \003(\t\022\023\n\013read_facto"
-                + "r\030\007 \001(\005\022\024\n\014write_factor\030\010 \001(\005\022\027\n\017old_rea"
-                + "d_factor\030\t \001(\005\022\030\n\020old_write_factor\030\n \001(\005"
-                + "\022\030\n\020isEnableFlexible\030\013 \001(\010\022\035\n\006quorum\030\014 \001"
-                + "(\0132\r.jraft.Quorum\022!\n\nold_quorum\030\r \001(\0132\r."
-                + "jraft.QuorumB*\n\034com.alipay.sofa.jraft.en" + "tityB\nRaftOutter"};
+        java.lang.String[] descriptorData = { "\n\nraft.proto\022\005jraft\032\nenum.proto\032\tlog.pro"
+                                              + "to\"\341\002\n\tEntryMeta\022\014\n\004term\030\001 \002(\003\022\036\n\004type\030\002"
+                                              + " \002(\0162\020.jraft.EntryType\022\r\n\005peers\030\003 \003(\t\022\020\n"
+                                              + "\010data_len\030\004 \001(\003\022\021\n\told_peers\030\005 \003(\t\022\020\n\010ch"
+                                              + "ecksum\030\006 \001(\003\022\020\n\010learners\030\007 \003(\t\022\024\n\014old_le"
+                                              + "arners\030\010 \003(\t\022\023\n\013read_factor\030\t \001(\005\022\024\n\014wri"
+                                              + "te_factor\030\n \001(\005\022\027\n\017old_read_factor\030\013 \001(\005"
+                                              + "\022\030\n\020old_write_factor\030\014 \001(\005\022\030\n\020isEnableFl"
+                                              + "exible\030\r \001(\010\022\035\n\006quorum\030\016 \001(\0132\r.jraft.Quo"
+                                              + "rum\022!\n\nold_quorum\030\017 \001(\0132\r.jraft.Quorum\"\313"
+                                              + "\002\n\014SnapshotMeta\022\033\n\023last_included_index\030\001"
+                                              + " \002(\003\022\032\n\022last_included_term\030\002 \002(\003\022\r\n\005peer"
+                                              + "s\030\003 \003(\t\022\021\n\told_peers\030\004 \003(\t\022\020\n\010learners\030\005"
+                                              + " \003(\t\022\024\n\014old_learners\030\006 \003(\t\022\023\n\013read_facto"
+                                              + "r\030\007 \001(\005\022\024\n\014write_factor\030\010 \001(\005\022\027\n\017old_rea"
+                                              + "d_factor\030\t \001(\005\022\030\n\020old_write_factor\030\n \001(\005"
+                                              + "\022\030\n\020isEnableFlexible\030\013 \001(\010\022\035\n\006quorum\030\014 \001"
+                                              + "(\0132\r.jraft.Quorum\022!\n\nold_quorum\030\r \001(\0132\r."
+                                              + "jraft.QuorumB*\n\034com.alipay.sofa.jraft.en" + "tityB\nRaftOutter" };
         com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
             public com.google.protobuf.ExtensionRegistry assignDescriptors(com.google.protobuf.Descriptors.FileDescriptor root) {
                 descriptor = root;
@@ -4854,20 +4854,20 @@ public final class RaftOutter {
             }
         };
         com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
-                descriptorData,
-                new com.google.protobuf.Descriptors.FileDescriptor[]{
-                        com.alipay.sofa.jraft.entity.EnumOutter.getDescriptor(),
-                        com.alipay.sofa.jraft.entity.codec.v2.LogOutter.getDescriptor(),}, assigner);
+            descriptorData,
+            new com.google.protobuf.Descriptors.FileDescriptor[] {
+            com.alipay.sofa.jraft.entity.EnumOutter.getDescriptor(),
+            com.alipay.sofa.jraft.entity.codec.v2.LogOutter.getDescriptor(), }, assigner);
         internal_static_jraft_EntryMeta_descriptor = getDescriptor().getMessageTypes().get(0);
         internal_static_jraft_EntryMeta_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_jraft_EntryMeta_descriptor, new java.lang.String[] { "Term", "Type", "Peers", "DataLen",
-                "OldPeers", "Checksum", "Learners", "OldLearners", "ReadFactor", "WriteFactor", "OldReadFactor",
-                "OldWriteFactor", "IsEnableFlexible", "Quorum", "OldQuorum",});
+            "OldPeers", "Checksum", "Learners", "OldLearners", "ReadFactor", "WriteFactor", "OldReadFactor",
+            "OldWriteFactor", "IsEnableFlexible", "Quorum", "OldQuorum", });
         internal_static_jraft_SnapshotMeta_descriptor = getDescriptor().getMessageTypes().get(1);
         internal_static_jraft_SnapshotMeta_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
             internal_static_jraft_SnapshotMeta_descriptor, new java.lang.String[] { "LastIncludedIndex",
-                "LastIncludedTerm", "Peers", "OldPeers", "Learners", "OldLearners", "ReadFactor", "WriteFactor",
-                "OldReadFactor", "OldWriteFactor", "IsEnableFlexible", "Quorum", "OldQuorum",});
+            "LastIncludedTerm", "Peers", "OldPeers", "Learners", "OldLearners", "ReadFactor", "WriteFactor",
+            "OldReadFactor", "OldWriteFactor", "IsEnableFlexible", "Quorum", "OldQuorum", });
         com.alipay.sofa.jraft.entity.EnumOutter.getDescriptor();
         com.alipay.sofa.jraft.entity.codec.v2.LogOutter.getDescriptor();
     }

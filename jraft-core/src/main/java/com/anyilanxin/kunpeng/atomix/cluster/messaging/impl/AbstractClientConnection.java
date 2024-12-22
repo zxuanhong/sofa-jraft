@@ -1,10 +1,10 @@
 /*
- * Copyright 2018-present Open Networking Foundation
- * Copyright © 2024 anyilanxin xuanhongzhou(anyilanxin@aliyun.com)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -31,8 +31,8 @@ import org.slf4j.LoggerFactory;
  * Base class for client-side connections. Manages request futures and timeouts.
  */
 abstract class AbstractClientConnection implements ClientConnection {
-    private final Logger log = LoggerFactory.getLogger(getClass());
-    private final AtomicBoolean closed = new AtomicBoolean(false);
+    private final Logger                               log             = LoggerFactory.getLogger(getClass());
+    private final AtomicBoolean                        closed          = new AtomicBoolean(false);
 
     // since all messages go through the same entry point, we keep a map of message IDs -> response
     // futures to allow dynamic dispatch of messages to the right response future
@@ -49,15 +49,12 @@ abstract class AbstractClientConnection implements ClientConnection {
                 responseFuture.completeExceptionally(new MessagingException.NoRemoteHandler(subject));
             } else if (message.status() == ProtocolReply.Status.ERROR_HANDLER_EXCEPTION) {
                 final String exceptionMessage = extractMessage(message);
-                responseFuture.completeExceptionally(
-                        new MessagingException.RemoteHandlerFailure(exceptionMessage));
+                responseFuture.completeExceptionally(new MessagingException.RemoteHandlerFailure(exceptionMessage));
             } else if (message.status() == ProtocolReply.Status.PROTOCOL_EXCEPTION) {
                 responseFuture.completeExceptionally(new MessagingException.ProtocolException());
             }
         } else {
-            log.debug(
-                    "Received a reply for message id:[{}] but was unable to locate the request handle",
-                    message.id());
+            log.debug("Received a reply for message id:[{}] but was unable to locate the request handle", message.id());
         }
     }
 
@@ -75,9 +72,8 @@ abstract class AbstractClientConnection implements ClientConnection {
     public void close() {
         if (closed.compareAndSet(false, true)) {
             for (final CompletableFuture<byte[]> responseFuture : responseFutures.values()) {
-                responseFuture.completeExceptionally(
-                        new MessagingException.ConnectionClosed(
-                                String.format("Connection %s was closed", this)));
+                responseFuture.completeExceptionally(new MessagingException.ConnectionClosed(String.format(
+                    "Connection %s was closed", this)));
             }
         }
     }

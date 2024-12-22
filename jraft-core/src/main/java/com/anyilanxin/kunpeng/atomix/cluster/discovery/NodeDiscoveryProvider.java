@@ -1,12 +1,12 @@
 /*
- * Copyright 2018-present Open Networking Foundation
- * Copyright © 2024 anyilanxin xuanhongzhou(anyilanxin@aliyun.com)
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -39,43 +39,42 @@ import java.util.concurrent.CompletableFuture;
  * @see BootstrapDiscoveryProvider
  * @see MulticastDiscoveryProvider
  */
-public interface NodeDiscoveryProvider
-    extends ListenerService<NodeDiscoveryEvent, NodeDiscoveryEventListener>,
-        Configured<NodeDiscoveryConfig> {
-
-  /**
-   * Returns the set of active nodes.
-   *
-   * @return the set of active nodes
-   */
-  Set<Node> getNodes();
-
-  /**
-   * Joins the cluster.
-   *
-   * @param bootstrap the bootstrap service
-   * @param localNode the local node info
-   * @return a future to be completed once the join is complete
-   */
-  CompletableFuture<Void> join(BootstrapService bootstrap, Node localNode);
-
-  /**
-   * Leaves the cluster.
-   *
-   * @param localNode the local node info
-   * @return a future to be completed once the leave is complete
-   */
-  CompletableFuture<Void> leave(Node localNode);
-
-  /** Membership provider type. */
-  interface Type<C extends NodeDiscoveryConfig> extends NamedType {
+public interface NodeDiscoveryProvider extends ListenerService<NodeDiscoveryEvent, NodeDiscoveryEventListener>,
+                                      Configured<NodeDiscoveryConfig> {
 
     /**
-     * Creates a new instance of the provider.
+     * Returns the set of active nodes.
      *
-     * @param config the provider configuration
-     * @return the provider instance
+     * @return the set of active nodes
      */
-    NodeDiscoveryProvider newProvider(C config);
-  }
+    Set<Node> getNodes();
+
+    /**
+     * Joins the cluster.
+     *
+     * @param bootstrap the bootstrap service
+     * @param localNode the local node info
+     * @return a future to be completed once the join is complete
+     */
+    CompletableFuture<Void> join(BootstrapService bootstrap, Node localNode);
+
+    /**
+     * Leaves the cluster.
+     *
+     * @param localNode the local node info
+     * @return a future to be completed once the leave is complete
+     */
+    CompletableFuture<Void> leave(Node localNode);
+
+    /** Membership provider type. */
+    interface Type<C extends NodeDiscoveryConfig> extends NamedType {
+
+        /**
+         * Creates a new instance of the provider.
+         *
+         * @param config the provider configuration
+         * @return the provider instance
+         */
+        NodeDiscoveryProvider newProvider(C config);
+    }
 }

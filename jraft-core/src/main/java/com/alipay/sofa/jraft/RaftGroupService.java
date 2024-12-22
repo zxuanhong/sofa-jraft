@@ -39,40 +39,39 @@ import com.alipay.sofa.jraft.util.Utils;
  */
 public class RaftGroupService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(RaftGroupService.class);
+    private static final Logger LOG     = LoggerFactory.getLogger(RaftGroupService.class);
 
     static {
         ProtobufMsgFactory.load();
     }
 
-    private volatile boolean started = false;
+    private volatile boolean    started = false;
 
     /**
      * This node serverId
      */
-    private PeerId serverId;
+    private PeerId              serverId;
 
     /**
      * Node options
      */
-    private NodeOptions nodeOptions;
+    private NodeOptions         nodeOptions;
 
-    private MessagingService rpcServer;
+    private MessagingService    rpcServer;
 
     /**
      * If we want to share the rpcServer instance, then we can't stop it when shutdown.
      */
-    private final boolean sharedRpcServer;
+    private final boolean       sharedRpcServer;
 
     /**
      * The raft group id
      */
-    private String groupId;
+    private String              groupId;
     /**
      * The raft node.
      */
-    private Node node;
-
+    private Node                node;
 
     public RaftGroupService(final String groupId, final PeerId serverId, final NodeOptions nodeOptions,
                             final MessagingService messagingService) {
@@ -93,7 +92,6 @@ public class RaftGroupService {
         return this.node;
     }
 
-
     /**
      * Starts the raft group service, returns the raft node.
      *
@@ -103,7 +101,7 @@ public class RaftGroupService {
             return this.node;
         }
         if (this.serverId == null || this.serverId.getEndpoint() == null
-                || this.serverId.getEndpoint().equals(new Endpoint(Utils.IP_ANY, 0))) {
+            || this.serverId.getEndpoint().equals(new Endpoint(Utils.IP_ANY, 0))) {
             throw new IllegalArgumentException("Blank serverId:" + this.serverId);
         }
         if (StringUtils.isBlank(this.groupId)) {

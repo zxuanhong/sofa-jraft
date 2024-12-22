@@ -1,9 +1,10 @@
 /*
- * Copyright © 2024 anyilanxin xuanhongzhou(anyilanxin@aliyun.com)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -36,15 +37,13 @@ import org.slf4j.Logger;
 
 public class CompatibleKryoPool extends Pool<Kryo> {
 
-    private static final Logger LOGGER = getLogger(CompatibleKryoPool.class);
-    private final String friendlyName;
-    private final ClassLoader classLoader;
+    private static final Logger           LOGGER = getLogger(CompatibleKryoPool.class);
+    private final String                  friendlyName;
+    private final ClassLoader             classLoader;
     private final List<RegistrationBlock> registeredBlocks;
 
-    public CompatibleKryoPool(
-            final String friendlyName,
-            final ClassLoader classLoader,
-            final List<RegistrationBlock> registeredBlocks) {
+    public CompatibleKryoPool(final String friendlyName, final ClassLoader classLoader,
+                              final List<RegistrationBlock> registeredBlocks) {
         super(true, true);
 
         this.friendlyName = friendlyName;
@@ -79,21 +78,14 @@ public class CompatibleKryoPool extends Pool<Kryo> {
         return kryo;
     }
 
-    private void register(
-            final Kryo kryo, final Class<?>[] types, final Serializer<?> serializer, final int id) {
+    private void register(final Kryo kryo, final Class<?>[] types, final Serializer<?> serializer, final int id) {
         final Registration existing = kryo.getRegistration(id);
         if (existing != null && !contains(types, existing)) {
-            LOGGER.error(
-                    "{}: Failed to register {} as {}. {} was already registered with that id.",
-                    friendlyName,
-                    types,
-                    id,
-                    existing.getType());
+            LOGGER.error("{}: Failed to register {} as {}. {} was already registered with that id.", friendlyName,
+                types, id, existing.getType());
 
-            throw new IllegalStateException(
-                    String.format(
-                            "Failed to register %s as %s, %s was already registered.",
-                            Arrays.toString(types), id, existing.getType()));
+            throw new IllegalStateException(String.format("Failed to register %s as %s, %s was already registered.",
+                Arrays.toString(types), id, existing.getType()));
         }
 
         for (final Class<?> type : types) {

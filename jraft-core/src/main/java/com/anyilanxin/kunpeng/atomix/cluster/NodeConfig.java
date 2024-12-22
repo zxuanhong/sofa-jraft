@@ -1,12 +1,12 @@
 /*
- * Copyright 2018-present Open Networking Foundation
- * Copyright © 2024 anyilanxin xuanhongzhou(anyilanxin@aliyun.com)
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,98 +21,98 @@ import com.anyilanxin.kunpeng.atomix.utils.net.Address;
 
 /** Node configuration. */
 public class NodeConfig implements Config {
-  private NodeId id = NodeId.anonymous();
-  private String host = "localhost";
-  private int port = 5679;
+    private NodeId id   = NodeId.anonymous();
+    private String host = "localhost";
+    private int    port = 5679;
 
-  /**
-   * Returns the node identifier.
-   *
-   * @return the node identifier
-   */
-  public NodeId getId() {
-    return id;
-  }
+    /**
+     * Returns the node identifier.
+     *
+     * @return the node identifier
+     */
+    public NodeId getId() {
+        return id;
+    }
 
-  /**
-   * Sets the node identifier.
-   *
-   * @param id the node identifier
-   * @return the node configuration
-   */
-  public NodeConfig setId(final String id) {
-    return setId(id != null ? NodeId.from(id) : null);
-  }
+    /**
+     * Sets the node identifier.
+     *
+     * @param id the node identifier
+     * @return the node configuration
+     */
+    public NodeConfig setId(final String id) {
+        return setId(id != null ? NodeId.from(id) : null);
+    }
 
-  /**
-   * Sets the node identifier.
-   *
-   * @param id the node identifier
-   * @return the node configuration
-   */
-  public NodeConfig setId(final NodeId id) {
-    this.id = id != null ? id : NodeId.anonymous();
-    return this;
-  }
+    /**
+     * Sets the node identifier.
+     *
+     * @param id the node identifier
+     * @return the node configuration
+     */
+    public NodeConfig setId(final NodeId id) {
+        this.id = id != null ? id : NodeId.anonymous();
+        return this;
+    }
 
-  /**
-   * Returns the node hostname.
-   *
-   * @return the node hostname
-   */
-  public String getHost() {
-    return host;
-  }
+    /**
+     * Returns the node hostname.
+     *
+     * @return the node hostname
+     */
+    public String getHost() {
+        return host;
+    }
 
-  /**
-   * Sets the node hostname.
-   *
-   * @param host the node hostname
-   * @return the node configuration
-   */
-  public NodeConfig setHost(final String host) {
-    this.host = host;
-    return this;
-  }
+    /**
+     * Sets the node hostname.
+     *
+     * @param host the node hostname
+     * @return the node configuration
+     */
+    public NodeConfig setHost(final String host) {
+        this.host = host;
+        return this;
+    }
 
-  /**
-   * Returns the node port.
-   *
-   * @return the node port
-   */
-  public int getPort() {
-    return port;
-  }
+    /**
+     * Returns the node port.
+     *
+     * @return the node port
+     */
+    public int getPort() {
+        return port;
+    }
 
-  /**
-   * Sets the node port.
-   *
-   * @param port the node port
-   * @return the node configuration
-   */
-  public NodeConfig setPort(final int port) {
-    this.port = port;
-    return this;
-  }
+    /**
+     * Sets the node port.
+     *
+     * @param port the node port
+     * @return the node configuration
+     */
+    public NodeConfig setPort(final int port) {
+        this.port = port;
+        return this;
+    }
 
-  /**
-   * Returns the node address.
-   *
-   * @return the node address
-   */
-  public Address getAddress() {
-    return Address.from(host, port);
-  }
+    /**
+     * Returns the node address.
+     *
+     * @return the node address
+     */
+    public Address getAddress() {
+        return Address.from(host, port);
+    }
 
-  /**
-   * Sets the node address.
-   *
-   * @param address the node address
-   * @return the node configuration
-   */
-  public NodeConfig setAddress(final Address address) {
-    host = address.host();
-    port = address.port();
-    return this;
-  }
+    /**
+     * Sets the node address.
+     *
+     * @param address the node address
+     * @return the node configuration
+     */
+    public NodeConfig setAddress(final Address address) {
+        host = address.host();
+        port = address.port();
+        return this;
+    }
 }

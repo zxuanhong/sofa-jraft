@@ -1,9 +1,10 @@
 /*
- * Copyright 2015-present Open Networking Foundation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -26,38 +27,35 @@ import java.util.function.Function;
  * @param <V> output type
  */
 public class RetryingFunction<U, V> implements Function<U, V> {
-  private final Function<U, V> baseFunction;
-  private final Class<? extends Throwable> exceptionClass;
-  private final int maxRetries;
-  private final int maxDelayBetweenRetries;
+    private final Function<U, V>             baseFunction;
+    private final Class<? extends Throwable> exceptionClass;
+    private final int                        maxRetries;
+    private final int                        maxDelayBetweenRetries;
 
-  public RetryingFunction(
-      Function<U, V> baseFunction,
-      Class<? extends Throwable> exceptionClass,
-      int maxRetries,
-      int maxDelayBetweenRetries) {
-    this.baseFunction = baseFunction;
-    this.exceptionClass = exceptionClass;
-    this.maxRetries = maxRetries;
-    this.maxDelayBetweenRetries = maxDelayBetweenRetries;
-  }
-
-  @SuppressWarnings("squid:S1181")
-  // Yes we really do want to catch Throwable
-  @Override
-  public V apply(U input) {
-    int retryAttempts = 0;
-    while (true) {
-      try {
-        return baseFunction.apply(input);
-      } catch (Throwable t) {
-        if (!exceptionClass.isAssignableFrom(t.getClass()) || retryAttempts == maxRetries) {
-          throwIfUnchecked(t);
-          throw new RuntimeException(t);
-        }
-        Retries.randomDelay(maxDelayBetweenRetries);
-        retryAttempts++;
-      }
+    public RetryingFunction(Function<U, V> baseFunction, Class<? extends Throwable> exceptionClass, int maxRetries,
+                            int maxDelayBetweenRetries) {
+        this.baseFunction = baseFunction;
+        this.exceptionClass = exceptionClass;
+        this.maxRetries = maxRetries;
+        this.maxDelayBetweenRetries = maxDelayBetweenRetries;
     }
-  }
+
+    @SuppressWarnings("squid:S1181")
+    // Yes we really do want to catch Throwable
+    @Override
+    public V apply(U input) {
+        int retryAttempts = 0;
+        while (true) {
+            try {
+                return baseFunction.apply(input);
+            } catch (Throwable t) {
+                if (!exceptionClass.isAssignableFrom(t.getClass()) || retryAttempts == maxRetries) {
+                    throwIfUnchecked(t);
+                    throw new RuntimeException(t);
+                }
+                Retries.randomDelay(maxDelayBetweenRetries);
+                retryAttempts++;
+            }
+        }
+    }
 }

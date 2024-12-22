@@ -1,12 +1,12 @@
 /*
- * Copyright 2014-present Open Networking Foundation
- * Copyright © 2024 anyilanxin xuanhongzhou(anyilanxin@aliyun.com)
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -80,12 +80,7 @@ public interface ClusterCommunicationService {
      * @param reliable  whether to perform a reliable (TCP) unicast or not (UDP)
      * @param <M>       message type
      */
-    <M> void multicast(
-            String subject,
-            M message,
-            Function<M, byte[]> encoder,
-            Set<MemberId> memberIds,
-            boolean reliable);
+    <M> void multicast(String subject, M message, Function<M, byte[]> encoder, Set<MemberId> memberIds, boolean reliable);
 
     /**
      * Sends a message to a member.
@@ -97,8 +92,7 @@ public interface ClusterCommunicationService {
      * @param reliable whether to perform a reliable (TCP) unicast or not (UDP)
      * @param <M>      message type
      */
-    <M> void unicast(
-            String subject, M message, Function<M, byte[]> encoder, MemberId memberId, boolean reliable);
+    <M> void unicast(String subject, M message, Function<M, byte[]> encoder, MemberId memberId, boolean reliable);
 
     /**
      * Sends a message and expects a reply.
@@ -124,13 +118,8 @@ public interface ClusterCommunicationService {
      * @param <R>        reply type
      * @return reply future
      */
-    <M, R> CompletableFuture<R> send(
-            String subject,
-            M message,
-            Function<M, byte[]> encoder,
-            Function<byte[], R> decoder,
-            MemberId toMemberId,
-            Duration timeout);
+    <M, R> CompletableFuture<R> send(String subject, M message, Function<M, byte[]> encoder,
+                                     Function<byte[], R> decoder, MemberId toMemberId, Duration timeout);
 
     /**
      * Adds a new subscriber for the specified message subject, which must return a reply.
@@ -142,11 +131,8 @@ public interface ClusterCommunicationService {
      * @param <M>     incoming message type
      * @param <R>     reply message type
      */
-    <M, R> void replyTo(
-            String subject,
-            Function<byte[], M> decoder,
-            Function<M, CompletableFuture<R>> handler,
-            Function<R, byte[]> encoder);
+    <M, R> void replyTo(String subject, Function<byte[], M> decoder, Function<M, CompletableFuture<R>> handler,
+                        Function<R, byte[]> encoder);
 
     /**
      * Adds a new subscriber for the specified message subject which does not return any reply.
@@ -157,8 +143,7 @@ public interface ClusterCommunicationService {
      * @param executor executor to run this handler on
      * @param <M>      incoming message type
      */
-    <M> void consume(
-            String subject, Function<byte[], M> decoder, Consumer<M> handler, Executor executor);
+    <M> void consume(String subject, Function<byte[], M> decoder, Consumer<M> handler, Executor executor);
 
     /**
      * Adds a new subscriber for the specified message subject which does not return any reply. If the
@@ -172,11 +157,7 @@ public interface ClusterCommunicationService {
      * @param executor executor to run this handler on
      * @param <M>      incoming message type
      */
-    <M> void consume(
-            String subject,
-            Function<byte[], M> decoder,
-            BiConsumer<MemberId, M> handler,
-            Executor executor);
+    <M> void consume(String subject, Function<byte[], M> decoder, BiConsumer<MemberId, M> handler, Executor executor);
 
     /**
      * Adds a new subscriber for the specified message subject which must return a reply. If the
@@ -192,12 +173,8 @@ public interface ClusterCommunicationService {
      * @param executor executor to run this handler on
      * @param <M>      incoming message type
      */
-    <M, R> void replyTo(
-            String subject,
-            Function<byte[], M> decoder,
-            BiFunction<MemberId, M, R> handler,
-            Function<R, byte[]> encoder,
-            Executor executor);
+    <M, R> void replyTo(String subject, Function<byte[], M> decoder, BiFunction<MemberId, M, R> handler,
+                        Function<R, byte[]> encoder, Executor executor);
 
     /**
      * Adds a new subscriber for the specified message subject which must return a reply. If the
@@ -213,12 +190,8 @@ public interface ClusterCommunicationService {
      * @param executor executor to run this handler on
      * @param <M>      incoming message type
      */
-    <M, R> void replyToAsync(
-            String subject,
-            Function<byte[], M> decoder,
-            Function<M, CompletableFuture<R>> handler,
-            Function<R, byte[]> encoder,
-            Executor executor);
+    <M, R> void replyToAsync(String subject, Function<byte[], M> decoder, Function<M, CompletableFuture<R>> handler,
+                             Function<R, byte[]> encoder, Executor executor);
 
     /**
      * Removes a subscriber for the specified message subject.

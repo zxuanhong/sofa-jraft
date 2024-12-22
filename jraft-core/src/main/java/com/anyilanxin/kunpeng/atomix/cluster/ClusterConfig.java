@@ -1,12 +1,12 @@
 /*
- * Copyright 2018-present Open Networking Foundation
- * Copyright © 2024 anyilanxin xuanhongzhou(anyilanxin@aliyun.com)
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,13 +29,13 @@ import com.anyilanxin.kunpeng.atomix.utils.config.Config;
  */
 public class ClusterConfig implements Config {
 
-    private static final String DEFAULT_CLUSTER_NAME = "atomix";
+    private static final String           DEFAULT_CLUSTER_NAME = "atomix";
 
-    private String clusterId = DEFAULT_CLUSTER_NAME;
-    private MemberConfig nodeConfig = new MemberConfig();
-    private NodeDiscoveryConfig discoveryConfig;
-    private GroupMembershipProtocolConfig protocolConfig = new SwimMembershipProtocolConfig();
-    private MessagingConfig messagingConfig = new MessagingConfig();
+    private String                        clusterId            = DEFAULT_CLUSTER_NAME;
+    private MemberConfig                  nodeConfig           = new MemberConfig();
+    private NodeDiscoveryConfig           discoveryConfig;
+    private GroupMembershipProtocolConfig protocolConfig       = new SwimMembershipProtocolConfig();
+    private MessagingConfig               messagingConfig      = new MessagingConfig();
 
     /**
      * Returns the cluster identifier.

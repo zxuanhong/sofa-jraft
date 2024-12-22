@@ -1,18 +1,18 @@
 /*
- * Copyright © 2024 anyilanxin xuanhongzhou(anyilanxin@aliyun.com)
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.anyilanxin.kunpeng.util.error;
 
@@ -24,55 +24,50 @@ import org.slf4j.Logger;
  * UncaughtExceptionHandler uncaught exception handler}, for example as the {@link
  * Thread#setDefaultUncaughtExceptionHandler default uncaught exception handler}
  */
-public final class VirtualMachineErrorHandler
-    implements FatalErrorHandler, UncaughtExceptionHandler {
-  private static final int EXIT_CODE = 156; // ascii code Z + B
-  private final Logger log;
+public final class VirtualMachineErrorHandler implements FatalErrorHandler, UncaughtExceptionHandler {
+    private static final int EXIT_CODE = 156; // ascii code Z + B
+    private final Logger     log;
 
-  VirtualMachineErrorHandler(final Logger log) {
-    this.log = log;
-  }
-
-  /**
-   * Handles arbitrary {@link Throwable}s and completely terminates the JVM if it's an unrecoverable
-   * error, i.e. a {@link VirtualMachineError}. Use this method whenever catching a {@link
-   * Throwable}, before carrying on with your regular error handling.
-   *
-   * <p>Some example of {@link VirtualMachineError}s include {@link OutOfMemoryError}, {@link
-   * StackOverflowError} and {@link InternalError}. We consider these errors unrecoverable because
-   * there is no action we can take to resolve them, and it is safer to terminate and let a
-   * hypervisor restart Zeebe.
-   *
-   * @param e the throwable
-   */
-  @Override
-  public void handleError(final Throwable e) {
-    if (e instanceof VirtualMachineError) {
-      tryLogging(e);
-      System.exit(EXIT_CODE);
+    VirtualMachineErrorHandler(final Logger log) {
+        this.log = log;
     }
-  }
 
-  private void tryLogging(final Throwable e) {
-    try {
-      if (e instanceof OutOfMemoryError) {
-        log.error(
-            "Out of memory, exiting now because we can't recover from OOM."
-                + " Consider adjusting memory limits.",
-            e);
-      } else {
-        log.error(
-            "Shutting down because we can't recover from JVM errors."
-                + " Consider restarting this broker if it is a temporary issue.",
-            e);
-      }
-    } catch (final Throwable loggingError) {
-      // Ignored! We've tried logging a useful error message, but failed. There's nothing we can do.
+    /**
+     * Handles arbitrary {@link Throwable}s and completely terminates the JVM if it's an unrecoverable
+     * error, i.e. a {@link VirtualMachineError}. Use this method whenever catching a {@link
+     * Throwable}, before carrying on with your regular error handling.
+     *
+     * <p>Some example of {@link VirtualMachineError}s include {@link OutOfMemoryError}, {@link
+     * StackOverflowError} and {@link InternalError}. We consider these errors unrecoverable because
+     * there is no action we can take to resolve them, and it is safer to terminate and let a
+     * hypervisor restart Zeebe.
+     *
+     * @param e the throwable
+     */
+    @Override
+    public void handleError(final Throwable e) {
+        if (e instanceof VirtualMachineError) {
+            tryLogging(e);
+            System.exit(EXIT_CODE);
+        }
     }
-  }
 
-  @Override
-  public void uncaughtException(final Thread t, final Throwable e) {
-    handleError(e);
-  }
+    private void tryLogging(final Throwable e) {
+        try {
+            if (e instanceof OutOfMemoryError) {
+                log.error("Out of memory, exiting now because we can't recover from OOM."
+                          + " Consider adjusting memory limits.", e);
+            } else {
+                log.error("Shutting down because we can't recover from JVM errors."
+                          + " Consider restarting this broker if it is a temporary issue.", e);
+            }
+        } catch (final Throwable loggingError) {
+            // Ignored! We've tried logging a useful error message, but failed. There's nothing we can do.
+        }
+    }
+
+    @Override
+    public void uncaughtException(final Thread t, final Throwable e) {
+        handleError(e);
+    }
 }

@@ -137,17 +137,17 @@ public class CliServiceImpl implements CliService {
             return st;
         }
         final CliRequests.ResetFactorRequest.Builder rb = CliRequests.ResetFactorRequest.newBuilder()
-                .setGroupId(groupId) //
-                .setLeaderId(leaderId.toString()) //
-                .setReadFactor(readFactor) //
-                .setWriteFactor(writeFactor);
+            .setGroupId(groupId) //
+            .setLeaderId(leaderId.toString()) //
+            .setReadFactor(readFactor) //
+            .setWriteFactor(writeFactor);
 
         try {
             final Message result = this.cliClientService.resetFactor(leaderId.getEndpoint(), rb.build(), null).get();
             if (result instanceof CliRequests.ResetFactorResponse) {
                 final CliRequests.ResetFactorResponse resp = (CliRequests.ResetFactorResponse) result;
                 LOG.info("Factor of group {} changed to readFactor:{} writeFactor:{}.", groupId, resp.getReadFactor(),
-                        resp.getWriteFactor());
+                    resp.getWriteFactor());
                 return Status.OK();
             } else {
                 return statusFromResponse(result);

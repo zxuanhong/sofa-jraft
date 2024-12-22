@@ -1,12 +1,12 @@
 /*
- * Copyright 2018-present Open Networking Foundation
- * Copyright © 2024 anyilanxin xuanhongzhou(anyilanxin@aliyun.com)
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,24 +22,24 @@ import io.netty.handler.codec.MessageToByteEncoder;
 
 /** V1 messaging protocol. */
 public class MessagingProtocolV1 implements MessagingProtocol {
-  private final Address address;
+    private final Address address;
 
-  MessagingProtocolV1(final Address address) {
-    this.address = address;
-  }
+    MessagingProtocolV1(final Address address) {
+        this.address = address;
+    }
 
-  @Override
-  public ProtocolVersion version() {
-    return ProtocolVersion.V1;
-  }
+    @Override
+    public ProtocolVersion version() {
+        return ProtocolVersion.V1;
+    }
 
-  @Override
-  public MessageToByteEncoder<Object> newEncoder() {
-    return new MessageEncoderV1(address);
-  }
+    @Override
+    public MessageToByteEncoder<Object> newEncoder() {
+        return new MessageEncoderV1(address);
+    }
 
-  @Override
-  public ByteToMessageDecoder newDecoder() {
-    return new MessageDecoderV1();
-  }
+    @Override
+    public ByteToMessageDecoder newDecoder() {
+        return new MessageDecoderV1();
+    }
 }

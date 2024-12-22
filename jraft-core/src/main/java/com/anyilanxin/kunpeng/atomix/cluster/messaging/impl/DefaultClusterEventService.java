@@ -1,12 +1,12 @@
 /*
- * Copyright 2017-present Open Networking Foundation
- * Copyright © 2024 anyilanxin xuanhongzhou(anyilanxin@aliyun.com)
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -47,30 +47,28 @@ import org.slf4j.LoggerFactory;
 /**
  * Cluster event service.
  */
-public class DefaultClusterEventService
-        implements ManagedClusterEventService, ClusterMembershipEventListener {
-    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultClusterEventService.class);
+public class DefaultClusterEventService implements ManagedClusterEventService, ClusterMembershipEventListener {
+    private static final Logger              LOGGER                     = LoggerFactory
+                                                                            .getLogger(DefaultClusterEventService.class);
 
-    private static final Serializer SERIALIZER =
-            Serializer.using(
-                    new Builder()
-                            .register(Namespaces.BASIC)
-                            .register(MemberId.class)
-                            .register(Void.class) // placeholder for the deleted LogicalTimestamp class
-                            .register(Void.class) // placeholder for the deleted WallClockTimestamp class
-                            .build());
+    private static final Serializer          SERIALIZER                 = Serializer.using(new Builder()
+                                                                            .register(Namespaces.BASIC)
+                                                                            .register(MemberId.class)
+                                                                            .register(Void.class) // placeholder for the deleted LogicalTimestamp class
+                                                                            .register(Void.class) // placeholder for the deleted WallClockTimestamp class
+                                                                            .build());
 
-    private static final String SUBSCRIPTION_PROPERTY_NAME = "event-service-topics-subscribed";
-    private final ClusterMembershipService membershipService;
-    private final MessagingService messagingService;
-    private final MemberId localMemberId;
-    private final Map<String, InternalTopic> topics = Maps.newConcurrentMap();
-    private final Map<MemberId, Set<String>> remoteMemberSubscriptions = Maps.newConcurrentMap();
-    private final AtomicBoolean started = new AtomicBoolean();
-    private ScheduledExecutorService eventServiceExecutor;
+    private static final String              SUBSCRIPTION_PROPERTY_NAME = "event-service-topics-subscribed";
+    private final ClusterMembershipService   membershipService;
+    private final MessagingService           messagingService;
+    private final MemberId                   localMemberId;
+    private final Map<String, InternalTopic> topics                     = Maps.newConcurrentMap();
+    private final Map<MemberId, Set<String>> remoteMemberSubscriptions  = Maps.newConcurrentMap();
+    private final AtomicBoolean              started                    = new AtomicBoolean();
+    private ScheduledExecutorService         eventServiceExecutor;
 
-    public DefaultClusterEventService(
-            final ClusterMembershipService membershipService, final MessagingService messagingService) {
+    public DefaultClusterEventService(final ClusterMembershipService membershipService,
+                                      final MessagingService messagingService) {
         this.membershipService = membershipService;
         this.messagingService = messagingService;
         localMemberId = membershipService.getLocalMember().id();
@@ -157,10 +155,7 @@ public class DefaultClusterEventService
      */
     private CompletableFuture<Void> updateNodes() {
         final String topicSubscribed = topicsAsString(new HashSet<>(topics.keySet()));
-        membershipService
-                .getLocalMember()
-                .properties()
-                .setProperty(SUBSCRIPTION_PROPERTY_NAME, topicSubscribed);
+        membershipService.getLocalMember().properties().setProperty(SUBSCRIPTION_PROPERTY_NAME, topicSubscribed);
         return CompletableFuture.completedFuture(null);
     }
 
@@ -170,8 +165,7 @@ public class DefaultClusterEventService
     }
 
     private Set<String> topicsFromString(final String topicsAsString) {
-        final byte[] bytes =
-                Base64.getDecoder().decode(topicsAsString.getBytes(StandardCharsets.UTF_8));
+        final byte[] bytes = Base64.getDecoder().decode(topicsAsString.getBytes(StandardCharsets.UTF_8));
         return SERIALIZER.decode(bytes);
     }
 
@@ -256,8 +250,7 @@ public class DefaultClusterEventService
     /**
      * Internal subscriber.
      */
-    private static final class InternalSubscriber
-            implements BiFunction<Address, byte[], CompletableFuture<byte[]>> {
+    private static final class InternalSubscriber implements BiFunction<Address, byte[], CompletableFuture<byte[]>> {
         private final List<InternalSubscription> subscriptions = new CopyOnWriteArrayList<>();
 
         /**
@@ -300,9 +293,9 @@ public class DefaultClusterEventService
      * Internal topic.
      */
     private class InternalTopic {
-        private final String topic;
+        private final String             topic;
         private final InternalSubscriber localSubscribers = new InternalSubscriber();
-        private final Set<MemberId> subscriptions = Sets.newCopyOnWriteArraySet();
+        private final Set<MemberId>      subscriptions    = Sets.newCopyOnWriteArraySet();
 
         InternalTopic(final String topic) {
             this.topic = topic;
@@ -412,8 +405,7 @@ public class DefaultClusterEventService
          *
          * @param subscription the subscription to unregister
          */
-        private synchronized CompletableFuture<Void> removeLocalSubscription(
-                final InternalSubscription subscription) {
+        private synchronized CompletableFuture<Void> removeLocalSubscription(final InternalSubscription subscription) {
             localSubscribers.remove(subscription);
             if (localSubscribers.subscriptions.isEmpty()) {
                 subscriptions.remove(localMemberId);
@@ -445,11 +437,10 @@ public class DefaultClusterEventService
      * Internal subscription.
      */
     private class InternalSubscription implements Subscription {
-        private final InternalTopic topic;
+        private final InternalTopic                               topic;
         private final Function<byte[], CompletableFuture<byte[]>> callback;
 
-        InternalSubscription(
-                final InternalTopic topic, final Function<byte[], CompletableFuture<byte[]>> callback) {
+        InternalSubscription(final InternalTopic topic, final Function<byte[], CompletableFuture<byte[]>> callback) {
             this.topic = topic;
             this.callback = callback;
         }

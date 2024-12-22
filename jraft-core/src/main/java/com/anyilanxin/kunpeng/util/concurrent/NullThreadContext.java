@@ -1,11 +1,12 @@
 /*
- * Copyright 2018-present Open Networking Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,30 +20,34 @@ import java.time.Duration;
 
 /** Null thread context. */
 public class NullThreadContext implements ThreadContext {
-  @Override
-  public Scheduled schedule(Duration delay, Runnable callback) {
-    return null;
-  }
+    @Override
+    public Scheduled schedule(Duration delay, Runnable callback) {
+        return null;
+    }
 
-  @Override
-  public Scheduled schedule(Duration initialDelay, Duration interval, Runnable callback) {
-    return null;
-  }
+    @Override
+    public Scheduled schedule(Duration initialDelay, Duration interval, Runnable callback) {
+        return null;
+    }
 
-  @Override
-  public boolean isBlocked() {
-    return false;
-  }
+    @Override
+    public boolean isBlocked() {
+        return false;
+    }
 
-  @Override
-  public void block() {}
+    @Override
+    public void block() {
+    }
 
-  @Override
-  public void unblock() {}
+    @Override
+    public void unblock() {
+    }
 
-  @Override
-  public void close() {}
+    @Override
+    public void close() {
+    }
 
-  @Override
-  public void execute(Runnable command) {}
+    @Override
+    public void execute(Runnable command) {
+    }
 }

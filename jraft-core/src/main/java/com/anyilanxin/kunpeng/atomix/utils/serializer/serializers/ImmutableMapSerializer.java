@@ -1,10 +1,10 @@
 /*
- * Copyright 2014-present Open Networking Foundation
- * Copyright © 2024 anyilanxin xuanhongzhou(anyilanxin@aliyun.com)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -48,8 +48,7 @@ public class ImmutableMapSerializer extends Serializer<ImmutableMap<?, ?>> {
     }
 
     @Override
-    public ImmutableMap<?, ?> read(
-            final Kryo kryo, final Input input, final Class<? extends ImmutableMap<?, ?>> type) {
+    public ImmutableMap<?, ?> read(final Kryo kryo, final Input input, final Class<? extends ImmutableMap<?, ?>> type) {
         final int size = input.readInt();
         switch (size) {
             case 0:

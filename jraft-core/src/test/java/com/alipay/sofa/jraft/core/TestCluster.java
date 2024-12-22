@@ -147,7 +147,7 @@ public class TestCluster {
     }
 
     public boolean startLearnerWithFlexible(final PeerId peer, final int readFactor, final int writeFactor)
-            throws Exception {
+                                                                                                           throws Exception {
         this.learners.add(peer);
         return this.start(peer.getEndpoint(), false, 300, false, readFactor, writeFactor, null, null);
     }
@@ -249,7 +249,7 @@ public class TestCluster {
         }
         final RpcServer rpcServer = RaftRpcServerFactory.createRaftRpcServer(listenAddr);
         final RaftGroupService server = new RaftGroupService(this.name, new PeerId(listenAddr, 0), nodeOptions,
-                rpcServer);
+            rpcServer);
 
         this.lock.lock();
         try {

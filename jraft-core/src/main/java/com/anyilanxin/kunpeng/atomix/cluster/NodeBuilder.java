@@ -1,12 +1,12 @@
 /*
- * Copyright 2018-present Open Networking Foundation
- * Copyright © 2024 anyilanxin xuanhongzhou(anyilanxin@aliyun.com)
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,69 +21,69 @@ import com.anyilanxin.kunpeng.atomix.utils.net.Address;
 
 /** Node builder. */
 public class NodeBuilder implements Builder<Node> {
-  protected final NodeConfig config;
+    protected final NodeConfig config;
 
-  protected NodeBuilder(final NodeConfig config) {
-    this.config = config;
-  }
+    protected NodeBuilder(final NodeConfig config) {
+        this.config = config;
+    }
 
-  /**
-   * Sets the node identifier.
-   *
-   * @param id the node identifier
-   * @return the node builder
-   */
-  public NodeBuilder withId(final String id) {
-    config.setId(id);
-    return this;
-  }
+    /**
+     * Sets the node identifier.
+     *
+     * @param id the node identifier
+     * @return the node builder
+     */
+    public NodeBuilder withId(final String id) {
+        config.setId(id);
+        return this;
+    }
 
-  /**
-   * Sets the node identifier.
-   *
-   * @param id the node identifier
-   * @return the node builder
-   */
-  public NodeBuilder withId(final NodeId id) {
-    config.setId(id);
-    return this;
-  }
+    /**
+     * Sets the node identifier.
+     *
+     * @param id the node identifier
+     * @return the node builder
+     */
+    public NodeBuilder withId(final NodeId id) {
+        config.setId(id);
+        return this;
+    }
 
-  /**
-   * Sets the node host.
-   *
-   * @param host the node host
-   * @return the node builder
-   */
-  public NodeBuilder withHost(final String host) {
-    config.setHost(host);
-    return this;
-  }
+    /**
+     * Sets the node host.
+     *
+     * @param host the node host
+     * @return the node builder
+     */
+    public NodeBuilder withHost(final String host) {
+        config.setHost(host);
+        return this;
+    }
 
-  /**
-   * Sets the node port.
-   *
-   * @param port the node port
-   * @return the node builder
-   */
-  public NodeBuilder withPort(final int port) {
-    config.setPort(port);
-    return this;
-  }
+    /**
+     * Sets the node port.
+     *
+     * @param port the node port
+     * @return the node builder
+     */
+    public NodeBuilder withPort(final int port) {
+        config.setPort(port);
+        return this;
+    }
 
-  /**
-   * Sets the node address.
-   *
-   * @param address the node address
-   * @return the node builder
-   */
-  public NodeBuilder withAddress(final Address address) {
-    config.setAddress(address);
-    return this;
-  }
+    /**
+     * Sets the node address.
+     *
+     * @param address the node address
+     * @return the node builder
+     */
+    public NodeBuilder withAddress(final Address address) {
+        config.setAddress(address);
+        return this;
+    }
 
-  @Override
-  public Node build() {
-    return new Node(config);
-  }
+    @Override
+    public Node build() {
+        return new Node(config);
+    }
 }

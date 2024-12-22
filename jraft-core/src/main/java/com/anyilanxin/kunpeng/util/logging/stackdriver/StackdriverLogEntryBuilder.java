@@ -1,18 +1,18 @@
 /*
- * Copyright © 2024 anyilanxin xuanhongzhou(anyilanxin@aliyun.com)
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.anyilanxin.kunpeng.util.logging.stackdriver;
 
@@ -26,163 +26,162 @@ import org.apache.logging.log4j.util.ReadOnlyStringMap;
 
 public final class StackdriverLogEntryBuilder {
 
-  public static final String ERROR_REPORT_LOCATION_CONTEXT_KEY = "reportLocation";
-  private final ServiceContext service;
-  private final Map<String, Object> context;
+    public static final String        ERROR_REPORT_LOCATION_CONTEXT_KEY = "reportLocation";
+    private final ServiceContext      service;
+    private final Map<String, Object> context;
 
-  private SourceLocation sourceLocation;
-  private Severity severity;
-  private String message;
-  private StackTraceElement traceElement;
-  private String type;
-  private String exception;
-  private Instant time;
+    private SourceLocation            sourceLocation;
+    private Severity                  severity;
+    private String                    message;
+    private StackTraceElement         traceElement;
+    private String                    type;
+    private String                    exception;
+    private Instant                   time;
 
-  StackdriverLogEntryBuilder() {
-    service = new ServiceContext();
-    context = new HashMap<>();
-  }
-
-  public StackdriverLogEntryBuilder withLevel(final Level level) {
-    switch (level.getStandardLevel()) {
-      case FATAL:
-        severity = Severity.CRITICAL;
-        break;
-      case ERROR:
-        severity = Severity.ERROR;
-        break;
-      case WARN:
-        severity = Severity.WARNING;
-        break;
-      case INFO:
-        severity = Severity.INFO;
-        break;
-      case DEBUG:
-      case TRACE:
-        severity = Severity.DEBUG;
-        break;
-      case OFF:
-      case ALL:
-      default:
-        severity = Severity.DEFAULT;
-        break;
+    StackdriverLogEntryBuilder() {
+        service = new ServiceContext();
+        context = new HashMap<>();
     }
 
-    return this;
-  }
+    public StackdriverLogEntryBuilder withLevel(final Level level) {
+        switch (level.getStandardLevel()) {
+            case FATAL:
+                severity = Severity.CRITICAL;
+                break;
+            case ERROR:
+                severity = Severity.ERROR;
+                break;
+            case WARN:
+                severity = Severity.WARNING;
+                break;
+            case INFO:
+                severity = Severity.INFO;
+                break;
+            case DEBUG:
+            case TRACE:
+                severity = Severity.DEBUG;
+                break;
+            case OFF:
+            case ALL:
+            default:
+                severity = Severity.DEFAULT;
+                break;
+        }
 
-  public StackdriverLogEntryBuilder withSource(final StackTraceElement traceElement) {
-    this.traceElement = traceElement;
-    return this;
-  }
+        return this;
+    }
 
-  public StackdriverLogEntryBuilder withTime(final Instant time) {
-    this.time = time;
-    return this;
-  }
+    public StackdriverLogEntryBuilder withSource(final StackTraceElement traceElement) {
+        this.traceElement = traceElement;
+        return this;
+    }
 
-  public StackdriverLogEntryBuilder withMessage(final String message) {
-    this.message = message;
-    return this;
-  }
+    public StackdriverLogEntryBuilder withTime(final Instant time) {
+        this.time = time;
+        return this;
+    }
 
-  public StackdriverLogEntryBuilder withServiceName(final String serviceName) {
-    service.setService(serviceName);
-    return this;
-  }
+    public StackdriverLogEntryBuilder withMessage(final String message) {
+        this.message = message;
+        return this;
+    }
 
-  public StackdriverLogEntryBuilder withServiceVersion(final String serviceVersion) {
-    service.setVersion(serviceVersion);
-    return this;
-  }
+    public StackdriverLogEntryBuilder withServiceName(final String serviceName) {
+        service.setService(serviceName);
+        return this;
+    }
 
-  public StackdriverLogEntryBuilder withContextEntry(final String key, final Object value) {
-    context.put(key, value);
-    return this;
-  }
+    public StackdriverLogEntryBuilder withServiceVersion(final String serviceVersion) {
+        service.setVersion(serviceVersion);
+        return this;
+    }
 
-  public StackdriverLogEntryBuilder withDiagnosticContext(final ReadOnlyStringMap context) {
+    public StackdriverLogEntryBuilder withContextEntry(final String key, final Object value) {
+        context.put(key, value);
+        return this;
+    }
+
+    public StackdriverLogEntryBuilder withDiagnosticContext(final ReadOnlyStringMap context) {
     context.forEach(this::withContextEntry);
     return this;
   }
 
-  public StackdriverLogEntryBuilder withException(final ThrowableProxy error) {
-    return withException(error.getExtendedStackTraceAsString());
-  }
-
-  public StackdriverLogEntryBuilder withType(final String type) {
-    this.type = type;
-    return this;
-  }
-
-  public StackdriverLogEntryBuilder withException(final String exception) {
-    this.exception = exception;
-    return this;
-  }
-
-  public StackdriverLogEntryBuilder withLogger(final String logger) {
-    return withContextEntry("loggerName", logger);
-  }
-
-  public StackdriverLogEntryBuilder withThreadName(final String threadName) {
-    return withContextEntry("threadName", threadName);
-  }
-
-  public StackdriverLogEntryBuilder withThreadId(final long threadId) {
-    return withContextEntry("threadId", threadId);
-  }
-
-  public StackdriverLogEntryBuilder withThreadPriority(final int threadPriority) {
-    return withContextEntry("threadPriority", threadPriority);
-  }
-
-  public StackdriverLogEntry build() {
-    final StackdriverLogEntry stackdriverLogEntry = new StackdriverLogEntry();
-
-    if (traceElement != null) {
-      sourceLocation = mapStackTraceToSourceLocation(traceElement);
-
-      if (severity == Severity.ERROR && exception == null) {
-        context.putIfAbsent(
-            ERROR_REPORT_LOCATION_CONTEXT_KEY, mapStackTraceToReportLocation(traceElement));
-      }
+    public StackdriverLogEntryBuilder withException(final ThrowableProxy error) {
+        return withException(error.getExtendedStackTraceAsString());
     }
 
-    if (severity == Severity.ERROR && type == null) {
-      type = StackdriverLogEntry.ERROR_REPORT_TYPE;
+    public StackdriverLogEntryBuilder withType(final String type) {
+        this.type = type;
+        return this;
     }
 
-    if (time != null) {
-      stackdriverLogEntry.setTimestampSeconds(time.getEpochSecond());
-      stackdriverLogEntry.setTimestampNanos(time.getNanoOfSecond());
+    public StackdriverLogEntryBuilder withException(final String exception) {
+        this.exception = exception;
+        return this;
     }
 
-    stackdriverLogEntry.setSeverity(severity.name());
-    stackdriverLogEntry.setSourceLocation(sourceLocation);
-    stackdriverLogEntry.setMessage(Objects.requireNonNull(message));
-    stackdriverLogEntry.setService(service);
-    stackdriverLogEntry.setContext(context);
-    stackdriverLogEntry.setType(type);
-    stackdriverLogEntry.setException(exception);
+    public StackdriverLogEntryBuilder withLogger(final String logger) {
+        return withContextEntry("loggerName", logger);
+    }
 
-    return stackdriverLogEntry;
-  }
+    public StackdriverLogEntryBuilder withThreadName(final String threadName) {
+        return withContextEntry("threadName", threadName);
+    }
 
-  private SourceLocation mapStackTraceToSourceLocation(final StackTraceElement stackTrace) {
-    final var location = new SourceLocation();
-    location.setFile(stackTrace.getFileName());
-    location.setFunction(stackTrace.getMethodName());
-    location.setLine(stackTrace.getLineNumber());
+    public StackdriverLogEntryBuilder withThreadId(final long threadId) {
+        return withContextEntry("threadId", threadId);
+    }
 
-    return location;
-  }
+    public StackdriverLogEntryBuilder withThreadPriority(final int threadPriority) {
+        return withContextEntry("threadPriority", threadPriority);
+    }
 
-  private ReportLocation mapStackTraceToReportLocation(final StackTraceElement stackTrace) {
-    final var location = new ReportLocation();
-    location.setFilePath(stackTrace.getFileName());
-    location.setFunctionName(stackTrace.getMethodName());
-    location.setLineNumber(stackTrace.getLineNumber());
+    public StackdriverLogEntry build() {
+        final StackdriverLogEntry stackdriverLogEntry = new StackdriverLogEntry();
 
-    return location;
-  }
+        if (traceElement != null) {
+            sourceLocation = mapStackTraceToSourceLocation(traceElement);
+
+            if (severity == Severity.ERROR && exception == null) {
+                context.putIfAbsent(ERROR_REPORT_LOCATION_CONTEXT_KEY, mapStackTraceToReportLocation(traceElement));
+            }
+        }
+
+        if (severity == Severity.ERROR && type == null) {
+            type = StackdriverLogEntry.ERROR_REPORT_TYPE;
+        }
+
+        if (time != null) {
+            stackdriverLogEntry.setTimestampSeconds(time.getEpochSecond());
+            stackdriverLogEntry.setTimestampNanos(time.getNanoOfSecond());
+        }
+
+        stackdriverLogEntry.setSeverity(severity.name());
+        stackdriverLogEntry.setSourceLocation(sourceLocation);
+        stackdriverLogEntry.setMessage(Objects.requireNonNull(message));
+        stackdriverLogEntry.setService(service);
+        stackdriverLogEntry.setContext(context);
+        stackdriverLogEntry.setType(type);
+        stackdriverLogEntry.setException(exception);
+
+        return stackdriverLogEntry;
+    }
+
+    private SourceLocation mapStackTraceToSourceLocation(final StackTraceElement stackTrace) {
+        final var location = new SourceLocation();
+        location.setFile(stackTrace.getFileName());
+        location.setFunction(stackTrace.getMethodName());
+        location.setLine(stackTrace.getLineNumber());
+
+        return location;
+    }
+
+    private ReportLocation mapStackTraceToReportLocation(final StackTraceElement stackTrace) {
+        final var location = new ReportLocation();
+        location.setFilePath(stackTrace.getFileName());
+        location.setFunctionName(stackTrace.getMethodName());
+        location.setLineNumber(stackTrace.getLineNumber());
+
+        return location;
+    }
 }

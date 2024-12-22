@@ -1,9 +1,10 @@
 /*
- * Copyright 2015-present Open Networking Foundation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -35,17 +36,17 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractAccumulator<T> implements Accumulator<T> {
 
-    private final Logger log = LoggerFactory.getLogger(AbstractAccumulator.class);
+    private final Logger                     log      = LoggerFactory.getLogger(AbstractAccumulator.class);
 
-    private final Timer timer;
-    private final int maxItems;
-    private final int maxBatchMillis;
-    private final int maxIdleMillis;
+    private final Timer                      timer;
+    private final int                        maxItems;
+    private final int                        maxBatchMillis;
+    private final int                        maxIdleMillis;
 
     private final AtomicReference<TimerTask> idleTask = new AtomicReference<>();
-    private final AtomicReference<TimerTask> maxTask = new AtomicReference<>();
+    private final AtomicReference<TimerTask> maxTask  = new AtomicReference<>();
 
-    private final List<T> items;
+    private final List<T>                    items;
 
     /**
      * Creates an item accumulator capable of triggering on the specified thresholds.
@@ -80,15 +81,15 @@ public abstract class AbstractAccumulator<T> implements Accumulator<T> {
             sizeAtTimeOfAdd = items.size();
         }
 
-    /*
-       WARNING: It is possible that the item that was just added to the list
-       has been processed by an existing idle task at this point.
+        /*
+           WARNING: It is possible that the item that was just added to the list
+           has been processed by an existing idle task at this point.
 
-       By rescheduling the following timers, it is possible that a
-       superfluous maxTask is generated now OR that the idle task and max
-       task are scheduled at their specified delays. This could result in
-       calls to processItems sooner than expected.
-    */
+           By rescheduling the following timers, it is possible that a
+           superfluous maxTask is generated now OR that the idle task and max
+           task are scheduled at their specified delays. This could result in
+           calls to processItems sooner than expected.
+        */
 
         // Did we hit the max item threshold?
         if (sizeAtTimeOfAdd >= maxItems) {

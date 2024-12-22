@@ -1,12 +1,12 @@
 /*
- * Copyright 2017-present Open Networking Foundation
- * Copyright © 2024 anyilanxin xuanhongzhou(anyilanxin@aliyun.com)
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,199 +23,198 @@ import java.util.function.Supplier;
 /** Logger context. */
 public class LoggerContext {
 
-  private final Supplier<String> stringProvider;
+    private final Supplier<String> stringProvider;
 
-  public LoggerContext(final Supplier<String> stringProvider) {
-    this.stringProvider = stringProvider;
-  }
-
-  /**
-   * Returns a new contextual logger builder.
-   *
-   * @param name the logger name
-   * @return the logger builder
-   */
-  public static Builder builder(final String name) {
-    return new Builder(name);
-  }
-
-  /**
-   * Returns a new contextual logger builder.
-   *
-   * @param clazz the logger class
-   * @return the logger builder
-   */
-  public static Builder builder(final Class clazz) {
-    return new Builder(clazz.getSimpleName());
-  }
-
-  @Override
-  public String toString() {
-    return stringProvider.get();
-  }
-
-  /** Contextual logger builder. */
-  public static class Builder
-      implements com.anyilanxin.kunpeng.atomix.utils.Builder<LoggerContext> {
-    private final MoreObjects.ToStringHelper identityStringHelper;
-    private MoreObjects.ToStringHelper argsStringHelper;
-    private final boolean omitNullValues = false;
-
-    public Builder(final String name) {
-      identityStringHelper = MoreObjects.toStringHelper(name);
-    }
-
-    /** Initializes the arguments string helper. */
-    private void initializeArgs() {
-      if (argsStringHelper == null) {
-        argsStringHelper = MoreObjects.toStringHelper("");
-      }
+    public LoggerContext(final Supplier<String> stringProvider) {
+        this.stringProvider = stringProvider;
     }
 
     /**
-     * Adds a name/value pair to the formatted output in {@code name=value} format. If {@code value}
-     * is {@code null}, the string {@code "null"} is used.
-     */
-    @CanIgnoreReturnValue
-    public Builder add(final String name, final Object value) {
-      initializeArgs();
-      argsStringHelper.add(name, value);
-      return this;
-    }
-
-    /** Adds a name/value pair to the formatted output in {@code name=value} format. */
-    @CanIgnoreReturnValue
-    public Builder add(final String name, final boolean value) {
-      initializeArgs();
-      argsStringHelper.add(name, value);
-      return this;
-    }
-
-    /** Adds a name/value pair to the formatted output in {@code name=value} format. */
-    @CanIgnoreReturnValue
-    public Builder add(final String name, final char value) {
-      initializeArgs();
-      argsStringHelper.add(name, value);
-      return this;
-    }
-
-    /** Adds a name/value pair to the formatted output in {@code name=value} format. */
-    @CanIgnoreReturnValue
-    public Builder add(final String name, final double value) {
-      initializeArgs();
-      argsStringHelper.add(name, value);
-      return this;
-    }
-
-    /** Adds a name/value pair to the formatted output in {@code name=value} format. */
-    @CanIgnoreReturnValue
-    public Builder add(final String name, final float value) {
-      initializeArgs();
-      argsStringHelper.add(name, value);
-      return this;
-    }
-
-    /** Adds a name/value pair to the formatted output in {@code name=value} format. */
-    @CanIgnoreReturnValue
-    public Builder add(final String name, final int value) {
-      initializeArgs();
-      argsStringHelper.add(name, value);
-      return this;
-    }
-
-    /** Adds a name/value pair to the formatted output in {@code name=value} format. */
-    @CanIgnoreReturnValue
-    public Builder add(final String name, final long value) {
-      initializeArgs();
-      argsStringHelper.add(name, value);
-      return this;
-    }
-
-    /**
-     * Adds an unnamed value to the formatted output.
+     * Returns a new contextual logger builder.
      *
-     * <p>It is strongly encouraged to use {@link #add(String, Object)} instead and give value a
-     * readable name.
+     * @param name the logger name
+     * @return the logger builder
      */
-    @CanIgnoreReturnValue
-    public Builder addValue(final Object value) {
-      identityStringHelper.addValue(value);
-      return this;
+    public static Builder builder(final String name) {
+        return new Builder(name);
     }
 
     /**
-     * Adds an unnamed value to the formatted output.
+     * Returns a new contextual logger builder.
      *
-     * <p>It is strongly encouraged to use {@link #add(String, boolean)} instead and give value a
-     * readable name.
+     * @param clazz the logger class
+     * @return the logger builder
      */
-    @CanIgnoreReturnValue
-    public Builder addValue(final boolean value) {
-      identityStringHelper.addValue(value);
-      return this;
-    }
-
-    /**
-     * Adds an unnamed value to the formatted output.
-     *
-     * <p>It is strongly encouraged to use {@link #add(String, char)} instead and give value a
-     * readable name.
-     */
-    @CanIgnoreReturnValue
-    public Builder addValue(final char value) {
-      identityStringHelper.addValue(value);
-      return this;
-    }
-
-    /**
-     * Adds an unnamed value to the formatted output.
-     *
-     * <p>It is strongly encouraged to use {@link #add(String, double)} instead and give value a
-     * readable name.
-     */
-    @CanIgnoreReturnValue
-    public Builder addValue(final double value) {
-      identityStringHelper.addValue(value);
-      return this;
-    }
-
-    /**
-     * Adds an unnamed value to the formatted output.
-     *
-     * <p>It is strongly encouraged to use {@link #add(String, float)} instead and give value a
-     * readable name.
-     */
-    @CanIgnoreReturnValue
-    public Builder addValue(final float value) {
-      identityStringHelper.addValue(value);
-      return this;
-    }
-
-    /**
-     * Adds an unnamed value to the formatted output.
-     *
-     * <p>It is strongly encouraged to use {@link #add(String, int)} instead and give value a
-     * readable name.
-     */
-    @CanIgnoreReturnValue
-    public Builder addValue(final int value) {
-      identityStringHelper.addValue(value);
-      return this;
-    }
-
-    /**
-     * Adds an unnamed value to the formatted output.
-     *
-     * <p>It is strongly encouraged to use {@link #add(String, long)} instead and give value a
-     * readable name.
-     */
-    @CanIgnoreReturnValue
-    public Builder addValue(final long value) {
-      identityStringHelper.addValue(value);
-      return this;
+    public static Builder builder(final Class clazz) {
+        return new Builder(clazz.getSimpleName());
     }
 
     @Override
+    public String toString() {
+        return stringProvider.get();
+    }
+
+    /** Contextual logger builder. */
+    public static class Builder implements com.anyilanxin.kunpeng.atomix.utils.Builder<LoggerContext> {
+        private final MoreObjects.ToStringHelper identityStringHelper;
+        private MoreObjects.ToStringHelper       argsStringHelper;
+        private final boolean                    omitNullValues = false;
+
+        public Builder(final String name) {
+            identityStringHelper = MoreObjects.toStringHelper(name);
+        }
+
+        /** Initializes the arguments string helper. */
+        private void initializeArgs() {
+            if (argsStringHelper == null) {
+                argsStringHelper = MoreObjects.toStringHelper("");
+            }
+        }
+
+        /**
+         * Adds a name/value pair to the formatted output in {@code name=value} format. If {@code value}
+         * is {@code null}, the string {@code "null"} is used.
+         */
+        @CanIgnoreReturnValue
+        public Builder add(final String name, final Object value) {
+            initializeArgs();
+            argsStringHelper.add(name, value);
+            return this;
+        }
+
+        /** Adds a name/value pair to the formatted output in {@code name=value} format. */
+        @CanIgnoreReturnValue
+        public Builder add(final String name, final boolean value) {
+            initializeArgs();
+            argsStringHelper.add(name, value);
+            return this;
+        }
+
+        /** Adds a name/value pair to the formatted output in {@code name=value} format. */
+        @CanIgnoreReturnValue
+        public Builder add(final String name, final char value) {
+            initializeArgs();
+            argsStringHelper.add(name, value);
+            return this;
+        }
+
+        /** Adds a name/value pair to the formatted output in {@code name=value} format. */
+        @CanIgnoreReturnValue
+        public Builder add(final String name, final double value) {
+            initializeArgs();
+            argsStringHelper.add(name, value);
+            return this;
+        }
+
+        /** Adds a name/value pair to the formatted output in {@code name=value} format. */
+        @CanIgnoreReturnValue
+        public Builder add(final String name, final float value) {
+            initializeArgs();
+            argsStringHelper.add(name, value);
+            return this;
+        }
+
+        /** Adds a name/value pair to the formatted output in {@code name=value} format. */
+        @CanIgnoreReturnValue
+        public Builder add(final String name, final int value) {
+            initializeArgs();
+            argsStringHelper.add(name, value);
+            return this;
+        }
+
+        /** Adds a name/value pair to the formatted output in {@code name=value} format. */
+        @CanIgnoreReturnValue
+        public Builder add(final String name, final long value) {
+            initializeArgs();
+            argsStringHelper.add(name, value);
+            return this;
+        }
+
+        /**
+         * Adds an unnamed value to the formatted output.
+         *
+         * <p>It is strongly encouraged to use {@link #add(String, Object)} instead and give value a
+         * readable name.
+         */
+        @CanIgnoreReturnValue
+        public Builder addValue(final Object value) {
+            identityStringHelper.addValue(value);
+            return this;
+        }
+
+        /**
+         * Adds an unnamed value to the formatted output.
+         *
+         * <p>It is strongly encouraged to use {@link #add(String, boolean)} instead and give value a
+         * readable name.
+         */
+        @CanIgnoreReturnValue
+        public Builder addValue(final boolean value) {
+            identityStringHelper.addValue(value);
+            return this;
+        }
+
+        /**
+         * Adds an unnamed value to the formatted output.
+         *
+         * <p>It is strongly encouraged to use {@link #add(String, char)} instead and give value a
+         * readable name.
+         */
+        @CanIgnoreReturnValue
+        public Builder addValue(final char value) {
+            identityStringHelper.addValue(value);
+            return this;
+        }
+
+        /**
+         * Adds an unnamed value to the formatted output.
+         *
+         * <p>It is strongly encouraged to use {@link #add(String, double)} instead and give value a
+         * readable name.
+         */
+        @CanIgnoreReturnValue
+        public Builder addValue(final double value) {
+            identityStringHelper.addValue(value);
+            return this;
+        }
+
+        /**
+         * Adds an unnamed value to the formatted output.
+         *
+         * <p>It is strongly encouraged to use {@link #add(String, float)} instead and give value a
+         * readable name.
+         */
+        @CanIgnoreReturnValue
+        public Builder addValue(final float value) {
+            identityStringHelper.addValue(value);
+            return this;
+        }
+
+        /**
+         * Adds an unnamed value to the formatted output.
+         *
+         * <p>It is strongly encouraged to use {@link #add(String, int)} instead and give value a
+         * readable name.
+         */
+        @CanIgnoreReturnValue
+        public Builder addValue(final int value) {
+            identityStringHelper.addValue(value);
+            return this;
+        }
+
+        /**
+         * Adds an unnamed value to the formatted output.
+         *
+         * <p>It is strongly encouraged to use {@link #add(String, long)} instead and give value a
+         * readable name.
+         */
+        @CanIgnoreReturnValue
+        public Builder addValue(final long value) {
+            identityStringHelper.addValue(value);
+            return this;
+        }
+
+        @Override
     public LoggerContext build() {
       final MoreObjects.ToStringHelper identityStringHelper = this.identityStringHelper;
       final MoreObjects.ToStringHelper argsStringHelper = this.argsStringHelper;
@@ -234,5 +233,5 @@ public class LoggerContext {
             }
           });
     }
-  }
+    }
 }

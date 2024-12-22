@@ -1,10 +1,10 @@
 /*
- * Copyright 2015-present Open Networking Foundation
- * Copyright © 2024 anyilanxin xuanhongzhou(anyilanxin@aliyun.com)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -82,41 +82,40 @@ import org.slf4j.LoggerFactory;
 
 /** Netty based MessagingService. */
 public final class NettyMessagingService implements ManagedMessagingService {
-  private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(5);
-  private static final String TLS_PROTOCOL = "TLSv1.3";
+    private static final Duration                      DEFAULT_TIMEOUT    = Duration.ofSeconds(5);
+    private static final String                        TLS_PROTOCOL       = "TLSv1.3";
 
-  private final Logger log = LoggerFactory.getLogger(getClass());
-  private final Address advertisedAddress;
-  private final Collection<Address> bindingAddresses = new ArrayList<>();
-  private final int preamble;
-  private final ProtocolVersion protocolVersion;
-  private final AtomicBoolean started = new AtomicBoolean(false);
-  private final HandlerRegistry handlers = new HandlerRegistry();
-  private final Map<Channel, RemoteClientConnection> connections = Maps.newConcurrentMap();
-  private final AtomicLong messageIdGenerator = new AtomicLong(0);
-  private final ChannelPool channelPool;
-  private final Set<CompletableFuture<?>> openFutures = Sets.newConcurrentHashSet();
-  private final MessagingConfig config;
-  private EventLoopGroup serverGroup;
-  private EventLoopGroup clientGroup;
-  private Class<? extends ServerChannel> serverChannelClass;
-  private Class<? extends SocketChannel> clientChannelClass;
-  private Class<? extends DatagramChannel> clientDataGramChannelClass;
-  private Channel serverChannel;
-  // a single thread executor which silently rejects tasks being submitted when it's shutdown
-  private ScheduledExecutorService timeoutExecutor;
-  private volatile LocalClientConnection localConnection;
-  private SslContext serverSslContext;
-  private SslContext clientSslContext;
-  private DnsAddressResolverGroup dnsResolverGroup;
-  private final MessagingMetrics messagingMetrics = new MessagingMetricsImpl();
+    private final Logger                               log                = LoggerFactory.getLogger(getClass());
+    private final Address                              advertisedAddress;
+    private final Collection<Address>                  bindingAddresses   = new ArrayList<>();
+    private final int                                  preamble;
+    private final ProtocolVersion                      protocolVersion;
+    private final AtomicBoolean                        started            = new AtomicBoolean(false);
+    private final HandlerRegistry                      handlers           = new HandlerRegistry();
+    private final Map<Channel, RemoteClientConnection> connections        = Maps.newConcurrentMap();
+    private final AtomicLong                           messageIdGenerator = new AtomicLong(0);
+    private final ChannelPool                          channelPool;
+    private final Set<CompletableFuture<?>>            openFutures        = Sets.newConcurrentHashSet();
+    private final MessagingConfig                      config;
+    private EventLoopGroup                             serverGroup;
+    private EventLoopGroup                             clientGroup;
+    private Class<? extends ServerChannel>             serverChannelClass;
+    private Class<? extends SocketChannel>             clientChannelClass;
+    private Class<? extends DatagramChannel>           clientDataGramChannelClass;
+    private Channel                                    serverChannel;
+    // a single thread executor which silently rejects tasks being submitted when it's shutdown
+    private ScheduledExecutorService                   timeoutExecutor;
+    private volatile LocalClientConnection             localConnection;
+    private SslContext                                 serverSslContext;
+    private SslContext                                 clientSslContext;
+    private DnsAddressResolverGroup                    dnsResolverGroup;
+    private final MessagingMetrics                     messagingMetrics   = new MessagingMetricsImpl();
 
-  public NettyMessagingService(
-      final String cluster, final Address advertisedAddress, final MessagingConfig config) {
-    this(cluster, advertisedAddress, config, ProtocolVersion.latest());
-  }
+    public NettyMessagingService(final String cluster, final Address advertisedAddress, final MessagingConfig config) {
+        this(cluster, advertisedAddress, config, ProtocolVersion.latest());
+    }
 
-  NettyMessagingService(
+    NettyMessagingService(
       final String cluster,
       final Address advertisedAddress,
       final MessagingConfig config,
@@ -130,31 +129,31 @@ public final class NettyMessagingService implements ManagedMessagingService {
     initAddresses(config);
   }
 
-  @VisibleForTesting
-  public ChannelPool getChannelPool() {
-    return channelPool;
-  }
-
-  private static MessagingConfig verifyHeartbeatConfig(final MessagingConfig config) {
-    if (config.getHeartbeatInterval().isZero() && config.getHeartbeatTimeout().isZero()) {
-      // Setting both to zero essentially disables the heartbeat mechanism which is valid.
-      return config;
+    @VisibleForTesting
+    public ChannelPool getChannelPool() {
+        return channelPool;
     }
 
-    if (config.getHeartbeatInterval().isNegative() || config.getHeartbeatTimeout().isNegative()) {
-      throw new IllegalArgumentException(
-          "Heartbeat interval and timeout must not be negative. Use 0s to disable heartbeats.");
+    private static MessagingConfig verifyHeartbeatConfig(final MessagingConfig config) {
+        if (config.getHeartbeatInterval().isZero() && config.getHeartbeatTimeout().isZero()) {
+            // Setting both to zero essentially disables the heartbeat mechanism which is valid.
+            return config;
+        }
+
+        if (config.getHeartbeatInterval().isNegative() || config.getHeartbeatTimeout().isNegative()) {
+            throw new IllegalArgumentException(
+                "Heartbeat interval and timeout must not be negative. Use 0s to disable heartbeats.");
+        }
+
+        if (config.getHeartbeatInterval().compareTo(config.getHeartbeatTimeout()) >= 0) {
+            throw new IllegalArgumentException(
+                "Heartbeat interval %s must be less than heartbeat timeout %s".formatted(config.getHeartbeatInterval(),
+                    config.getHeartbeatTimeout()));
+        }
+        return config;
     }
 
-    if (config.getHeartbeatInterval().compareTo(config.getHeartbeatTimeout()) >= 0) {
-      throw new IllegalArgumentException(
-          "Heartbeat interval %s must be less than heartbeat timeout %s"
-              .formatted(config.getHeartbeatInterval(), config.getHeartbeatTimeout()));
-    }
-    return config;
-  }
-
-  private void initAddresses(final MessagingConfig config) {
+    private void initAddresses(final MessagingConfig config) {
     final int port = config.getPort() != null ? config.getPort() : advertisedAddress.port();
     if (config.getInterfaces().isEmpty()) {
       bindingAddresses.add(Address.from(advertisedAddress.host(), port));
@@ -167,17 +166,17 @@ public final class NettyMessagingService implements ManagedMessagingService {
     }
   }
 
-  @Override
-  public Address address() {
-    return advertisedAddress;
-  }
+    @Override
+    public Address address() {
+        return advertisedAddress;
+    }
 
-  @Override
-  public Collection<Address> bindingAddresses() {
-    return bindingAddresses;
-  }
+    @Override
+    public Collection<Address> bindingAddresses() {
+        return bindingAddresses;
+    }
 
-  @Override
+    @Override
   public CompletableFuture<Void> sendAsync(
       final Address address, final String type, final byte[] payload, final boolean keepAlive) {
     final long messageId = messageIdGenerator.incrementAndGet();
@@ -187,35 +186,25 @@ public final class NettyMessagingService implements ManagedMessagingService {
         address, type, c -> c.sendAsync(message), MoreExecutors.directExecutor());
   }
 
-  @Override
-  public CompletableFuture<byte[]> sendAndReceive(
-      final Address address, final String type, final byte[] payload, final boolean keepAlive) {
-    return sendAndReceive(
-        address, type, payload, keepAlive, DEFAULT_TIMEOUT, MoreExecutors.directExecutor());
-  }
+    @Override
+    public CompletableFuture<byte[]> sendAndReceive(final Address address, final String type, final byte[] payload,
+                                                    final boolean keepAlive) {
+        return sendAndReceive(address, type, payload, keepAlive, DEFAULT_TIMEOUT, MoreExecutors.directExecutor());
+    }
 
-  @Override
-  public CompletableFuture<byte[]> sendAndReceive(
-      final Address address,
-      final String type,
-      final byte[] payload,
-      final boolean keepAlive,
-      final Executor executor) {
-    return sendAndReceive(address, type, payload, keepAlive, DEFAULT_TIMEOUT, executor);
-  }
+    @Override
+    public CompletableFuture<byte[]> sendAndReceive(final Address address, final String type, final byte[] payload,
+                                                    final boolean keepAlive, final Executor executor) {
+        return sendAndReceive(address, type, payload, keepAlive, DEFAULT_TIMEOUT, executor);
+    }
 
-  @Override
-  public CompletableFuture<byte[]> sendAndReceive(
-      final Address address,
-      final String type,
-      final byte[] payload,
-      final boolean keepAlive,
-      final Duration timeout) {
-    return sendAndReceive(
-        address, type, payload, keepAlive, timeout, MoreExecutors.directExecutor());
-  }
+    @Override
+    public CompletableFuture<byte[]> sendAndReceive(final Address address, final String type, final byte[] payload,
+                                                    final boolean keepAlive, final Duration timeout) {
+        return sendAndReceive(address, type, payload, keepAlive, timeout, MoreExecutors.directExecutor());
+    }
 
-  @Override
+    @Override
   public CompletableFuture<byte[]> sendAndReceive(
       final Address address,
       final String type,
@@ -255,7 +244,7 @@ public final class NettyMessagingService implements ManagedMessagingService {
     return responseFuture;
   }
 
-  @Override
+    @Override
   public void registerHandler(
       final String type, final BiConsumer<Address, byte[]> handler, final Executor executor) {
     handlers.register(
@@ -264,7 +253,7 @@ public final class NettyMessagingService implements ManagedMessagingService {
             executor.execute(() -> handler.accept(message.sender(), message.payload())));
   }
 
-  @Override
+    @Override
   public void registerHandler(
       final String type,
       final BiFunction<Address, byte[], byte[]> handler,
@@ -295,7 +284,7 @@ public final class NettyMessagingService implements ManagedMessagingService {
                 }));
   }
 
-  @Override
+    @Override
   public void registerHandler(
       final String type, final BiFunction<Address, byte[], CompletableFuture<byte[]>> handler) {
     handlers.register(
@@ -336,17 +325,17 @@ public final class NettyMessagingService implements ManagedMessagingService {
         });
   }
 
-  @Override
-  public void unregisterHandler(final String type) {
-    handlers.unregister(type);
-  }
+    @Override
+    public void unregisterHandler(final String type) {
+        handlers.unregister(type);
+    }
 
-  @Override
-  public boolean isRunning() {
-    return started.get();
-  }
+    @Override
+    public boolean isRunning() {
+        return started.get();
+    }
 
-  @Override
+    @Override
   public CompletableFuture<MessagingService> start() {
     if (started.get()) {
       log.warn("Already running at local address: {}", advertisedAddress);
@@ -390,7 +379,7 @@ public final class NettyMessagingService implements ManagedMessagingService {
         .thenApply(v -> this);
   }
 
-  @Override
+    @Override
   public CompletableFuture<Void> stop() {
     if (started.compareAndSet(true, false)) {
       return CompletableFuture.supplyAsync(
@@ -457,61 +446,57 @@ public final class NettyMessagingService implements ManagedMessagingService {
     return CompletableFuture.completedFuture(null);
   }
 
-  private CompletableFuture<Void> loadClientSslContext() {
-    try {
+    private CompletableFuture<Void> loadClientSslContext() {
+        try {
 
-      final var sslContextBuilder = SslContextBuilder.forClient();
+            final var sslContextBuilder = SslContextBuilder.forClient();
 
-      if (config.getKeyStore() != null) {
-        sslContextBuilder.trustManager(
-            TlsConfigUtil.getCertificateChain(config.getKeyStore(), config.getKeyStorePassword()));
-      } else {
-        sslContextBuilder.trustManager(config.getCertificateChain());
-      }
-      clientSslContext =
-          sslContextBuilder.sslProvider(SslProvider.OPENSSL_REFCNT).protocols(TLS_PROTOCOL).build();
-      return CompletableFuture.completedFuture(null);
-    } catch (final Exception e) {
-      return CompletableFuture.failedFuture(
-          new MessagingException(
-              "Failed to start messaging service; invalid client TLS configuration", e));
+            if (config.getKeyStore() != null) {
+                sslContextBuilder.trustManager(TlsConfigUtil.getCertificateChain(config.getKeyStore(),
+                    config.getKeyStorePassword()));
+            } else {
+                sslContextBuilder.trustManager(config.getCertificateChain());
+            }
+            clientSslContext = sslContextBuilder.sslProvider(SslProvider.OPENSSL_REFCNT).protocols(TLS_PROTOCOL)
+                .build();
+            return CompletableFuture.completedFuture(null);
+        } catch (final Exception e) {
+            return CompletableFuture.failedFuture(new MessagingException(
+                "Failed to start messaging service; invalid client TLS configuration", e));
+        }
     }
-  }
 
-  private CompletableFuture<Void> loadServerSslContext() {
-    try {
-      final SslContextBuilder sslContextBuilder;
+    private CompletableFuture<Void> loadServerSslContext() {
+        try {
+            final SslContextBuilder sslContextBuilder;
 
-      if (config.getKeyStore() != null) {
-        final var privateKey =
-            TlsConfigUtil.getPrivateKey(config.getKeyStore(), config.getKeyStorePassword());
-        final var certChain =
-            TlsConfigUtil.getCertificateChain(config.getKeyStore(), config.getKeyStorePassword());
+            if (config.getKeyStore() != null) {
+                final var privateKey = TlsConfigUtil.getPrivateKey(config.getKeyStore(), config.getKeyStorePassword());
+                final var certChain = TlsConfigUtil.getCertificateChain(config.getKeyStore(),
+                    config.getKeyStorePassword());
 
-        sslContextBuilder = SslContextBuilder.forServer(privateKey, certChain);
-      } else {
-        sslContextBuilder =
-            SslContextBuilder.forServer(config.getCertificateChain(), config.getPrivateKey());
-      }
-      serverSslContext =
-          sslContextBuilder.sslProvider(SslProvider.OPENSSL_REFCNT).protocols(TLS_PROTOCOL).build();
-      return CompletableFuture.completedFuture(null);
-    } catch (final Exception e) {
-      return CompletableFuture.failedFuture(
-          new MessagingException(
-              "Failed to start messaging service; invalid server TLS configuration", e));
+                sslContextBuilder = SslContextBuilder.forServer(privateKey, certChain);
+            } else {
+                sslContextBuilder = SslContextBuilder.forServer(config.getCertificateChain(), config.getPrivateKey());
+            }
+            serverSslContext = sslContextBuilder.sslProvider(SslProvider.OPENSSL_REFCNT).protocols(TLS_PROTOCOL)
+                .build();
+            return CompletableFuture.completedFuture(null);
+        } catch (final Exception e) {
+            return CompletableFuture.failedFuture(new MessagingException(
+                "Failed to start messaging service; invalid server TLS configuration", e));
+        }
     }
-  }
 
-  private void initTransport() {
-    if (Epoll.isAvailable()) {
-      initEpollTransport();
-    } else {
-      initNioTransport();
+    private void initTransport() {
+        if (Epoll.isAvailable()) {
+            initEpollTransport();
+        } else {
+            initNioTransport();
+        }
     }
-  }
 
-  private X509Certificate[] getCertificateChain(final File keyStoreFile, final String password)
+    private X509Certificate[] getCertificateChain(final File keyStoreFile, final String password)
       throws CertificateException, KeyStoreException, IOException, NoSuchAlgorithmException {
     final var keyStore = getKeyStore(keyStoreFile, password);
 
@@ -521,85 +506,75 @@ public final class NettyMessagingService implements ManagedMessagingService {
         .toArray(X509Certificate[]::new);
   }
 
-  private PrivateKey getPrivateKey(final File keyStoreFile, final String password)
-      throws CertificateException,
-          KeyStoreException,
-          IOException,
-          NoSuchAlgorithmException,
-          UnrecoverableKeyException {
-    final var keyStore = getKeyStore(keyStoreFile, password);
+    private PrivateKey getPrivateKey(final File keyStoreFile, final String password) throws CertificateException,
+                                                                                    KeyStoreException, IOException,
+                                                                                    NoSuchAlgorithmException,
+                                                                                    UnrecoverableKeyException {
+        final var keyStore = getKeyStore(keyStoreFile, password);
 
-    final String alias = keyStore.aliases().nextElement();
-    return (PrivateKey) keyStore.getKey(alias, password.toCharArray());
-  }
-
-  private KeyStore getKeyStore(final File keyStoreFile, final String password)
-      throws KeyStoreException {
-    final var keyStore = KeyStore.getInstance("PKCS12");
-    try {
-      keyStore.load(new FileInputStream(keyStoreFile), password.toCharArray());
-    } catch (final Exception e) {
-      throw new IllegalStateException(
-          String.format(
-              "Keystore failed to load file: %s, please ensure it is a valid PKCS12 keystore",
-              keyStoreFile.toPath()),
-          e);
+        final String alias = keyStore.aliases().nextElement();
+        return (PrivateKey) keyStore.getKey(alias, password.toCharArray());
     }
 
-    return keyStore;
-  }
+    private KeyStore getKeyStore(final File keyStoreFile, final String password) throws KeyStoreException {
+        final var keyStore = KeyStore.getInstance("PKCS12");
+        try {
+            keyStore.load(new FileInputStream(keyStoreFile), password.toCharArray());
+        } catch (final Exception e) {
+            throw new IllegalStateException(
+                String.format("Keystore failed to load file: %s, please ensure it is a valid PKCS12 keystore",
+                    keyStoreFile.toPath()), e);
+        }
 
-  private void initEpollTransport() {
-    clientGroup =
-        new EpollEventLoopGroup(0, namedThreads("netty-messaging-event-epoll-client-%d", log));
-    serverGroup =
-        new EpollEventLoopGroup(0, namedThreads("netty-messaging-event-epoll-server-%d", log));
-    serverChannelClass = EpollServerSocketChannel.class;
-    clientChannelClass = EpollSocketChannel.class;
-    clientDataGramChannelClass = EpollDatagramChannel.class;
-  }
+        return keyStore;
+    }
 
-  private void initNioTransport() {
-    clientGroup =
-        new NioEventLoopGroup(0, namedThreads("netty-messaging-event-nio-client-%d", log));
-    serverGroup =
-        new NioEventLoopGroup(0, namedThreads("netty-messaging-event-nio-server-%d", log));
-    serverChannelClass = NioServerSocketChannel.class;
-    clientChannelClass = NioSocketChannel.class;
-    clientDataGramChannelClass = NioDatagramChannel.class;
-  }
+    private void initEpollTransport() {
+        clientGroup = new EpollEventLoopGroup(0, namedThreads("netty-messaging-event-epoll-client-%d", log));
+        serverGroup = new EpollEventLoopGroup(0, namedThreads("netty-messaging-event-epoll-server-%d", log));
+        serverChannelClass = EpollServerSocketChannel.class;
+        clientChannelClass = EpollSocketChannel.class;
+        clientDataGramChannelClass = EpollDatagramChannel.class;
+    }
 
-  /**
-   * Executes the given callback on a pooled connection.
-   *
-   * @param address the connection address
-   * @param type the message type to map to the connection
-   * @param callback the callback to execute
-   * @param executor an executor on which to complete the callback future
-   * @param <T> the callback response type
-   * @return a future to be completed once the callback future is complete
-   */
-  private <T> CompletableFuture<T> executeOnPooledConnection(
-      final Address address,
-      final String type,
-      final Function<ClientConnection, CompletableFuture<T>> callback,
-      final Executor executor) {
-    final CompletableFuture<T> future = new CompletableFuture<>();
-    executeOnPooledConnection(address, type, callback, executor, future);
-    return future;
-  }
+    private void initNioTransport() {
+        clientGroup = new NioEventLoopGroup(0, namedThreads("netty-messaging-event-nio-client-%d", log));
+        serverGroup = new NioEventLoopGroup(0, namedThreads("netty-messaging-event-nio-server-%d", log));
+        serverChannelClass = NioServerSocketChannel.class;
+        clientChannelClass = NioSocketChannel.class;
+        clientDataGramChannelClass = NioDatagramChannel.class;
+    }
 
-  /**
-   * Executes the given callback on a pooled connection.
-   *
-   * @param address the connection address
-   * @param type the message type to map to the connection
-   * @param callback the callback to execute
-   * @param executor an executor on which to complete the callback future
-   * @param responseFuture the future to be completed once the callback future is complete
-   * @param <T> the callback response type
-   */
-  private <T> void executeOnPooledConnection(
+    /**
+     * Executes the given callback on a pooled connection.
+     *
+     * @param address the connection address
+     * @param type the message type to map to the connection
+     * @param callback the callback to execute
+     * @param executor an executor on which to complete the callback future
+     * @param <T> the callback response type
+     * @return a future to be completed once the callback future is complete
+     */
+    private <T> CompletableFuture<T> executeOnPooledConnection(final Address address,
+                                                               final String type,
+                                                               final Function<ClientConnection, CompletableFuture<T>> callback,
+                                                               final Executor executor) {
+        final CompletableFuture<T> future = new CompletableFuture<>();
+        executeOnPooledConnection(address, type, callback, executor, future);
+        return future;
+    }
+
+    /**
+     * Executes the given callback on a pooled connection.
+     *
+     * @param address the connection address
+     * @param type the message type to map to the connection
+     * @param callback the callback to execute
+     * @param executor an executor on which to complete the callback future
+     * @param responseFuture the future to be completed once the callback future is complete
+     * @param <T> the callback response type
+     */
+    private <T> void executeOnPooledConnection(
       final Address address,
       final String type,
       final Function<ClientConnection, CompletableFuture<T>> callback,
@@ -667,15 +642,15 @@ public final class NettyMessagingService implements ManagedMessagingService {
             });
   }
 
-  /**
-   * Executes the given callback on a transient connection.
-   *
-   * @param address the connection address
-   * @param callback the callback to execute
-   * @param executor an executor on which to complete the callback future
-   * @param <T> the callback response type
-   */
-  private <T> CompletableFuture<T> executeOnTransientConnection(
+    /**
+     * Executes the given callback on a transient connection.
+     *
+     * @param address the connection address
+     * @param callback the callback to execute
+     * @param executor an executor on which to complete the callback future
+     * @param <T> the callback response type
+     */
+    private <T> CompletableFuture<T> executeOnTransientConnection(
       final Address address,
       final Function<ClientConnection, CompletableFuture<T>> callback,
       final Executor executor) {
@@ -716,7 +691,7 @@ public final class NettyMessagingService implements ManagedMessagingService {
     return future;
   }
 
-  private RemoteClientConnection getOrCreateClientConnection(final Channel channel) {
+    private RemoteClientConnection getOrCreateClientConnection(final Channel channel) {
     RemoteClientConnection connection = connections.get(channel);
     if (connection == null) {
       connection =
@@ -735,23 +710,23 @@ public final class NettyMessagingService implements ManagedMessagingService {
     return connection;
   }
 
-  /**
-   * Opens a new Netty channel to the given address.
-   *
-   * @param address the address to which to open the channel
-   * @return a future to be completed once the channel has been opened and the handshake is complete
-   */
-  private CompletableFuture<Channel> openChannel(final Address address) {
-    return bootstrapClient(address);
-  }
+    /**
+     * Opens a new Netty channel to the given address.
+     *
+     * @param address the address to which to open the channel
+     * @return a future to be completed once the channel has been opened and the handshake is complete
+     */
+    private CompletableFuture<Channel> openChannel(final Address address) {
+        return bootstrapClient(address);
+    }
 
-  /**
-   * Bootstraps a new channel to the given address.
-   *
-   * @param address the address to which to connect
-   * @return a future to be completed with the connected channel
-   */
-  private CompletableFuture<Channel> bootstrapClient(final Address address) {
+    /**
+     * Bootstraps a new channel to the given address.
+     *
+     * @param address the address to which to connect
+     * @return a future to be completed with the connected channel
+     */
+    private CompletableFuture<Channel> bootstrapClient(final Address address) {
     final CompletableFuture<Channel> future = new OrderedFuture<>();
     final InetSocketAddress socketAddress = address.socketAddress();
 
@@ -807,51 +782,50 @@ public final class NettyMessagingService implements ManagedMessagingService {
     return future;
   }
 
-  /**
-   * Bootstraps a server.
-   *
-   * @return a future to be completed once the server has been bound to all interfaces
-   */
-  private CompletableFuture<Void> bootstrapServer() {
-    final ServerBootstrap b = new ServerBootstrap();
-    b.option(ChannelOption.SO_REUSEADDR, true);
-    b.option(ChannelOption.SO_BACKLOG, 128);
-    b.childOption(
-        ChannelOption.WRITE_BUFFER_WATER_MARK, new WriteBufferWaterMark(8 * 1024, 32 * 1024));
-    b.childOption(ChannelOption.SO_RCVBUF, config.getSocketReceiveBuffer());
-    b.childOption(ChannelOption.SO_SNDBUF, config.getSocketSendBuffer());
-    b.childOption(ChannelOption.SO_KEEPALIVE, true);
-    b.childOption(ChannelOption.TCP_NODELAY, true);
-    b.childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
-    b.group(serverGroup, clientGroup);
-    b.channel(serverChannelClass);
-    b.childHandler(new BasicServerChannelInitializer());
-    return bind(b);
-  }
+    /**
+     * Bootstraps a server.
+     *
+     * @return a future to be completed once the server has been bound to all interfaces
+     */
+    private CompletableFuture<Void> bootstrapServer() {
+        final ServerBootstrap b = new ServerBootstrap();
+        b.option(ChannelOption.SO_REUSEADDR, true);
+        b.option(ChannelOption.SO_BACKLOG, 128);
+        b.childOption(ChannelOption.WRITE_BUFFER_WATER_MARK, new WriteBufferWaterMark(8 * 1024, 32 * 1024));
+        b.childOption(ChannelOption.SO_RCVBUF, config.getSocketReceiveBuffer());
+        b.childOption(ChannelOption.SO_SNDBUF, config.getSocketSendBuffer());
+        b.childOption(ChannelOption.SO_KEEPALIVE, true);
+        b.childOption(ChannelOption.TCP_NODELAY, true);
+        b.childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
+        b.group(serverGroup, clientGroup);
+        b.channel(serverChannelClass);
+        b.childHandler(new BasicServerChannelInitializer());
+        return bind(b);
+    }
 
-  /**
-   * Binds the given bootstrap to the appropriate interfaces.
-   *
-   * @param bootstrap the bootstrap to bind
-   * @return a future to be completed once the bootstrap has been bound to all interfaces
-   */
-  private CompletableFuture<Void> bind(final ServerBootstrap bootstrap) {
-    final CompletableFuture<Void> future = new CompletableFuture<>();
+    /**
+     * Binds the given bootstrap to the appropriate interfaces.
+     *
+     * @param bootstrap the bootstrap to bind
+     * @return a future to be completed once the bootstrap has been bound to all interfaces
+     */
+    private CompletableFuture<Void> bind(final ServerBootstrap bootstrap) {
+        final CompletableFuture<Void> future = new CompletableFuture<>();
 
-    bind(bootstrap, bindingAddresses.iterator(), future);
+        bind(bootstrap, bindingAddresses.iterator(), future);
 
-    return future;
-  }
+        return future;
+    }
 
-  /**
-   * Recursively binds the given bootstrap to the given interfaces.
-   *
-   * @param bootstrap the bootstrap to bind
-   * @param addressIterator an iterator of Addresses to which to bind
-   * @param future the future to completed once the bootstrap has been bound to all provided
-   *     interfaces
-   */
-  private void bind(
+    /**
+     * Recursively binds the given bootstrap to the given interfaces.
+     *
+     * @param bootstrap the bootstrap to bind
+     * @param addressIterator an iterator of Addresses to which to bind
+     * @param future the future to completed once the bootstrap has been bound to all provided
+     *     interfaces
+     */
+    private void bind(
       final ServerBootstrap bootstrap,
       final Iterator<Address> addressIterator,
       final CompletableFuture<Void> future) {
@@ -877,11 +851,11 @@ public final class NettyMessagingService implements ManagedMessagingService {
     }
   }
 
-  private final class HeartBeatHandler extends ChannelDuplexHandler {
-    private static final String HEARTBEAT_SUBJECT = "internal-heartbeat";
-    private static final byte[] HEARTBEAT_PAYLOAD = new byte[0];
+    private final class HeartBeatHandler extends ChannelDuplexHandler {
+        private static final String HEARTBEAT_SUBJECT = "internal-heartbeat";
+        private static final byte[] HEARTBEAT_PAYLOAD = new byte[0];
 
-    @Override
+        @Override
     public void channelRead(final ChannelHandlerContext ctx, final Object msg) {
       if (msg instanceof final ProtocolRequest request
           && request.subject().equals(HEARTBEAT_SUBJECT)) {
@@ -902,7 +876,7 @@ public final class NettyMessagingService implements ManagedMessagingService {
       ctx.fireChannelRead(msg);
     }
 
-    @Override
+        @Override
     public void userEventTriggered(final ChannelHandlerContext ctx, final Object evt) {
       if (!(evt instanceof final IdleStateEvent idleStateEvent)) {
         return;
@@ -917,181 +891,162 @@ public final class NettyMessagingService implements ManagedMessagingService {
       }
     }
 
-    private ProtocolRequest createHeartBeat() {
-      return new ProtocolRequest(
-          messageIdGenerator.incrementAndGet(),
-          advertisedAddress,
-          HEARTBEAT_SUBJECT,
-          HEARTBEAT_PAYLOAD);
-    }
-  }
-
-  /** Channel initializer for basic connections. */
-  private class BasicClientChannelInitializer extends ChannelInitializer<SocketChannel> {
-
-    private final CompletableFuture<Channel> future;
-
-    BasicClientChannelInitializer(final CompletableFuture<Channel> future) {
-      this.future = future;
-    }
-
-    @Override
-    protected void initChannel(final SocketChannel channel) {
-      if (config.isTlsEnabled()) {
-        final var sslHandler = clientSslContext.newHandler(channel.alloc());
-        channel.pipeline().addLast("tls", sslHandler);
-      }
-
-      channel
-          .pipeline()
-          .addLast(
-              "idle",
-              new IdleStateHandler(
-                  config.getHeartbeatTimeout().toMillis(),
-                  config.getHeartbeatInterval().toMillis(),
-                  0,
-                  TimeUnit.MILLISECONDS));
-      channel.pipeline().addLast("handshake", new ClientHandshakeHandlerAdapter(future));
-
-      switch (config.getCompressionAlgorithm()) {
-        case GZIP:
-          channel.pipeline().addLast(ZlibCodecFactory.newZlibEncoder(ZlibWrapper.GZIP));
-          channel.pipeline().addLast(ZlibCodecFactory.newZlibDecoder(ZlibWrapper.GZIP));
-          break;
-        case SNAPPY:
-          channel.pipeline().addLast(new SnappyFrameEncoder());
-          channel.pipeline().addLast(new SnappyFrameDecoder());
-          break;
-        case NONE:
-          break;
-        default:
-          log.debug("Unknown compression algorithm. Proceeding without compression.");
-      }
-    }
-
-    @Override
-    public void exceptionCaught(final ChannelHandlerContext ctx, final Throwable cause)
-        throws Exception {
-      future.completeExceptionally(cause);
-      super.exceptionCaught(ctx, cause);
-    }
-  }
-
-  /** Channel initializer for basic connections. */
-  private final class BasicServerChannelInitializer extends ChannelInitializer<SocketChannel> {
-
-    @Override
-    protected void initChannel(final SocketChannel channel) {
-      if (config.isTlsEnabled()) {
-        final var sslHandler = serverSslContext.newHandler(channel.alloc());
-        channel.pipeline().addLast("tls", sslHandler);
-      }
-
-      channel
-          .pipeline()
-          .addLast(
-              "idle",
-              new IdleStateHandler(
-                  config.getHeartbeatTimeout().toMillis(),
-                  config.getHeartbeatInterval().toMillis(),
-                  0,
-                  TimeUnit.MILLISECONDS));
-      channel.pipeline().addLast("handshake", new ServerHandshakeHandlerAdapter());
-
-      switch (config.getCompressionAlgorithm()) {
-        case GZIP:
-          channel.pipeline().addLast(ZlibCodecFactory.newZlibEncoder(ZlibWrapper.GZIP));
-          channel.pipeline().addLast(ZlibCodecFactory.newZlibDecoder(ZlibWrapper.GZIP));
-          break;
-        case SNAPPY:
-          channel.pipeline().addLast(new SnappyFrameEncoder());
-          channel.pipeline().addLast(new SnappyFrameDecoder());
-          break;
-        case NONE:
-          break;
-        default:
-          log.debug("Unknown compression algorithm. Proceeding without compression.");
-      }
-    }
-  }
-
-  /** Base class for handshake handlers. */
-  private abstract class HandshakeHandlerAdapter<M extends ProtocolMessage>
-      extends ChannelInboundHandlerAdapter {
-
-    /**
-     * Writes the protocol version to the given context.
-     *
-     * @param context the context to which to write the version
-     * @param version the version to write
-     */
-    void writeProtocolVersion(final ChannelHandlerContext context, final ProtocolVersion version) {
-      final ByteBuf buffer = context.alloc().buffer(6);
-      buffer.writeInt(preamble);
-      buffer.writeShort(version.version());
-      context.writeAndFlush(buffer);
-    }
-
-    /**
-     * Reads the protocol version from the given buffer.
-     *
-     * @param context the buffer context
-     * @param buffer the buffer from which to read the version
-     * @return the read protocol version
-     */
-    OptionalInt readProtocolVersion(final ChannelHandlerContext context, final ByteBuf buffer) {
-      try {
-        final int preamble = buffer.readInt();
-        if (preamble != NettyMessagingService.this.preamble) {
-          log.warn("Received invalid handshake, closing connection");
-          context.close();
-          return OptionalInt.empty();
+        private ProtocolRequest createHeartBeat() {
+            return new ProtocolRequest(messageIdGenerator.incrementAndGet(), advertisedAddress, HEARTBEAT_SUBJECT,
+                HEARTBEAT_PAYLOAD);
         }
-        return OptionalInt.of(buffer.readShort());
-      } finally {
-        buffer.release();
-      }
     }
 
-    /**
-     * Activates the given version of the messaging protocol.
-     *
-     * @param context the channel handler context
-     * @param connection the client or server connection for which to activate the protocol version
-     * @param protocolVersion the protocol version to activate
-     */
-    void activateProtocolVersion(
-        final ChannelHandlerContext context,
-        final Connection<M> connection,
-        final ProtocolVersion protocolVersion) {
-      final MessagingProtocol protocol = protocolVersion.createProtocol(advertisedAddress);
-      context.pipeline().remove(this);
-      context.pipeline().addLast("encoder", protocol.newEncoder());
-      context.pipeline().addLast("decoder", protocol.newDecoder());
-      context.pipeline().addLast("heartbeat", new HeartBeatHandler());
-      context.pipeline().addLast("handler", new MessageDispatcher<>(connection));
+    /** Channel initializer for basic connections. */
+    private class BasicClientChannelInitializer extends ChannelInitializer<SocketChannel> {
+
+        private final CompletableFuture<Channel> future;
+
+        BasicClientChannelInitializer(final CompletableFuture<Channel> future) {
+            this.future = future;
+        }
+
+        @Override
+        protected void initChannel(final SocketChannel channel) {
+            if (config.isTlsEnabled()) {
+                final var sslHandler = clientSslContext.newHandler(channel.alloc());
+                channel.pipeline().addLast("tls", sslHandler);
+            }
+
+            channel.pipeline().addLast(
+                "idle",
+                new IdleStateHandler(config.getHeartbeatTimeout().toMillis(), config.getHeartbeatInterval().toMillis(),
+                    0, TimeUnit.MILLISECONDS));
+            channel.pipeline().addLast("handshake", new ClientHandshakeHandlerAdapter(future));
+
+            switch (config.getCompressionAlgorithm()) {
+                case GZIP:
+                    channel.pipeline().addLast(ZlibCodecFactory.newZlibEncoder(ZlibWrapper.GZIP));
+                    channel.pipeline().addLast(ZlibCodecFactory.newZlibDecoder(ZlibWrapper.GZIP));
+                    break;
+                case SNAPPY:
+                    channel.pipeline().addLast(new SnappyFrameEncoder());
+                    channel.pipeline().addLast(new SnappyFrameDecoder());
+                    break;
+                case NONE:
+                    break;
+                default:
+                    log.debug("Unknown compression algorithm. Proceeding without compression.");
+            }
+        }
+
+        @Override
+        public void exceptionCaught(final ChannelHandlerContext ctx, final Throwable cause) throws Exception {
+            future.completeExceptionally(cause);
+            super.exceptionCaught(ctx, cause);
+        }
     }
-  }
 
-  /** Client handshake handler. */
-  private class ClientHandshakeHandlerAdapter extends HandshakeHandlerAdapter<ProtocolReply> {
+    /** Channel initializer for basic connections. */
+    private final class BasicServerChannelInitializer extends ChannelInitializer<SocketChannel> {
 
-    private final CompletableFuture<Channel> future;
+        @Override
+        protected void initChannel(final SocketChannel channel) {
+            if (config.isTlsEnabled()) {
+                final var sslHandler = serverSslContext.newHandler(channel.alloc());
+                channel.pipeline().addLast("tls", sslHandler);
+            }
 
-    ClientHandshakeHandlerAdapter(final CompletableFuture<Channel> future) {
-      this.future = future;
+            channel.pipeline().addLast(
+                "idle",
+                new IdleStateHandler(config.getHeartbeatTimeout().toMillis(), config.getHeartbeatInterval().toMillis(),
+                    0, TimeUnit.MILLISECONDS));
+            channel.pipeline().addLast("handshake", new ServerHandshakeHandlerAdapter());
+
+            switch (config.getCompressionAlgorithm()) {
+                case GZIP:
+                    channel.pipeline().addLast(ZlibCodecFactory.newZlibEncoder(ZlibWrapper.GZIP));
+                    channel.pipeline().addLast(ZlibCodecFactory.newZlibDecoder(ZlibWrapper.GZIP));
+                    break;
+                case SNAPPY:
+                    channel.pipeline().addLast(new SnappyFrameEncoder());
+                    channel.pipeline().addLast(new SnappyFrameDecoder());
+                    break;
+                case NONE:
+                    break;
+                default:
+                    log.debug("Unknown compression algorithm. Proceeding without compression.");
+            }
+        }
     }
 
-    @Override
-    public void channelActive(final ChannelHandlerContext context) throws Exception {
-      log.debug(
-          "Writing client protocol version {} for connection to {}",
-          protocolVersion,
-          context.channel().remoteAddress());
-      writeProtocolVersion(context, protocolVersion);
+    /** Base class for handshake handlers. */
+    private abstract class HandshakeHandlerAdapter<M extends ProtocolMessage> extends ChannelInboundHandlerAdapter {
+
+        /**
+         * Writes the protocol version to the given context.
+         *
+         * @param context the context to which to write the version
+         * @param version the version to write
+         */
+        void writeProtocolVersion(final ChannelHandlerContext context, final ProtocolVersion version) {
+            final ByteBuf buffer = context.alloc().buffer(6);
+            buffer.writeInt(preamble);
+            buffer.writeShort(version.version());
+            context.writeAndFlush(buffer);
+        }
+
+        /**
+         * Reads the protocol version from the given buffer.
+         *
+         * @param context the buffer context
+         * @param buffer the buffer from which to read the version
+         * @return the read protocol version
+         */
+        OptionalInt readProtocolVersion(final ChannelHandlerContext context, final ByteBuf buffer) {
+            try {
+                final int preamble = buffer.readInt();
+                if (preamble != NettyMessagingService.this.preamble) {
+                    log.warn("Received invalid handshake, closing connection");
+                    context.close();
+                    return OptionalInt.empty();
+                }
+                return OptionalInt.of(buffer.readShort());
+            } finally {
+                buffer.release();
+            }
+        }
+
+        /**
+         * Activates the given version of the messaging protocol.
+         *
+         * @param context the channel handler context
+         * @param connection the client or server connection for which to activate the protocol version
+         * @param protocolVersion the protocol version to activate
+         */
+        void activateProtocolVersion(final ChannelHandlerContext context, final Connection<M> connection,
+                                     final ProtocolVersion protocolVersion) {
+            final MessagingProtocol protocol = protocolVersion.createProtocol(advertisedAddress);
+            context.pipeline().remove(this);
+            context.pipeline().addLast("encoder", protocol.newEncoder());
+            context.pipeline().addLast("decoder", protocol.newDecoder());
+            context.pipeline().addLast("heartbeat", new HeartBeatHandler());
+            context.pipeline().addLast("handler", new MessageDispatcher<>(connection));
+        }
     }
 
-    @Override
+    /** Client handshake handler. */
+    private class ClientHandshakeHandlerAdapter extends HandshakeHandlerAdapter<ProtocolReply> {
+
+        private final CompletableFuture<Channel> future;
+
+        ClientHandshakeHandlerAdapter(final CompletableFuture<Channel> future) {
+            this.future = future;
+        }
+
+        @Override
+        public void channelActive(final ChannelHandlerContext context) throws Exception {
+            log.debug("Writing client protocol version {} for connection to {}", protocolVersion, context.channel()
+                .remoteAddress());
+            writeProtocolVersion(context, protocolVersion);
+        }
+
+        @Override
     public void channelRead(final ChannelHandlerContext context, final Object message)
         throws Exception {
       // Read the protocol version from the server.
@@ -1112,31 +1067,25 @@ public final class NettyMessagingService implements ManagedMessagingService {
               });
     }
 
-    @Override
-    public void exceptionCaught(final ChannelHandlerContext ctx, final Throwable cause)
-        throws Exception {
-      future.completeExceptionally(cause);
+        @Override
+        public void exceptionCaught(final ChannelHandlerContext ctx, final Throwable cause) throws Exception {
+            future.completeExceptionally(cause);
+        }
+
+        @Override
+        void activateProtocolVersion(final ChannelHandlerContext context, final Connection<ProtocolReply> connection,
+                                     final ProtocolVersion protocolVersion) {
+            log.debug("Activating client protocol version {} for connection to {}", protocolVersion, context.channel()
+                .remoteAddress());
+            super.activateProtocolVersion(context, connection, protocolVersion);
+            future.complete(context.channel());
+        }
     }
 
-    @Override
-    void activateProtocolVersion(
-        final ChannelHandlerContext context,
-        final Connection<ProtocolReply> connection,
-        final ProtocolVersion protocolVersion) {
-      log.debug(
-          "Activating client protocol version {} for connection to {}",
-          protocolVersion,
-          context.channel().remoteAddress());
-      super.activateProtocolVersion(context, connection, protocolVersion);
-      future.complete(context.channel());
-    }
-  }
+    /** Server handshake handler. */
+    private final class ServerHandshakeHandlerAdapter extends HandshakeHandlerAdapter<ProtocolRequest> {
 
-  /** Server handshake handler. */
-  private final class ServerHandshakeHandlerAdapter
-      extends HandshakeHandlerAdapter<ProtocolRequest> {
-
-    @Override
+        @Override
     public void channelRead(final ChannelHandlerContext context, final Object message)
         throws Exception {
       // Read the protocol version from the client handshake. If the client's protocol version is
@@ -1157,56 +1106,50 @@ public final class NettyMessagingService implements ManagedMessagingService {
               });
     }
 
-    @Override
-    void activateProtocolVersion(
-        final ChannelHandlerContext context,
-        final Connection<ProtocolRequest> connection,
-        final ProtocolVersion protocolVersion) {
-      log.debug(
-          "Activating server protocol version {} for connection to {}",
-          protocolVersion,
-          context.channel().remoteAddress());
-      super.activateProtocolVersion(context, connection, protocolVersion);
-    }
-  }
-
-  /** Connection message dispatcher. */
-  private class MessageDispatcher<M extends ProtocolMessage>
-      extends SimpleChannelInboundHandler<Object> {
-
-    private final Connection<M> connection;
-
-    MessageDispatcher(final Connection<M> connection) {
-      this.connection = connection;
+        @Override
+        void activateProtocolVersion(final ChannelHandlerContext context, final Connection<ProtocolRequest> connection,
+                                     final ProtocolVersion protocolVersion) {
+            log.debug("Activating server protocol version {} for connection to {}", protocolVersion, context.channel()
+                .remoteAddress());
+            super.activateProtocolVersion(context, connection, protocolVersion);
+        }
     }
 
-    @Override
-    public void channelInactive(final ChannelHandlerContext context) throws Exception {
-      connection.close();
-      context.close();
-    }
+    /** Connection message dispatcher. */
+    private class MessageDispatcher<M extends ProtocolMessage> extends SimpleChannelInboundHandler<Object> {
 
-    @Override
-    public void exceptionCaught(final ChannelHandlerContext context, final Throwable cause) {
-      log.error("Exception inside channel handling pipeline", cause);
-      connection.close();
-      context.close();
-    }
+        private final Connection<M> connection;
 
-    @Override
-    public boolean acceptInboundMessage(final Object msg) {
-      return msg instanceof ProtocolMessage;
-    }
+        MessageDispatcher(final Connection<M> connection) {
+            this.connection = connection;
+        }
 
-    @Override
-    @SuppressWarnings("unchecked")
-    protected void channelRead0(final ChannelHandlerContext ctx, final Object message)
-        throws Exception {
-      try {
-        connection.dispatch((M) message);
-      } catch (final RejectedExecutionException e) {
-        log.warn("Unable to dispatch message due to {}", e.getMessage());
-      }
+        @Override
+        public void channelInactive(final ChannelHandlerContext context) throws Exception {
+            connection.close();
+            context.close();
+        }
+
+        @Override
+        public void exceptionCaught(final ChannelHandlerContext context, final Throwable cause) {
+            log.error("Exception inside channel handling pipeline", cause);
+            connection.close();
+            context.close();
+        }
+
+        @Override
+        public boolean acceptInboundMessage(final Object msg) {
+            return msg instanceof ProtocolMessage;
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        protected void channelRead0(final ChannelHandlerContext ctx, final Object message) throws Exception {
+            try {
+                connection.dispatch((M) message);
+            } catch (final RejectedExecutionException e) {
+                log.warn("Unable to dispatch message due to {}", e.getMessage());
+            }
+        }
     }
-  }
 }

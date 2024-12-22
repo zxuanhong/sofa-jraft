@@ -1,18 +1,18 @@
 /*
- * Copyright © 2024 anyilanxin xuanhongzhou(anyilanxin@aliyun.com)
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.anyilanxin.kunpeng.util.buffer;
 
@@ -27,10 +27,10 @@ import org.agrona.MutableDirectBuffer;
 import org.agrona.concurrent.UnsafeBuffer;
 
 public final class BufferUtil {
-    public static final int NO_WRAP = 1;
-    private static final int DEFAULT_WRAP = 16; // bytes
+    public static final int     NO_WRAP      = 1;
+    private static final int    DEFAULT_WRAP = 16;                              // bytes
 
-    private static final char[] HEX_CODE = "0123456789ABCDEF".toCharArray();
+    private static final char[] HEX_CODE     = "0123456789ABCDEF".toCharArray();
 
     private BufferUtil() { // avoid instantiation of util class
     }
@@ -39,8 +39,7 @@ public final class BufferUtil {
         return bufferAsString(buffer, 0, buffer.capacity());
     }
 
-    public static String bufferAsString(
-            final DirectBuffer buffer, final int offset, final int length) {
+    public static String bufferAsString(final DirectBuffer buffer, final int offset, final int length) {
         final byte[] bytes = new byte[length];
 
         buffer.getBytes(offset, bytes);
@@ -58,8 +57,7 @@ public final class BufferUtil {
     public static boolean equals(final DirectBuffer buffer1, final DirectBuffer buffer2) {
         if (buffer1 instanceof UnsafeBuffer && buffer2 instanceof UnsafeBuffer) {
             return buffer1.equals(buffer2);
-        } else if (buffer1 instanceof ExpandableArrayBuffer
-                && buffer2 instanceof ExpandableArrayBuffer) {
+        } else if (buffer1 instanceof ExpandableArrayBuffer && buffer2 instanceof ExpandableArrayBuffer) {
             return buffer1.equals(buffer2);
         } else {
             return contentsEqual(buffer1, buffer2);
@@ -120,8 +118,7 @@ public final class BufferUtil {
      * @param length the number of bytes to clone
      * @return the new buffer instance
      */
-    public static DirectBuffer cloneBuffer(
-            final DirectBuffer src, final int offset, final int length) {
+    public static DirectBuffer cloneBuffer(final DirectBuffer src, final int offset, final int length) {
         final int availableBytes = src.capacity() - offset;
 
         ensureGreaterThanOrEqual("available bytes", availableBytes, length);
@@ -135,8 +132,7 @@ public final class BufferUtil {
             src.getBytes(offset, dst, 0, length);
             return dst;
         } else {
-            throw new RuntimeException(
-                    "Unable to clone buffer of class " + src.getClass().getSimpleName());
+            throw new RuntimeException("Unable to clone buffer of class " + src.getClass().getSimpleName());
         }
     }
 
@@ -148,8 +144,8 @@ public final class BufferUtil {
         return bufferAsHexString(buffer, 0, buffer.capacity(), wrap);
     }
 
-    private static String bufferAsHexString(
-            final DirectBuffer buffer, final int offset, final int length, final int wrap) {
+    private static String bufferAsHexString(final DirectBuffer buffer, final int offset, final int length,
+                                            final int wrap) {
         final byte[] bytes = new byte[length];
         buffer.getBytes(offset, bytes, 0, length);
 
@@ -187,11 +183,7 @@ public final class BufferUtil {
                     hexBuilder.append("   ");
                 }
             }
-            builder
-                    .append(hexBuilder.toString())
-                    .append('|')
-                    .append(asciiBuilder.toString())
-                    .append("|\n");
+            builder.append(hexBuilder.toString()).append('|').append(asciiBuilder.toString()).append("|\n");
 
             asciiBuilder.delete(0, asciiBuilder.length());
             hexBuilder.delete(0, hexBuilder.length());
@@ -237,13 +229,8 @@ public final class BufferUtil {
      * @param contentLength the length of the content to check
      * @return true if array starts with the all bytes contained in prefix
      */
-    public static boolean startsWith(
-            final byte[] prefix,
-            final int prefixOffset,
-            final int prefixLength,
-            final byte[] content,
-            int contentOffset,
-            final int contentLength) {
+    public static boolean startsWith(final byte[] prefix, final int prefixOffset, final int prefixLength,
+                                     final byte[] content, int contentOffset, final int contentLength) {
         if (contentLength < prefixLength) {
             return false;
         }

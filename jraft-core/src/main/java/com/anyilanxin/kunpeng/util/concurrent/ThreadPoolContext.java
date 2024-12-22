@@ -1,11 +1,12 @@
 /*
- * Copyright 2015-present Open Networking Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -36,31 +37,30 @@ import org.slf4j.LoggerFactory;
  * @author <a href="http://github.com/kuujo">Jordan Halterman</a>
  */
 public class ThreadPoolContext extends AbstractThreadContext {
-  private static final Logger LOGGER = LoggerFactory.getLogger(ThreadPoolContext.class);
-  protected final ScheduledExecutorService parent;
-  private final Runnable runner;
-  private final LinkedList<Runnable> tasks = new LinkedList<>();
-  private boolean running;
-  private final Executor executor =
-      new Executor() {
-        @Override
-        public void execute(Runnable command) {
-          synchronized (tasks) {
-            tasks.add(command);
-            if (!running) {
-              running = true;
-              parent.execute(runner);
-            }
-          }
-        }
-      };
+    private static final Logger              LOGGER   = LoggerFactory.getLogger(ThreadPoolContext.class);
+    protected final ScheduledExecutorService parent;
+    private final Runnable                   runner;
+    private final LinkedList<Runnable>       tasks    = new LinkedList<>();
+    private boolean                          running;
+    private final Executor                   executor = new Executor() {
+                                                          @Override
+                                                          public void execute(Runnable command) {
+                                                              synchronized (tasks) {
+                                                                  tasks.add(command);
+                                                                  if (!running) {
+                                                                      running = true;
+                                                                      parent.execute(runner);
+                                                                  }
+                                                              }
+                                                          }
+                                                      };
 
-  /**
-   * Creates a new thread pool context.
-   *
-   * @param parent The thread pool on which to execute events.
-   */
-  public ThreadPoolContext(ScheduledExecutorService parent) {
+    /**
+     * Creates a new thread pool context.
+     *
+     * @param parent The thread pool on which to execute events.
+     */
+    public ThreadPoolContext(ScheduledExecutorService parent) {
     this.parent = checkNotNull(parent, "parent cannot be null");
 
     // This code was shamelessly stolededed from Vert.x:
@@ -88,19 +88,19 @@ public class ThreadPoolContext extends AbstractThreadContext {
         };
   }
 
-  @Override
-  public void execute(Runnable command) {
-    executor.execute(command);
-  }
+    @Override
+    public void execute(Runnable command) {
+        executor.execute(command);
+    }
 
-  @Override
+    @Override
   public Scheduled schedule(Duration delay, Runnable runnable) {
     ScheduledFuture<?> future =
         parent.schedule(() -> executor.execute(runnable), delay.toMillis(), TimeUnit.MILLISECONDS);
     return new ScheduledFutureImpl<>(future);
   }
 
-  @Override
+    @Override
   public Scheduled schedule(Duration delay, Duration interval, Runnable runnable) {
     ScheduledFuture<?> future =
         parent.scheduleAtFixedRate(
@@ -111,8 +111,8 @@ public class ThreadPoolContext extends AbstractThreadContext {
     return new ScheduledFutureImpl<>(future);
   }
 
-  @Override
-  public void close() {
-    // Do nothing.
-  }
+    @Override
+    public void close() {
+        // Do nothing.
+    }
 }

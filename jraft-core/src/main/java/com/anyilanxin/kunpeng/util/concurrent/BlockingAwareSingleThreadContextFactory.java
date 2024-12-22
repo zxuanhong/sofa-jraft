@@ -1,11 +1,12 @@
 /*
- * Copyright 2017-present Open Networking Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,10 +29,9 @@ import org.slf4j.Logger;
  */
 public class BlockingAwareSingleThreadContextFactory implements ThreadContextFactory {
     private final ThreadFactory threadFactory;
-    private final Executor threadPoolExecutor;
+    private final Executor      threadPoolExecutor;
 
-    public BlockingAwareSingleThreadContextFactory(
-            String nameFormat, int threadPoolSize, Logger logger) {
+    public BlockingAwareSingleThreadContextFactory(String nameFormat, int threadPoolSize, Logger logger) {
         this(threadPoolSize, Threads.namedThreads(nameFormat, logger));
     }
 
@@ -39,8 +39,7 @@ public class BlockingAwareSingleThreadContextFactory implements ThreadContextFac
         this(threadFactory, Executors.newScheduledThreadPool(threadPoolSize, threadFactory));
     }
 
-    public BlockingAwareSingleThreadContextFactory(
-            ThreadFactory threadFactory, Executor threadPoolExecutor) {
+    public BlockingAwareSingleThreadContextFactory(ThreadFactory threadFactory, Executor threadPoolExecutor) {
         this.threadFactory = checkNotNull(threadFactory);
         this.threadPoolExecutor = checkNotNull(threadPoolExecutor);
     }

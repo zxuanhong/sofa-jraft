@@ -1,12 +1,12 @@
 /*
- * Copyright 2017-present Open Networking Foundation
- * Copyright © 2024 anyilanxin xuanhongzhou(anyilanxin@aliyun.com)
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,73 +22,67 @@ import java.util.Objects;
 
 /** Default cluster node. */
 public final class StatefulMember extends Member {
-  private final Version version;
-  private volatile boolean active;
-  private volatile boolean reachable;
+    private final Version    version;
+    private volatile boolean active;
+    private volatile boolean reachable;
 
-  public StatefulMember(final Member member, final Version version) {
-    super(
-        member.id(),
-        member.address(),
-        member.zone(),
-        member.rack(),
-        member.host(),
-        member.properties());
-    this.version = version;
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(super.hashCode(), version);
-  }
-
-  @Override
-  public boolean equals(final Object o) {
-    if (this == o) {
-      return true;
+    public StatefulMember(final Member member, final Version version) {
+        super(member.id(), member.address(), member.zone(), member.rack(), member.host(), member.properties());
+        this.version = version;
     }
 
-    if (o == null || getClass() != o.getClass()) {
-      return false;
-    }
-    if (!super.equals(o)) {
-      return false;
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), version);
     }
 
-    final StatefulMember that = (StatefulMember) o;
-    return version.equals(that.version);
-  }
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
 
-  @Override
-  public boolean isActive() {
-    return active;
-  }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
 
-  /**
-   * Sets whether this member is an active member of the cluster.
-   *
-   * @param active whether this member is an active member of the cluster
-   */
-  void setActive(final boolean active) {
-    this.active = active;
-  }
+        final StatefulMember that = (StatefulMember) o;
+        return version.equals(that.version);
+    }
 
-  @Override
-  public boolean isReachable() {
-    return reachable;
-  }
+    @Override
+    public boolean isActive() {
+        return active;
+    }
 
-  @Override
-  public Version version() {
-    return version;
-  }
+    /**
+     * Sets whether this member is an active member of the cluster.
+     *
+     * @param active whether this member is an active member of the cluster
+     */
+    void setActive(final boolean active) {
+        this.active = active;
+    }
 
-  /**
-   * Sets whether this member is reachable.
-   *
-   * @param reachable whether this member is reachable
-   */
-  void setReachable(final boolean reachable) {
-    this.reachable = reachable;
-  }
+    @Override
+    public boolean isReachable() {
+        return reachable;
+    }
+
+    @Override
+    public Version version() {
+        return version;
+    }
+
+    /**
+     * Sets whether this member is reachable.
+     *
+     * @param reachable whether this member is reachable
+     */
+    void setReachable(final boolean reachable) {
+        this.reachable = reachable;
+    }
 }

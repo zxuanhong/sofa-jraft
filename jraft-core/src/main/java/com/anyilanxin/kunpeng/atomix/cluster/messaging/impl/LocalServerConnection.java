@@ -1,10 +1,10 @@
 /*
- * Copyright 2018-present Open Networking Foundation
- * Copyright © 2024 anyilanxin xuanhongzhou(anyilanxin@aliyun.com)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -21,19 +21,17 @@ import java.util.Optional;
 
 /** Local server-side connection. */
 final class LocalServerConnection extends AbstractServerConnection {
-  private static final byte[] EMPTY_PAYLOAD = new byte[0];
+    private static final byte[]         EMPTY_PAYLOAD = new byte[0];
 
-  private final LocalClientConnection clientConnection;
+    private final LocalClientConnection clientConnection;
 
-  LocalServerConnection(
-      final HandlerRegistry handlers, final LocalClientConnection clientConnection) {
-    super(handlers);
-    this.clientConnection = Objects.requireNonNull(clientConnection);
-  }
+    LocalServerConnection(final HandlerRegistry handlers, final LocalClientConnection clientConnection) {
+        super(handlers);
+        this.clientConnection = Objects.requireNonNull(clientConnection);
+    }
 
-  @Override
-  public void reply(
-      final long messageId, final ProtocolReply.Status status, final Optional<byte[]> payload) {
-    clientConnection.dispatch(new ProtocolReply(messageId, payload.orElse(EMPTY_PAYLOAD), status));
-  }
+    @Override
+    public void reply(final long messageId, final ProtocolReply.Status status, final Optional<byte[]> payload) {
+        clientConnection.dispatch(new ProtocolReply(messageId, payload.orElse(EMPTY_PAYLOAD), status));
+    }
 }

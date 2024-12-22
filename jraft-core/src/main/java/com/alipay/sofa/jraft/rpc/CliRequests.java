@@ -15634,8 +15634,8 @@ public final class CliRequests {
     }
 
     public interface ResetFactorRequestOrBuilder extends
-            // @@protoc_insertion_point(interface_extends:jraft.ResetFactorRequest)
-            com.google.protobuf.MessageOrBuilder {
+    // @@protoc_insertion_point(interface_extends:jraft.ResetFactorRequest)
+                                                com.google.protobuf.MessageOrBuilder {
 
         /**
          * <code>required string group_id = 1;</code>
@@ -15692,8 +15692,8 @@ public final class CliRequests {
      * Protobuf type {@code jraft.ResetFactorRequest}
      */
     public static final class ResetFactorRequest extends com.google.protobuf.GeneratedMessageV3 implements
-            // @@protoc_insertion_point(message_implements:jraft.ResetFactorRequest)
-            ResetFactorRequestOrBuilder {
+    // @@protoc_insertion_point(message_implements:jraft.ResetFactorRequest)
+                                                                                               ResetFactorRequestOrBuilder {
         private static final long serialVersionUID = 0L;
 
         // Use ResetFactorRequest.newBuilder() to construct.
@@ -15715,14 +15715,14 @@ public final class CliRequests {
 
         private ResetFactorRequest(com.google.protobuf.CodedInputStream input,
                                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws com.google.protobuf.InvalidProtocolBufferException {
+                                                                                               throws com.google.protobuf.InvalidProtocolBufferException {
             this();
             if (extensionRegistry == null) {
                 throw new java.lang.NullPointerException();
             }
             int mutable_bitField0_ = 0;
             com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet
-                    .newBuilder();
+                .newBuilder();
             try {
                 boolean done = false;
                 while (!done) {
@@ -15777,12 +15777,12 @@ public final class CliRequests {
 
         protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
             return com.alipay.sofa.jraft.rpc.CliRequests.internal_static_jraft_ResetFactorRequest_fieldAccessorTable
-                    .ensureFieldAccessorsInitialized(com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorRequest.class,
-                            com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorRequest.Builder.class);
+                .ensureFieldAccessorsInitialized(com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorRequest.class,
+                    com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorRequest.Builder.class);
         }
 
-        private int bitField0_;
-        public static final int GROUP_ID_FIELD_NUMBER = 1;
+        private int                       bitField0_;
+        public static final int           GROUP_ID_FIELD_NUMBER = 1;
         private volatile java.lang.Object groupId_;
 
         /**
@@ -15823,7 +15823,7 @@ public final class CliRequests {
             }
         }
 
-        public static final int LEADER_ID_FIELD_NUMBER = 2;
+        public static final int           LEADER_ID_FIELD_NUMBER = 2;
         private volatile java.lang.Object leaderId_;
 
         /**
@@ -15865,7 +15865,7 @@ public final class CliRequests {
         }
 
         public static final int READ_FACTOR_FIELD_NUMBER = 3;
-        private int readFactor_;
+        private int             readFactor_;
 
         /**
          * <code>optional int32 read_factor = 3;</code>
@@ -15882,7 +15882,7 @@ public final class CliRequests {
         }
 
         public static final int WRITE_FACTOR_FIELD_NUMBER = 4;
-        private int writeFactor_;
+        private int             writeFactor_;
 
         /**
          * <code>optional int32 write_factor = 4;</code>
@@ -16018,69 +16018,69 @@ public final class CliRequests {
         }
 
         public static com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorRequest parseFrom(java.nio.ByteBuffer data)
-                throws com.google.protobuf.InvalidProtocolBufferException {
+                                                                                                                  throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data);
         }
 
         public static com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorRequest parseFrom(java.nio.ByteBuffer data,
                                                                                          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws com.google.protobuf.InvalidProtocolBufferException {
+                                                                                                                                                     throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data, extensionRegistry);
         }
 
         public static com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorRequest parseFrom(com.google.protobuf.ByteString data)
-                throws com.google.protobuf.InvalidProtocolBufferException {
+                                                                                                                             throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data);
         }
 
         public static com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorRequest parseFrom(com.google.protobuf.ByteString data,
                                                                                          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws com.google.protobuf.InvalidProtocolBufferException {
+                                                                                                                                                     throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data, extensionRegistry);
         }
 
         public static com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorRequest parseFrom(byte[] data)
-                throws com.google.protobuf.InvalidProtocolBufferException {
+                                                                                                     throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data);
         }
 
         public static com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorRequest parseFrom(byte[] data,
                                                                                          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws com.google.protobuf.InvalidProtocolBufferException {
+                                                                                                                                                     throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data, extensionRegistry);
         }
 
         public static com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorRequest parseFrom(java.io.InputStream input)
-                throws java.io.IOException {
+                                                                                                                   throws java.io.IOException {
             return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
         }
 
         public static com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorRequest parseFrom(java.io.InputStream input,
                                                                                          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws java.io.IOException {
+                                                                                                                                                     throws java.io.IOException {
             return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
         }
 
         public static com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorRequest parseDelimitedFrom(java.io.InputStream input)
-                throws java.io.IOException {
+                                                                                                                            throws java.io.IOException {
             return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
         }
 
         public static com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorRequest parseDelimitedFrom(java.io.InputStream input,
                                                                                                   com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws java.io.IOException {
+                                                                                                                                                              throws java.io.IOException {
             return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input,
-                    extensionRegistry);
+                extensionRegistry);
         }
 
         public static com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorRequest parseFrom(com.google.protobuf.CodedInputStream input)
-                throws java.io.IOException {
+                                                                                                                                    throws java.io.IOException {
             return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
         }
 
         public static com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorRequest parseFrom(com.google.protobuf.CodedInputStream input,
                                                                                          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws java.io.IOException {
+                                                                                                                                                     throws java.io.IOException {
             return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
         }
 
@@ -16110,17 +16110,17 @@ public final class CliRequests {
          * Protobuf type {@code jraft.ResetFactorRequest}
          */
         public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
-                implements
-                // @@protoc_insertion_point(builder_implements:jraft.ResetFactorRequest)
-                com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorRequestOrBuilder {
+                                                                                                         implements
+                                                                                                         // @@protoc_insertion_point(builder_implements:jraft.ResetFactorRequest)
+                                                                                                         com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorRequestOrBuilder {
             public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
                 return com.alipay.sofa.jraft.rpc.CliRequests.internal_static_jraft_ResetFactorRequest_descriptor;
             }
 
             protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
                 return com.alipay.sofa.jraft.rpc.CliRequests.internal_static_jraft_ResetFactorRequest_fieldAccessorTable
-                        .ensureFieldAccessorsInitialized(com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorRequest.class,
-                                com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorRequest.Builder.class);
+                    .ensureFieldAccessorsInitialized(com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorRequest.class,
+                        com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorRequest.Builder.class);
             }
 
             // Construct using com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorRequest.newBuilder()
@@ -16169,7 +16169,7 @@ public final class CliRequests {
 
             public com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorRequest buildPartial() {
                 com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorRequest result = new com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorRequest(
-                        this);
+                    this);
                 int from_bitField0_ = bitField0_;
                 int to_bitField0_ = 0;
                 if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
@@ -16264,7 +16264,7 @@ public final class CliRequests {
 
             public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
                                      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                    throws java.io.IOException {
+                                                                                                 throws java.io.IOException {
                 com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorRequest parsedMessage = null;
                 try {
                     parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
@@ -16279,7 +16279,7 @@ public final class CliRequests {
                 return this;
             }
 
-            private int bitField0_;
+            private int              bitField0_;
 
             private java.lang.Object groupId_ = "";
 
@@ -16314,7 +16314,7 @@ public final class CliRequests {
                 java.lang.Object ref = groupId_;
                 if (ref instanceof String) {
                     com.google.protobuf.ByteString b = com.google.protobuf.ByteString
-                            .copyFromUtf8((java.lang.String) ref);
+                        .copyFromUtf8((java.lang.String) ref);
                     groupId_ = b;
                     return b;
                 } else {
@@ -16391,7 +16391,7 @@ public final class CliRequests {
                 java.lang.Object ref = leaderId_;
                 if (ref instanceof String) {
                     com.google.protobuf.ByteString b = com.google.protobuf.ByteString
-                            .copyFromUtf8((java.lang.String) ref);
+                        .copyFromUtf8((java.lang.String) ref);
                     leaderId_ = b;
                     return b;
                 } else {
@@ -16531,13 +16531,13 @@ public final class CliRequests {
 
         @java.lang.Deprecated
         public static final com.google.protobuf.Parser<ResetFactorRequest> PARSER = new com.google.protobuf.AbstractParser<ResetFactorRequest>() {
-            public ResetFactorRequest parsePartialFrom(com.google.protobuf.CodedInputStream input,
-                                                       com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                    throws com.google.protobuf.InvalidProtocolBufferException {
-                return new ResetFactorRequest(
-                        input, extensionRegistry);
-            }
-        };
+                                                                                      public ResetFactorRequest parsePartialFrom(com.google.protobuf.CodedInputStream input,
+                                                                                                                                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                                                                                                                                                                                             throws com.google.protobuf.InvalidProtocolBufferException {
+                                                                                          return new ResetFactorRequest(
+                                                                                              input, extensionRegistry);
+                                                                                      }
+                                                                                  };
 
         public static com.google.protobuf.Parser<ResetFactorRequest> parser() {
             return PARSER;
@@ -16555,8 +16555,8 @@ public final class CliRequests {
     }
 
     public interface ResetFactorResponseOrBuilder extends
-            // @@protoc_insertion_point(interface_extends:jraft.ResetFactorResponse)
-            com.google.protobuf.MessageOrBuilder {
+    // @@protoc_insertion_point(interface_extends:jraft.ResetFactorResponse)
+                                                 com.google.protobuf.MessageOrBuilder {
 
         /**
          * <code>optional int32 read_factor = 1;</code>
@@ -16598,8 +16598,8 @@ public final class CliRequests {
      * Protobuf type {@code jraft.ResetFactorResponse}
      */
     public static final class ResetFactorResponse extends com.google.protobuf.GeneratedMessageV3 implements
-            // @@protoc_insertion_point(message_implements:jraft.ResetFactorResponse)
-            ResetFactorResponseOrBuilder {
+    // @@protoc_insertion_point(message_implements:jraft.ResetFactorResponse)
+                                                                                                ResetFactorResponseOrBuilder {
         private static final long serialVersionUID = 0L;
 
         // Use ResetFactorResponse.newBuilder() to construct.
@@ -16619,14 +16619,14 @@ public final class CliRequests {
 
         private ResetFactorResponse(com.google.protobuf.CodedInputStream input,
                                     com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws com.google.protobuf.InvalidProtocolBufferException {
+                                                                                                throws com.google.protobuf.InvalidProtocolBufferException {
             this();
             if (extensionRegistry == null) {
                 throw new java.lang.NullPointerException();
             }
             int mutable_bitField0_ = 0;
             com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet
-                    .newBuilder();
+                .newBuilder();
             try {
                 boolean done = false;
                 while (!done) {
@@ -16657,7 +16657,7 @@ public final class CliRequests {
                                 subBuilder = errorResponse_.toBuilder();
                             }
                             errorResponse_ = input.readMessage(
-                                    com.alipay.sofa.jraft.rpc.RpcRequests.ErrorResponse.PARSER, extensionRegistry);
+                                com.alipay.sofa.jraft.rpc.RpcRequests.ErrorResponse.PARSER, extensionRegistry);
                             if (subBuilder != null) {
                                 subBuilder.mergeFrom(errorResponse_);
                                 errorResponse_ = subBuilder.buildPartial();
@@ -16683,13 +16683,13 @@ public final class CliRequests {
 
         protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
             return com.alipay.sofa.jraft.rpc.CliRequests.internal_static_jraft_ResetFactorResponse_fieldAccessorTable
-                    .ensureFieldAccessorsInitialized(com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorResponse.class,
-                            com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorResponse.Builder.class);
+                .ensureFieldAccessorsInitialized(com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorResponse.class,
+                    com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorResponse.Builder.class);
         }
 
-        private int bitField0_;
+        private int             bitField0_;
         public static final int READ_FACTOR_FIELD_NUMBER = 1;
-        private int readFactor_;
+        private int             readFactor_;
 
         /**
          * <code>optional int32 read_factor = 1;</code>
@@ -16706,7 +16706,7 @@ public final class CliRequests {
         }
 
         public static final int WRITE_FACTOR_FIELD_NUMBER = 2;
-        private int writeFactor_;
+        private int             writeFactor_;
 
         /**
          * <code>optional int32 write_factor = 2;</code>
@@ -16722,7 +16722,7 @@ public final class CliRequests {
             return writeFactor_;
         }
 
-        public static final int ERRORRESPONSE_FIELD_NUMBER = 99;
+        public static final int                                     ERRORRESPONSE_FIELD_NUMBER = 99;
         private com.alipay.sofa.jraft.rpc.RpcRequests.ErrorResponse errorResponse_;
 
         /**
@@ -16737,7 +16737,7 @@ public final class CliRequests {
          */
         public com.alipay.sofa.jraft.rpc.RpcRequests.ErrorResponse getErrorResponse() {
             return errorResponse_ == null ? com.alipay.sofa.jraft.rpc.RpcRequests.ErrorResponse.getDefaultInstance()
-                    : errorResponse_;
+                : errorResponse_;
         }
 
         /**
@@ -16745,7 +16745,7 @@ public final class CliRequests {
          */
         public com.alipay.sofa.jraft.rpc.RpcRequests.ErrorResponseOrBuilder getErrorResponseOrBuilder() {
             return errorResponse_ == null ? com.alipay.sofa.jraft.rpc.RpcRequests.ErrorResponse.getDefaultInstance()
-                    : errorResponse_;
+                : errorResponse_;
         }
 
         private byte memoizedIsInitialized = -1;
@@ -16852,69 +16852,69 @@ public final class CliRequests {
         }
 
         public static com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorResponse parseFrom(java.nio.ByteBuffer data)
-                throws com.google.protobuf.InvalidProtocolBufferException {
+                                                                                                                   throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data);
         }
 
         public static com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorResponse parseFrom(java.nio.ByteBuffer data,
                                                                                           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws com.google.protobuf.InvalidProtocolBufferException {
+                                                                                                                                                      throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data, extensionRegistry);
         }
 
         public static com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorResponse parseFrom(com.google.protobuf.ByteString data)
-                throws com.google.protobuf.InvalidProtocolBufferException {
+                                                                                                                              throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data);
         }
 
         public static com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorResponse parseFrom(com.google.protobuf.ByteString data,
                                                                                           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws com.google.protobuf.InvalidProtocolBufferException {
+                                                                                                                                                      throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data, extensionRegistry);
         }
 
         public static com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorResponse parseFrom(byte[] data)
-                throws com.google.protobuf.InvalidProtocolBufferException {
+                                                                                                      throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data);
         }
 
         public static com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorResponse parseFrom(byte[] data,
                                                                                           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws com.google.protobuf.InvalidProtocolBufferException {
+                                                                                                                                                      throws com.google.protobuf.InvalidProtocolBufferException {
             return PARSER.parseFrom(data, extensionRegistry);
         }
 
         public static com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorResponse parseFrom(java.io.InputStream input)
-                throws java.io.IOException {
+                                                                                                                    throws java.io.IOException {
             return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
         }
 
         public static com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorResponse parseFrom(java.io.InputStream input,
                                                                                           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws java.io.IOException {
+                                                                                                                                                      throws java.io.IOException {
             return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
         }
 
         public static com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorResponse parseDelimitedFrom(java.io.InputStream input)
-                throws java.io.IOException {
+                                                                                                                             throws java.io.IOException {
             return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input);
         }
 
         public static com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorResponse parseDelimitedFrom(java.io.InputStream input,
                                                                                                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws java.io.IOException {
+                                                                                                                                                               throws java.io.IOException {
             return com.google.protobuf.GeneratedMessageV3.parseDelimitedWithIOException(PARSER, input,
-                    extensionRegistry);
+                extensionRegistry);
         }
 
         public static com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorResponse parseFrom(com.google.protobuf.CodedInputStream input)
-                throws java.io.IOException {
+                                                                                                                                     throws java.io.IOException {
             return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input);
         }
 
         public static com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorResponse parseFrom(com.google.protobuf.CodedInputStream input,
                                                                                           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws java.io.IOException {
+                                                                                                                                                      throws java.io.IOException {
             return com.google.protobuf.GeneratedMessageV3.parseWithIOException(PARSER, input, extensionRegistry);
         }
 
@@ -16944,17 +16944,17 @@ public final class CliRequests {
          * Protobuf type {@code jraft.ResetFactorResponse}
          */
         public static final class Builder extends com.google.protobuf.GeneratedMessageV3.Builder<Builder>
-                implements
-                // @@protoc_insertion_point(builder_implements:jraft.ResetFactorResponse)
-                com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorResponseOrBuilder {
+                                                                                                         implements
+                                                                                                         // @@protoc_insertion_point(builder_implements:jraft.ResetFactorResponse)
+                                                                                                         com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorResponseOrBuilder {
             public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
                 return com.alipay.sofa.jraft.rpc.CliRequests.internal_static_jraft_ResetFactorResponse_descriptor;
             }
 
             protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internalGetFieldAccessorTable() {
                 return com.alipay.sofa.jraft.rpc.CliRequests.internal_static_jraft_ResetFactorResponse_fieldAccessorTable
-                        .ensureFieldAccessorsInitialized(com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorResponse.class,
-                                com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorResponse.Builder.class);
+                    .ensureFieldAccessorsInitialized(com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorResponse.class,
+                        com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorResponse.Builder.class);
             }
 
             // Construct using com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorResponse.newBuilder()
@@ -17006,7 +17006,7 @@ public final class CliRequests {
 
             public com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorResponse buildPartial() {
                 com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorResponse result = new com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorResponse(
-                        this);
+                    this);
                 int from_bitField0_ = bitField0_;
                 int to_bitField0_ = 0;
                 if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
@@ -17093,13 +17093,13 @@ public final class CliRequests {
 
             public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
                                      com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                    throws java.io.IOException {
+                                                                                                 throws java.io.IOException {
                 com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorResponse parsedMessage = null;
                 try {
                     parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
                 } catch (com.google.protobuf.InvalidProtocolBufferException e) {
                     parsedMessage = (com.alipay.sofa.jraft.rpc.CliRequests.ResetFactorResponse) e
-                            .getUnfinishedMessage();
+                        .getUnfinishedMessage();
                     throw e.unwrapIOException();
                 } finally {
                     if (parsedMessage != null) {
@@ -17183,7 +17183,7 @@ public final class CliRequests {
                 return this;
             }
 
-            private com.alipay.sofa.jraft.rpc.RpcRequests.ErrorResponse errorResponse_ = null;
+            private com.alipay.sofa.jraft.rpc.RpcRequests.ErrorResponse                                                                                                                                                                      errorResponse_ = null;
             private com.google.protobuf.SingleFieldBuilderV3<com.alipay.sofa.jraft.rpc.RpcRequests.ErrorResponse, com.alipay.sofa.jraft.rpc.RpcRequests.ErrorResponse.Builder, com.alipay.sofa.jraft.rpc.RpcRequests.ErrorResponseOrBuilder> errorResponseBuilder_;
 
             /**
@@ -17199,7 +17199,7 @@ public final class CliRequests {
             public com.alipay.sofa.jraft.rpc.RpcRequests.ErrorResponse getErrorResponse() {
                 if (errorResponseBuilder_ == null) {
                     return errorResponse_ == null ? com.alipay.sofa.jraft.rpc.RpcRequests.ErrorResponse
-                            .getDefaultInstance() : errorResponse_;
+                        .getDefaultInstance() : errorResponse_;
                 } else {
                     return errorResponseBuilder_.getMessage();
                 }
@@ -17242,9 +17242,9 @@ public final class CliRequests {
             public Builder mergeErrorResponse(com.alipay.sofa.jraft.rpc.RpcRequests.ErrorResponse value) {
                 if (errorResponseBuilder_ == null) {
                     if (((bitField0_ & 0x00000004) == 0x00000004) && errorResponse_ != null
-                            && errorResponse_ != com.alipay.sofa.jraft.rpc.RpcRequests.ErrorResponse.getDefaultInstance()) {
+                        && errorResponse_ != com.alipay.sofa.jraft.rpc.RpcRequests.ErrorResponse.getDefaultInstance()) {
                         errorResponse_ = com.alipay.sofa.jraft.rpc.RpcRequests.ErrorResponse.newBuilder(errorResponse_)
-                                .mergeFrom(value).buildPartial();
+                            .mergeFrom(value).buildPartial();
                     } else {
                         errorResponse_ = value;
                     }
@@ -17287,7 +17287,7 @@ public final class CliRequests {
                     return errorResponseBuilder_.getMessageOrBuilder();
                 } else {
                     return errorResponse_ == null ? com.alipay.sofa.jraft.rpc.RpcRequests.ErrorResponse
-                            .getDefaultInstance() : errorResponse_;
+                        .getDefaultInstance() : errorResponse_;
                 }
             }
 
@@ -17297,7 +17297,7 @@ public final class CliRequests {
             private com.google.protobuf.SingleFieldBuilderV3<com.alipay.sofa.jraft.rpc.RpcRequests.ErrorResponse, com.alipay.sofa.jraft.rpc.RpcRequests.ErrorResponse.Builder, com.alipay.sofa.jraft.rpc.RpcRequests.ErrorResponseOrBuilder> getErrorResponseFieldBuilder() {
                 if (errorResponseBuilder_ == null) {
                     errorResponseBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<com.alipay.sofa.jraft.rpc.RpcRequests.ErrorResponse, com.alipay.sofa.jraft.rpc.RpcRequests.ErrorResponse.Builder, com.alipay.sofa.jraft.rpc.RpcRequests.ErrorResponseOrBuilder>(
-                            getErrorResponse(), getParentForChildren(), isClean());
+                        getErrorResponse(), getParentForChildren(), isClean());
                     errorResponse_ = null;
                 }
                 return errorResponseBuilder_;
@@ -17327,13 +17327,13 @@ public final class CliRequests {
 
         @java.lang.Deprecated
         public static final com.google.protobuf.Parser<ResetFactorResponse> PARSER = new com.google.protobuf.AbstractParser<ResetFactorResponse>() {
-            public ResetFactorResponse parsePartialFrom(com.google.protobuf.CodedInputStream input,
-                                                        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                    throws com.google.protobuf.InvalidProtocolBufferException {
-                return new ResetFactorResponse(
-                        input, extensionRegistry);
-            }
-        };
+                                                                                       public ResetFactorResponse parsePartialFrom(com.google.protobuf.CodedInputStream input,
+                                                                                                                                   com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                                                                                                                                                                                               throws com.google.protobuf.InvalidProtocolBufferException {
+                                                                                           return new ResetFactorResponse(
+                                                                                               input, extensionRegistry);
+                                                                                       }
+                                                                                   };
 
         public static com.google.protobuf.Parser<ResetFactorResponse> parser() {
             return PARSER;
@@ -17384,9 +17384,9 @@ public final class CliRequests {
     private static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internal_static_jraft_ResetLearnersRequest_fieldAccessorTable;
     private static final com.google.protobuf.Descriptors.Descriptor                internal_static_jraft_LearnersOpResponse_descriptor;
     private static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internal_static_jraft_LearnersOpResponse_fieldAccessorTable;
-    private static final com.google.protobuf.Descriptors.Descriptor internal_static_jraft_ResetFactorRequest_descriptor;
+    private static final com.google.protobuf.Descriptors.Descriptor                internal_static_jraft_ResetFactorRequest_descriptor;
     private static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internal_static_jraft_ResetFactorRequest_fieldAccessorTable;
-    private static final com.google.protobuf.Descriptors.Descriptor internal_static_jraft_ResetFactorResponse_descriptor;
+    private static final com.google.protobuf.Descriptors.Descriptor                internal_static_jraft_ResetFactorResponse_descriptor;
     private static final com.google.protobuf.GeneratedMessageV3.FieldAccessorTable internal_static_jraft_ResetFactorResponse_fieldAccessorTable;
 
     public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
@@ -17431,13 +17431,13 @@ public final class CliRequests {
                                               + "der_id\030\002 \002(\t\022\020\n\010learners\030\003 \003(\t\"m\n\022Learne"
                                               + "rsOpResponse\022\024\n\014old_learners\030\001 \003(\t\022\024\n\014ne"
                                               + "w_learners\030\002 \003(\t\022+\n\rerrorResponse\030c \001(\0132"
-                + "\024.jraft.ErrorResponse\"d\n\022ResetFactorRequ"
-                + "est\022\020\n\010group_id\030\001 \002(\t\022\021\n\tleader_id\030\002 \002(\t"
-                + "\022\023\n\013read_factor\030\003 \001(\005\022\024\n\014write_factor\030\004 "
-                + "\001(\005\"m\n\023ResetFactorResponse\022\023\n\013read_facto"
-                + "r\030\001 \001(\005\022\024\n\014write_factor\030\002 \001(\005\022+\n\rerrorRe"
-                + "sponse\030c \001(\0132\024.jraft.ErrorResponseB(\n\031co"
-                + "m.alipay.sofa.jraft.rpcB\013CliRequests"};
+                                              + "\024.jraft.ErrorResponse\"d\n\022ResetFactorRequ"
+                                              + "est\022\020\n\010group_id\030\001 \002(\t\022\021\n\tleader_id\030\002 \002(\t"
+                                              + "\022\023\n\013read_factor\030\003 \001(\005\022\024\n\014write_factor\030\004 "
+                                              + "\001(\005\"m\n\023ResetFactorResponse\022\023\n\013read_facto"
+                                              + "r\030\001 \001(\005\022\024\n\014write_factor\030\002 \001(\005\022+\n\rerrorRe"
+                                              + "sponse\030c \001(\0132\024.jraft.ErrorResponseB(\n\031co"
+                                              + "m.alipay.sofa.jraft.rpcB\013CliRequests" };
         com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
             public com.google.protobuf.ExtensionRegistry assignDescriptors(com.google.protobuf.Descriptors.FileDescriptor root) {
                 descriptor = root;
@@ -17514,12 +17514,12 @@ public final class CliRequests {
             "ErrorResponse", });
         internal_static_jraft_ResetFactorRequest_descriptor = getDescriptor().getMessageTypes().get(17);
         internal_static_jraft_ResetFactorRequest_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-                internal_static_jraft_ResetFactorRequest_descriptor, new java.lang.String[]{"GroupId", "LeaderId",
-                "ReadFactor", "WriteFactor",});
+            internal_static_jraft_ResetFactorRequest_descriptor, new java.lang.String[] { "GroupId", "LeaderId",
+            "ReadFactor", "WriteFactor", });
         internal_static_jraft_ResetFactorResponse_descriptor = getDescriptor().getMessageTypes().get(18);
         internal_static_jraft_ResetFactorResponse_fieldAccessorTable = new com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-                internal_static_jraft_ResetFactorResponse_descriptor, new java.lang.String[]{"ReadFactor", "WriteFactor",
-                "ErrorResponse",});
+            internal_static_jraft_ResetFactorResponse_descriptor, new java.lang.String[] { "ReadFactor", "WriteFactor",
+            "ErrorResponse", });
         com.alipay.sofa.jraft.rpc.RpcRequests.getDescriptor();
     }
 

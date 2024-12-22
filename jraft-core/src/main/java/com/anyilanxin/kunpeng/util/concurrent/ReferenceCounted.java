@@ -1,11 +1,12 @@
 /*
- * Copyright 2017-present Open Networking Foundation
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,28 +26,28 @@ package com.anyilanxin.kunpeng.util.concurrent;
  */
 public interface ReferenceCounted<T> extends AutoCloseable {
 
-  /**
-   * Acquires a reference.
-   *
-   * @return The acquired reference.
-   */
-  T acquire();
+    /**
+     * Acquires a reference.
+     *
+     * @return The acquired reference.
+     */
+    T acquire();
 
-  /**
-   * Releases a reference.
-   *
-   * @return Indicates whether all references to the object have been released.
-   */
-  boolean release();
+    /**
+     * Releases a reference.
+     *
+     * @return Indicates whether all references to the object have been released.
+     */
+    boolean release();
 
-  /**
-   * Returns the number of open references.
-   *
-   * @return The number of open references.
-   */
-  int references();
+    /**
+     * Returns the number of open references.
+     *
+     * @return The number of open references.
+     */
+    int references();
 
-  /** Defines an exception free close implementation. */
-  @Override
-  void close();
+    /** Defines an exception free close implementation. */
+    @Override
+    void close();
 }

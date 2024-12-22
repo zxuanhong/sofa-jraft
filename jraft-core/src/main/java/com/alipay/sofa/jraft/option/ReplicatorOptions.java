@@ -23,6 +23,7 @@ import com.alipay.sofa.jraft.core.Scheduler;
 import com.alipay.sofa.jraft.core.TimerManager;
 import com.alipay.sofa.jraft.entity.PeerId;
 import com.alipay.sofa.jraft.rpc.RaftClientService;
+import com.alipay.sofa.jraft.rpc.RaftMessageClientService;
 import com.alipay.sofa.jraft.storage.LogManager;
 import com.alipay.sofa.jraft.storage.SnapshotStorage;
 import com.alipay.sofa.jraft.util.Copiable;
@@ -36,19 +37,19 @@ import com.alipay.sofa.jraft.util.Copiable;
  */
 public class ReplicatorOptions implements Copiable<ReplicatorOptions> {
 
-    private int               dynamicHeartBeatTimeoutMs;
-    private int               electionTimeoutMs;
-    private String            groupId;
-    private PeerId            serverId;
-    private PeerId            peerId;
-    private LogManager        logManager;
-    private BallotBox         ballotBox;
-    private NodeImpl          node;
-    private long              term;
-    private SnapshotStorage   snapshotStorage;
-    private RaftClientService raftRpcService;
-    private Scheduler         timerManager;
-    private ReplicatorType    replicatorType;
+    private int                      dynamicHeartBeatTimeoutMs;
+    private int                      electionTimeoutMs;
+    private String                   groupId;
+    private PeerId                   serverId;
+    private PeerId                   peerId;
+    private LogManager               logManager;
+    private BallotBox                ballotBox;
+    private NodeImpl                 node;
+    private long                     term;
+    private SnapshotStorage          snapshotStorage;
+    private RaftMessageClientService raftRpcService;
+    private Scheduler                timerManager;
+    private ReplicatorType           replicatorType;
 
     public ReplicatorOptions() {
         super();
@@ -58,7 +59,7 @@ public class ReplicatorOptions implements Copiable<ReplicatorOptions> {
                              final int electionTimeoutMs, final String groupId, final PeerId serverId,
                              final PeerId peerId, final LogManager logManager, final BallotBox ballotBox,
                              final NodeImpl node, final long term, final SnapshotStorage snapshotStorage,
-                             final RaftClientService raftRpcService, final TimerManager timerManager) {
+                             final RaftMessageClientService raftRpcService, final TimerManager timerManager) {
         super();
         this.replicatorType = replicatorType;
         this.dynamicHeartBeatTimeoutMs = dynamicHeartBeatTimeoutMs;
@@ -87,11 +88,11 @@ public class ReplicatorOptions implements Copiable<ReplicatorOptions> {
         this.replicatorType = replicatorType;
     }
 
-    public RaftClientService getRaftRpcService() {
+    public RaftMessageClientService getRaftRpcService() {
         return this.raftRpcService;
     }
 
-    public void setRaftRpcService(final RaftClientService raftRpcService) {
+    public void setRaftRpcService(final RaftMessageClientService raftRpcService) {
         this.raftRpcService = raftRpcService;
     }
 

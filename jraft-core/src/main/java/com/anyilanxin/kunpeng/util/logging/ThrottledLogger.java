@@ -1,18 +1,18 @@
 /*
- * Copyright © 2024 anyilanxin xuanhongzhou(anyilanxin@aliyun.com)
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.anyilanxin.kunpeng.util.logging;
 
@@ -36,325 +36,325 @@ import org.slf4j.Marker;
  */
 public class ThrottledLogger implements Logger {
 
-  private long lastLogTime = 0;
-  private final Logger log;
-  private final long intervalMillis;
+    private long         lastLogTime = 0;
+    private final Logger log;
+    private final long   intervalMillis;
 
-  public ThrottledLogger(final Logger log, final Duration interval) {
-    this.log = log;
-    intervalMillis = interval.toMillis();
-  }
+    public ThrottledLogger(final Logger log, final Duration interval) {
+        this.log = log;
+        intervalMillis = interval.toMillis();
+    }
 
-  @Override
-  public String getName() {
-    return log.getName();
-  }
+    @Override
+    public String getName() {
+        return log.getName();
+    }
 
-  @Override
-  public boolean isTraceEnabled() {
-    return log.isTraceEnabled();
-  }
+    @Override
+    public boolean isTraceEnabled() {
+        return log.isTraceEnabled();
+    }
 
-  @Override
+    @Override
   public void trace(final String s) {
     checkAndLog(() -> log.trace(s));
   }
 
-  @Override
+    @Override
   public void trace(final String s, final Object o) {
     checkAndLog(() -> log.trace(s, o));
   }
 
-  @Override
+    @Override
   public void trace(final String s, final Object o, final Object o1) {
     checkAndLog(() -> log.trace(s, o, o1));
   }
 
-  @Override
+    @Override
   public void trace(final String s, final Object... objects) {
     checkAndLog(() -> log.trace(s, objects));
   }
 
-  @Override
+    @Override
   public void trace(final String s, final Throwable throwable) {
     checkAndLog(() -> log.trace(s, throwable));
   }
 
-  @Override
-  public boolean isTraceEnabled(final Marker marker) {
-    return log.isTraceEnabled(marker);
-  }
+    @Override
+    public boolean isTraceEnabled(final Marker marker) {
+        return log.isTraceEnabled(marker);
+    }
 
-  @Override
+    @Override
   public void trace(final Marker marker, final String s) {
     checkAndLog(() -> log.trace(marker, s));
   }
 
-  @Override
+    @Override
   public void trace(final Marker marker, final String s, final Object o) {
     checkAndLog(() -> log.trace(marker, s, o));
   }
 
-  @Override
+    @Override
   public void trace(final Marker marker, final String s, final Object o, final Object o1) {
     checkAndLog(() -> log.trace(marker, s, o, o1));
   }
 
-  @Override
+    @Override
   public void trace(final Marker marker, final String s, final Object... objects) {
     checkAndLog(() -> log.trace(marker, s, objects));
   }
 
-  @Override
+    @Override
   public void trace(final Marker marker, final String s, final Throwable throwable) {
     checkAndLog(() -> log.trace(marker, s, throwable));
   }
 
-  @Override
-  public boolean isDebugEnabled() {
-    return log.isDebugEnabled();
-  }
+    @Override
+    public boolean isDebugEnabled() {
+        return log.isDebugEnabled();
+    }
 
-  @Override
+    @Override
   public void debug(final String s) {
     checkAndLog(() -> log.debug(s));
   }
 
-  @Override
+    @Override
   public void debug(final String s, final Object o) {
     checkAndLog(() -> log.debug(s, o));
   }
 
-  @Override
+    @Override
   public void debug(final String s, final Object o, final Object o1) {
     checkAndLog(() -> log.debug(s, o, o1));
   }
 
-  @Override
+    @Override
   public void debug(final String s, final Object... objects) {
     checkAndLog(() -> log.debug(s, objects));
   }
 
-  @Override
+    @Override
   public void debug(final String s, final Throwable throwable) {
     checkAndLog(() -> log.debug(s, throwable));
   }
 
-  @Override
-  public boolean isDebugEnabled(final Marker marker) {
-    return log.isDebugEnabled(marker);
-  }
+    @Override
+    public boolean isDebugEnabled(final Marker marker) {
+        return log.isDebugEnabled(marker);
+    }
 
-  @Override
+    @Override
   public void debug(final Marker marker, final String s) {
     checkAndLog(() -> log.debug(marker, s));
   }
 
-  @Override
+    @Override
   public void debug(final Marker marker, final String s, final Object o) {
     checkAndLog(() -> log.debug(marker, s, o));
   }
 
-  @Override
+    @Override
   public void debug(final Marker marker, final String s, final Object o, final Object o1) {
     checkAndLog(() -> log.debug(marker, s, o, o1));
   }
 
-  @Override
+    @Override
   public void debug(final Marker marker, final String s, final Object... objects) {
     checkAndLog(() -> log.debug(marker, s, objects));
   }
 
-  @Override
+    @Override
   public void debug(final Marker marker, final String s, final Throwable throwable) {
     checkAndLog(() -> log.debug(marker, s, throwable));
   }
 
-  @Override
-  public boolean isInfoEnabled() {
-    return log.isInfoEnabled();
-  }
+    @Override
+    public boolean isInfoEnabled() {
+        return log.isInfoEnabled();
+    }
 
-  @Override
+    @Override
   public void info(final String s) {
     checkAndLog(() -> log.info(s));
   }
 
-  @Override
+    @Override
   public void info(final String s, final Object o) {
     checkAndLog(() -> log.info(s, o));
   }
 
-  @Override
+    @Override
   public void info(final String s, final Object o, final Object o1) {
     checkAndLog(() -> log.info(s, o, o1));
   }
 
-  @Override
+    @Override
   public void info(final String s, final Object... objects) {
     checkAndLog(() -> log.info(s, objects));
   }
 
-  @Override
+    @Override
   public void info(final String s, final Throwable throwable) {
     checkAndLog(() -> log.info(s, throwable));
   }
 
-  @Override
-  public boolean isInfoEnabled(final Marker marker) {
-    return log.isInfoEnabled(marker);
-  }
+    @Override
+    public boolean isInfoEnabled(final Marker marker) {
+        return log.isInfoEnabled(marker);
+    }
 
-  @Override
+    @Override
   public void info(final Marker marker, final String s) {
     checkAndLog(() -> log.info(marker, s));
   }
 
-  @Override
+    @Override
   public void info(final Marker marker, final String s, final Object o) {
     checkAndLog(() -> log.info(marker, s, o));
   }
 
-  @Override
+    @Override
   public void info(final Marker marker, final String s, final Object o, final Object o1) {
     checkAndLog(() -> log.info(marker, s, o, o1));
   }
 
-  @Override
+    @Override
   public void info(final Marker marker, final String s, final Object... objects) {
     checkAndLog(() -> log.info(marker, s, objects));
   }
 
-  @Override
+    @Override
   public void info(final Marker marker, final String s, final Throwable throwable) {
     checkAndLog(() -> log.info(marker, s, throwable));
   }
 
-  @Override
-  public boolean isWarnEnabled() {
-    return log.isWarnEnabled();
-  }
+    @Override
+    public boolean isWarnEnabled() {
+        return log.isWarnEnabled();
+    }
 
-  @Override
+    @Override
   public void warn(final String s) {
     checkAndLog(() -> log.warn(s));
   }
 
-  @Override
+    @Override
   public void warn(final String s, final Object o) {
     checkAndLog(() -> log.warn(s, o));
   }
 
-  @Override
+    @Override
   public void warn(final String s, final Object... objects) {
     checkAndLog(() -> log.warn(s, objects));
   }
 
-  @Override
+    @Override
   public void warn(final String s, final Object o, final Object o1) {
     checkAndLog(() -> log.warn(s, o, o1));
   }
 
-  @Override
+    @Override
   public void warn(final String s, final Throwable throwable) {
     checkAndLog(() -> log.warn(s, throwable));
   }
 
-  @Override
-  public boolean isWarnEnabled(final Marker marker) {
-    return log.isWarnEnabled(marker);
-  }
+    @Override
+    public boolean isWarnEnabled(final Marker marker) {
+        return log.isWarnEnabled(marker);
+    }
 
-  @Override
+    @Override
   public void warn(final Marker marker, final String s) {
     checkAndLog(() -> log.warn(marker, s));
   }
 
-  @Override
+    @Override
   public void warn(final Marker marker, final String s, final Object o) {
     checkAndLog(() -> log.warn(marker, s, o));
   }
 
-  @Override
+    @Override
   public void warn(final Marker marker, final String s, final Object o, final Object o1) {
     checkAndLog(() -> log.warn(marker, s, o, o1));
   }
 
-  @Override
+    @Override
   public void warn(final Marker marker, final String s, final Object... objects) {
     checkAndLog(() -> log.warn(marker, s, objects));
   }
 
-  @Override
+    @Override
   public void warn(final Marker marker, final String s, final Throwable throwable) {
     checkAndLog(() -> log.warn(marker, s, throwable));
   }
 
-  @Override
-  public boolean isErrorEnabled() {
-    return log.isErrorEnabled();
-  }
+    @Override
+    public boolean isErrorEnabled() {
+        return log.isErrorEnabled();
+    }
 
-  @Override
+    @Override
   public void error(final String s) {
     checkAndLog(() -> log.error(s));
   }
 
-  @Override
+    @Override
   public void error(final String s, final Object o) {
     checkAndLog(() -> log.error(s, o));
   }
 
-  @Override
+    @Override
   public void error(final String s, final Object o, final Object o1) {
     checkAndLog(() -> log.error(s, o, o1));
   }
 
-  @Override
+    @Override
   public void error(final String s, final Object... objects) {
     checkAndLog(() -> log.error(s, objects));
   }
 
-  @Override
+    @Override
   public void error(final String s, final Throwable throwable) {
     checkAndLog(() -> log.error(s, throwable));
   }
 
-  @Override
-  public boolean isErrorEnabled(final Marker marker) {
-    return log.isErrorEnabled(marker);
-  }
+    @Override
+    public boolean isErrorEnabled(final Marker marker) {
+        return log.isErrorEnabled(marker);
+    }
 
-  @Override
+    @Override
   public void error(final Marker marker, final String s) {
     checkAndLog(() -> log.error(marker, s));
   }
 
-  @Override
+    @Override
   public void error(final Marker marker, final String s, final Object o) {
     checkAndLog(() -> log.error(marker, s, o));
   }
 
-  @Override
+    @Override
   public void error(final Marker marker, final String s, final Object o, final Object o1) {
     checkAndLog(() -> log.error(marker, s, o, o1));
   }
 
-  @Override
+    @Override
   public void error(final Marker marker, final String s, final Object... objects) {
     checkAndLog(() -> log.error(marker, s, objects));
   }
 
-  @Override
+    @Override
   public void error(final Marker marker, final String s, final Throwable throwable) {
     checkAndLog(() -> log.error(marker, s, throwable));
   }
 
-  private void checkAndLog(final Runnable logger) {
-    final var currentTime = System.currentTimeMillis();
-    if (currentTime - lastLogTime >= intervalMillis) {
-      logger.run();
-      lastLogTime = currentTime;
+    private void checkAndLog(final Runnable logger) {
+        final var currentTime = System.currentTimeMillis();
+        if (currentTime - lastLogTime >= intervalMillis) {
+            logger.run();
+            lastLogTime = currentTime;
+        }
     }
-  }
 }

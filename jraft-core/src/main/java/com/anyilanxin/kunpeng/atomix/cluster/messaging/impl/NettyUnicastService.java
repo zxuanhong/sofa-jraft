@@ -1,12 +1,12 @@
 /*
- * Copyright 2018-present Open Networking Foundation
- * Copyright © 2024 anyilanxin xuanhongzhou(anyilanxin@aliyun.com)
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -54,55 +54,53 @@ import org.slf4j.LoggerFactory;
 
 /** Netty unicast service. */
 public class NettyUnicastService implements ManagedUnicastService {
-  private static final Logger LOGGER = LoggerFactory.getLogger(NettyUnicastService.class);
-  private static final Serializer SERIALIZER =
-      Serializer.using(
-          new Namespace.Builder()
-              .register(Namespaces.BASIC)
-              .nextId(Namespaces.BEGIN_USER_CUSTOM_ID)
-              .register(Message.class)
-              .register(new AddressSerializer(), Address.class)
-              .build());
+    private static final Logger                                           LOGGER     = LoggerFactory
+                                                                                         .getLogger(NettyUnicastService.class);
+    private static final Serializer                                       SERIALIZER = Serializer
+                                                                                         .using(new Namespace.Builder()
+                                                                                             .register(Namespaces.BASIC)
+                                                                                             .nextId(
+                                                                                                 Namespaces.BEGIN_USER_CUSTOM_ID)
+                                                                                             .register(Message.class)
+                                                                                             .register(
+                                                                                                 new AddressSerializer(),
+                                                                                                 Address.class).build());
 
-  private final Logger log = LoggerFactory.getLogger(getClass());
+    private final Logger                                                  log        = LoggerFactory
+                                                                                         .getLogger(getClass());
 
-  private final Address advertisedAddress;
-  private final MessagingConfig config;
-  private final int preamble;
-  private final Map<String, Map<BiConsumer<Address, byte[]>, Executor>> listeners =
-      Maps.newConcurrentMap();
-  private final AtomicBoolean started = new AtomicBoolean();
-  private final Address bindAddress;
+    private final Address                                                 advertisedAddress;
+    private final MessagingConfig                                         config;
+    private final int                                                     preamble;
+    private final Map<String, Map<BiConsumer<Address, byte[]>, Executor>> listeners  = Maps.newConcurrentMap();
+    private final AtomicBoolean                                           started    = new AtomicBoolean();
+    private final Address                                                 bindAddress;
 
-  private EventLoopGroup group;
-  private DatagramChannel channel;
+    private EventLoopGroup                                                group;
+    private DatagramChannel                                               channel;
 
-  private DnsAddressResolverGroup dnsAddressResolverGroup;
+    private DnsAddressResolverGroup                                       dnsAddressResolverGroup;
 
-  private final String actorSchedulerName;
+    private final String                                                  actorSchedulerName;
 
-  public NettyUnicastService(
-      final String clusterId, final Address advertisedAddress, final MessagingConfig config) {
-    this(clusterId, advertisedAddress, config, "");
-  }
+    public NettyUnicastService(final String clusterId, final Address advertisedAddress, final MessagingConfig config) {
+        this(clusterId, advertisedAddress, config, "");
+    }
 
-  public NettyUnicastService(
-      final String clusterId,
-      final Address advertisedAddress,
-      final MessagingConfig config,
-      final String actorSchedulerName) {
-    this.advertisedAddress = advertisedAddress;
-    this.config = config;
-    preamble = clusterId.hashCode();
+    public NettyUnicastService(final String clusterId, final Address advertisedAddress, final MessagingConfig config,
+                               final String actorSchedulerName) {
+        this.advertisedAddress = advertisedAddress;
+        this.config = config;
+        preamble = clusterId.hashCode();
 
-    // as we use SO_BROADCAST, it's only possible to bind to wildcard without root privilege, so we
-    // don't support binding to multiple interfaces here; wouldn't make sense anyway
-    final var port = config.getPort() != null ? config.getPort() : advertisedAddress.port();
-    bindAddress = new Address(new InetSocketAddress(port));
-    this.actorSchedulerName = actorSchedulerName != null ? actorSchedulerName : "";
-  }
+        // as we use SO_BROADCAST, it's only possible to bind to wildcard without root privilege, so we
+        // don't support binding to multiple interfaces here; wouldn't make sense anyway
+        final var port = config.getPort() != null ? config.getPort() : advertisedAddress.port();
+        bindAddress = new Address(new InetSocketAddress(port));
+        this.actorSchedulerName = actorSchedulerName != null ? actorSchedulerName : "";
+    }
 
-  @Override
+    @Override
   public void unicast(final Address address, final String subject, final byte[] payload) {
     if (!started.get()) {
       LOGGER.debug("Failed sending unicast message, unicast service was not started.");
@@ -135,45 +133,37 @@ public class NettyUnicastService implements ManagedUnicastService {
             });
   }
 
-  @Override
+    @Override
   public synchronized void addListener(
       final String subject, final BiConsumer<Address, byte[]> listener, final Executor executor) {
     listeners.computeIfAbsent(subject, s -> new ConcurrentHashMap<>()).put(listener, executor);
   }
 
-  @Override
-  public synchronized void removeListener(
-      final String subject, final BiConsumer<Address, byte[]> listener) {
-    final Map<BiConsumer<Address, byte[]>, Executor> listeners = this.listeners.get(subject);
-    if (listeners != null) {
-      listeners.remove(listener);
-      if (listeners.isEmpty()) {
-        this.listeners.remove(subject);
-      }
+    @Override
+    public synchronized void removeListener(final String subject, final BiConsumer<Address, byte[]> listener) {
+        final Map<BiConsumer<Address, byte[]>, Executor> listeners = this.listeners.get(subject);
+        if (listeners != null) {
+            listeners.remove(listener);
+            if (listeners.isEmpty()) {
+                this.listeners.remove(subject);
+            }
+        }
     }
-  }
 
-  private CompletableFuture<Void> bootstrap() {
-    final Bootstrap serverBootstrap =
-        new Bootstrap()
-            .group(group)
-            .channel(NioDatagramChannel.class)
-            .handler(
-                new SimpleChannelInboundHandler<DatagramPacket>() {
-                  @Override
-                  protected void channelRead0(
-                      final ChannelHandlerContext context, final DatagramPacket packet) {
+    private CompletableFuture<Void> bootstrap() {
+        final Bootstrap serverBootstrap = new Bootstrap().group(group).channel(NioDatagramChannel.class)
+            .handler(new SimpleChannelInboundHandler<DatagramPacket>() {
+                @Override
+                protected void channelRead0(final ChannelHandlerContext context, final DatagramPacket packet) {
                     handleReceivedPacket(packet);
-                  }
-                })
-            .option(ChannelOption.RCVBUF_ALLOCATOR, new DefaultMaxBytesRecvByteBufAllocator())
-            .option(ChannelOption.SO_BROADCAST, true)
-            .option(ChannelOption.SO_REUSEADDR, true);
+                }
+            }).option(ChannelOption.RCVBUF_ALLOCATOR, new DefaultMaxBytesRecvByteBufAllocator())
+            .option(ChannelOption.SO_BROADCAST, true).option(ChannelOption.SO_REUSEADDR, true);
 
-    return bind(serverBootstrap);
-  }
+        return bind(serverBootstrap);
+    }
 
-  private void handleReceivedPacket(final DatagramPacket packet) {
+    private void handleReceivedPacket(final DatagramPacket packet) {
     final int preambleReceived = packet.content().readInt();
     if (preambleReceived != preamble) {
       log.warn(
@@ -193,7 +183,7 @@ public class NettyUnicastService implements ManagedUnicastService {
     }
   }
 
-  private CompletableFuture<Void> bind(final Bootstrap bootstrap) {
+    private CompletableFuture<Void> bind(final Bootstrap bootstrap) {
     final CompletableFuture<Void> future = new CompletableFuture<>();
     bootstrap
         .bind(bindAddress.host(), bindAddress.port())
@@ -212,7 +202,7 @@ public class NettyUnicastService implements ManagedUnicastService {
     return future;
   }
 
-  @Override
+    @Override
   public CompletableFuture<UnicastService> start() {
     group = new NioEventLoopGroup(0, namedThreads("netty-unicast-event-nio-client-%d", log));
     return bootstrap()
@@ -241,12 +231,12 @@ public class NettyUnicastService implements ManagedUnicastService {
             });
   }
 
-  @Override
-  public boolean isRunning() {
-    return started.get();
-  }
+    @Override
+    public boolean isRunning() {
+        return started.get();
+    }
 
-  @Override
+    @Override
   public CompletableFuture<Void> stop() {
     if (!started.compareAndSet(true, false)) {
       return CompletableFuture.completedFuture(null);
@@ -255,7 +245,7 @@ public class NettyUnicastService implements ManagedUnicastService {
     return CompletableFuture.runAsync(this::doStop);
   }
 
-  private void doStop() {
+    private void doStop() {
     boolean interrupted = false;
     if (channel != null) {
 
@@ -293,33 +283,33 @@ public class NettyUnicastService implements ManagedUnicastService {
     }
   }
 
-  /**
-   * Internal unicast service message.
-   *
-   * <p>NOTE: Cannot be converted to a record as this would break kryo backwards compatibility
-   */
-  @SuppressWarnings("ClassCanBeRecord")
-  static final class Message {
-    private final Address source;
-    private final String subject;
-    private final byte[] payload;
+    /**
+     * Internal unicast service message.
+     *
+     * <p>NOTE: Cannot be converted to a record as this would break kryo backwards compatibility
+     */
+    @SuppressWarnings("ClassCanBeRecord")
+    static final class Message {
+        private final Address source;
+        private final String  subject;
+        private final byte[]  payload;
 
-    Message(final Address source, final String subject, final byte[] payload) {
-      this.source = source;
-      this.subject = subject;
-      this.payload = payload;
-    }
+        Message(final Address source, final String subject, final byte[] payload) {
+            this.source = source;
+            this.subject = subject;
+            this.payload = payload;
+        }
 
-    Address source() {
-      return source;
-    }
+        Address source() {
+            return source;
+        }
 
-    String subject() {
-      return subject;
-    }
+        String subject() {
+            return subject;
+        }
 
-    byte[] payload() {
-      return payload;
+        byte[] payload() {
+            return payload;
+        }
     }
-  }
 }

@@ -1,12 +1,12 @@
 /*
- * Copyright 2018-present Open Networking Foundation
- * Copyright © 2024 anyilanxin xuanhongzhou(anyilanxin@aliyun.com)
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -48,13 +48,14 @@ import org.slf4j.LoggerFactory;
  * implementation attempts to heartbeat all newly discovered peers before triggering a {@link
  * com.anyilanxin.kunpeng.atomix.cluster.ClusterMembershipEvent.Type#MEMBER_REMOVED} event.
  */
-public final class BootstrapDiscoveryProvider
-        extends AbstractListenerManager<NodeDiscoveryEvent, NodeDiscoveryEventListener>
-        implements NodeDiscoveryProvider {
+public final class BootstrapDiscoveryProvider extends
+                                             AbstractListenerManager<NodeDiscoveryEvent, NodeDiscoveryEventListener>
+                                                                                                                    implements
+                                                                                                                    NodeDiscoveryProvider {
 
-    public static final Type TYPE = new Type();
-    private static final Logger LOGGER = LoggerFactory.getLogger(BootstrapDiscoveryProvider.class);
-    private final ImmutableSet<Node> bootstrapNodes;
+    public static final Type               TYPE   = new Type();
+    private static final Logger            LOGGER = LoggerFactory.getLogger(BootstrapDiscoveryProvider.class);
+    private final ImmutableSet<Node>       bootstrapNodes;
     private final BootstrapDiscoveryConfig config;
 
     public BootstrapDiscoveryProvider(final Node... bootstrapNodes) {

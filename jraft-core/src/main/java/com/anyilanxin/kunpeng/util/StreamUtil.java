@@ -1,18 +1,18 @@
 /*
- * Copyright © 2024 anyilanxin xuanhongzhou(anyilanxin@aliyun.com)
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.anyilanxin.kunpeng.util;
 
@@ -26,29 +26,30 @@ import java.util.function.Supplier;
 import java.util.stream.Collector;
 
 public final class StreamUtil {
-  private StreamUtil() {}
-
-  /**
-   * Returns a collector that computes the minimum and maximum of a stream of elements according to
-   * the provided comparator.
-   */
-  public static <T> Collector<T, MinMax<T>, MinMax<T>> minMax(final Comparator<T> comparator) {
-    return new MinMaxCollector<>(comparator);
-  }
-
-  static final class MinMaxCollector<T> implements Collector<T, MinMax<T>, MinMax<T>> {
-    private final Comparator<T> comparator;
-
-    private MinMaxCollector(final Comparator<T> comparator) {
-      this.comparator = comparator;
+    private StreamUtil() {
     }
 
-    @Override
+    /**
+     * Returns a collector that computes the minimum and maximum of a stream of elements according to
+     * the provided comparator.
+     */
+    public static <T> Collector<T, MinMax<T>, MinMax<T>> minMax(final Comparator<T> comparator) {
+        return new MinMaxCollector<>(comparator);
+    }
+
+    static final class MinMaxCollector<T> implements Collector<T, MinMax<T>, MinMax<T>> {
+        private final Comparator<T> comparator;
+
+        private MinMaxCollector(final Comparator<T> comparator) {
+            this.comparator = comparator;
+        }
+
+        @Override
     public Supplier<MinMax<T>> supplier() {
       return MinMax::new;
     }
 
-    @Override
+        @Override
     public BiConsumer<MinMax<T>, T> accumulator() {
       return (minMax, value) -> {
         if (minMax.min == null || comparator.compare(value, minMax.min) < 0) {
@@ -60,7 +61,7 @@ public final class StreamUtil {
       };
     }
 
-    @Override
+        @Override
     public BinaryOperator<MinMax<T>> combiner() {
       return (minMax1, minMax2) -> {
         if (comparator.compare(minMax1.min, minMax2.min) < 0) {
@@ -73,33 +74,33 @@ public final class StreamUtil {
       };
     }
 
-    @Override
+        @Override
     public Function<MinMax<T>, MinMax<T>> finisher() {
       return (minMax) -> minMax;
     }
 
-    @Override
-    public Set<Characteristics> characteristics() {
-      return Set.of(Characteristics.IDENTITY_FINISH);
+        @Override
+        public Set<Characteristics> characteristics() {
+            return Set.of(Characteristics.IDENTITY_FINISH);
+        }
+
+        public static final class MinMax<T> {
+            private T min;
+            private T max;
+
+            /**
+             * @return the minimum value of the stream, or {@code null} if the stream was empty.
+             */
+            public T min() {
+                return min;
+            }
+
+            /**
+             * @return the maximum value of the stream, or {@code null} if the stream was empty.
+             */
+            public T max() {
+                return max;
+            }
+        }
     }
-
-    public static final class MinMax<T> {
-      private T min;
-      private T max;
-
-      /**
-       * @return the minimum value of the stream, or {@code null} if the stream was empty.
-       */
-      public T min() {
-        return min;
-      }
-
-      /**
-       * @return the maximum value of the stream, or {@code null} if the stream was empty.
-       */
-      public T max() {
-        return max;
-      }
-    }
-  }
 }

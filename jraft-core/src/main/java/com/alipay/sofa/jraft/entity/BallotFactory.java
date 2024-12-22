@@ -30,9 +30,9 @@ import java.util.Objects;
  * @author Akai
  */
 public final class BallotFactory {
-    private static final Logger LOG = LoggerFactory.getLogger(BallotFactory.class);
-    private static final String defaultDecimalFactor = "0.1";
-    private static final BigDecimal defaultDecimal = new BigDecimal(defaultDecimalFactor);
+    private static final Logger     LOG                  = LoggerFactory.getLogger(BallotFactory.class);
+    private static final String     defaultDecimalFactor = "0.1";
+    private static final BigDecimal defaultDecimal       = new BigDecimal(defaultDecimalFactor);
 
     public static Quorum buildFlexibleQuorum(int readFactor, int writeFactor, int size) {
         // if size equals 0,config must be empty,so we just return null
@@ -61,7 +61,7 @@ public final class BallotFactory {
 
     private static int calculateWriteQuorum(int writeFactor, int n) {
         BigDecimal writeFactorDecimal = defaultDecimal.multiply(new BigDecimal(writeFactor))
-                .multiply(new BigDecimal(n));
+            .multiply(new BigDecimal(n));
         return writeFactorDecimal.setScale(0, RoundingMode.CEILING).intValue();
     }
 
@@ -83,7 +83,7 @@ public final class BallotFactory {
             return true;
         }
         LOG.error("Fail to set quorum_nwr because the sum of read_factor and write_factor is {} , not 10",
-                readFactor + writeFactor);
+            readFactor + writeFactor);
         return false;
     }
 

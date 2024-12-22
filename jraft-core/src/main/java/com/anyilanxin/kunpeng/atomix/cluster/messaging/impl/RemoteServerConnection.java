@@ -1,10 +1,10 @@
 /*
- * Copyright 2018-present Open Networking Foundation
- * Copyright © 2024 anyilanxin xuanhongzhou(anyilanxin@aliyun.com)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -22,19 +22,18 @@ import java.util.Optional;
 
 /** Remote server connection manages messaging on the server side of a Netty connection. */
 final class RemoteServerConnection extends AbstractServerConnection {
-  private static final byte[] EMPTY_PAYLOAD = new byte[0];
+    private static final byte[] EMPTY_PAYLOAD = new byte[0];
 
-  private final Channel channel;
+    private final Channel       channel;
 
-  RemoteServerConnection(final HandlerRegistry handlers, final Channel channel) {
-    super(handlers);
-    this.channel = channel;
-  }
+    RemoteServerConnection(final HandlerRegistry handlers, final Channel channel) {
+        super(handlers);
+        this.channel = channel;
+    }
 
-  @Override
-  public void reply(final long messageId, final Status status, final Optional<byte[]> payload) {
-    final ProtocolReply response =
-        new ProtocolReply(messageId, payload.orElse(EMPTY_PAYLOAD), status);
-    channel.writeAndFlush(response, channel.voidPromise());
-  }
+    @Override
+    public void reply(final long messageId, final Status status, final Optional<byte[]> payload) {
+        final ProtocolReply response = new ProtocolReply(messageId, payload.orElse(EMPTY_PAYLOAD), status);
+        channel.writeAndFlush(response, channel.voidPromise());
+    }
 }

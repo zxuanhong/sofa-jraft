@@ -631,7 +631,7 @@ public class FSMCallerImpl implements FSMCaller {
             metaBuilder.setOldWriteFactor(oldConf.getWriteFactor());
             if (!oldConf.isEmpty()) {
                 LogOutter.Quorum oldQuorum = quorumBuilder.setR(oldConf.getQuorum().getR())
-                        .setW(oldConf.getQuorum().getW()).build();
+                    .setW(oldConf.getQuorum().getW()).build();
                 metaBuilder.setOldQuorum(oldQuorum);
             }
         }

@@ -1,12 +1,12 @@
 /*
- * Copyright 2014-present Open Networking Foundation
- * Copyright © 2024 anyilanxin xuanhongzhou(anyilanxin@aliyun.com)
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,59 +23,59 @@ import java.util.UUID;
 /** Node identifier. */
 public class NodeId extends AbstractIdentifier<String> implements Comparable<NodeId> {
 
-  /** Constructor for serialization. */
-  private NodeId() {
-    this("");
-  }
-
-  /**
-   * Creates a new cluster node identifier from the specified string.
-   *
-   * @param id string identifier
-   */
-  public NodeId(final String id) {
-    super(id);
-  }
-
-  /**
-   * Creates a new cluster node identifier from the specified string.
-   *
-   * @return node id
-   */
-  public static NodeId anonymous() {
-    return new NodeId(UUID.randomUUID().toString());
-  }
-
-  /**
-   * Creates a new cluster node identifier from the specified string.
-   *
-   * @param id string identifier
-   * @return node id
-   */
-  public static NodeId from(final String id) {
-    return new NodeId(id);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(id());
-  }
-
-  @Override
-  public boolean equals(final Object object) {
-    if (object instanceof NodeId) {
-      return ((NodeId) object).id().equals(id());
+    /** Constructor for serialization. */
+    private NodeId() {
+        this("");
     }
 
-    if (object instanceof AbstractIdentifier) {
-      return object.equals(this);
+    /**
+     * Creates a new cluster node identifier from the specified string.
+     *
+     * @param id string identifier
+     */
+    public NodeId(final String id) {
+        super(id);
     }
 
-    return false;
-  }
+    /**
+     * Creates a new cluster node identifier from the specified string.
+     *
+     * @return node id
+     */
+    public static NodeId anonymous() {
+        return new NodeId(UUID.randomUUID().toString());
+    }
 
-  @Override
-  public int compareTo(final NodeId that) {
-    return identifier.compareTo(that.identifier);
-  }
+    /**
+     * Creates a new cluster node identifier from the specified string.
+     *
+     * @param id string identifier
+     * @return node id
+     */
+    public static NodeId from(final String id) {
+        return new NodeId(id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id());
+    }
+
+    @Override
+    public boolean equals(final Object object) {
+        if (object instanceof NodeId) {
+            return ((NodeId) object).id().equals(id());
+        }
+
+        if (object instanceof AbstractIdentifier) {
+            return object.equals(this);
+        }
+
+        return false;
+    }
+
+    @Override
+    public int compareTo(final NodeId that) {
+        return identifier.compareTo(that.identifier);
+    }
 }

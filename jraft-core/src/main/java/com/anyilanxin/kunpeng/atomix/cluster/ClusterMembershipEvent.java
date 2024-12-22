@@ -1,12 +1,12 @@
 /*
- * Copyright 2014-present Open Networking Foundation
- * Copyright © 2024 anyilanxin xuanhongzhou(anyilanxin@aliyun.com)
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -59,20 +59,16 @@ public class ClusterMembershipEvent extends AbstractEvent<ClusterMembershipEvent
         }
         if (obj instanceof ClusterMembershipEvent) {
             final ClusterMembershipEvent other = (ClusterMembershipEvent) obj;
-            return Objects.equals(type(), other.type())
-                    && Objects.equals(subject(), other.subject())
-                    && Objects.equals(time(), other.time());
+            return Objects.equals(type(), other.type()) && Objects.equals(subject(), other.subject())
+                   && Objects.equals(time(), other.time());
         }
         return false;
     }
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(getClass())
-                .add("type", type())
-                .add("subject", subject())
-                .add("time", time())
-                .toString();
+        return MoreObjects.toStringHelper(getClass()).add("type", type()).add("subject", subject()).add("time", time())
+            .toString();
     }
 
     /**

@@ -35,8 +35,7 @@ public interface RaftMessageClientService {
 
     void isClosed();
 
-     boolean checkConnection(final Endpoint endpoint, final boolean createIfAbsent) ;
-
+    boolean checkConnection(final Endpoint endpoint, final boolean createIfAbsent);
 
     /**
      * Sends a pre-vote request and handle the response with done.
@@ -45,7 +44,8 @@ public interface RaftMessageClientService {
      * @param request  request data
      * @return a future with result
      */
-    CompletableFuture<RpcRequests.RequestVoteResponse> preVote(final Endpoint endpoint, final RpcRequests.RequestVoteRequest request);
+    CompletableFuture<RpcRequests.RequestVoteResponse> preVote(final Endpoint endpoint,
+                                                               final RpcRequests.RequestVoteRequest request);
 
     /**
      * Sends a request-vote request and handle the response with done.
@@ -54,7 +54,8 @@ public interface RaftMessageClientService {
      * @param request  request data
      * @return a future with result
      */
-    CompletableFuture<RpcRequests.RequestVoteResponse> requestVote(final Endpoint endpoint, final RpcRequests.RequestVoteRequest request);
+    CompletableFuture<RpcRequests.RequestVoteResponse> requestVote(final Endpoint endpoint,
+                                                                   final RpcRequests.RequestVoteRequest request);
 
     /**
      * Sends a append-entries request and handle the response with done.
@@ -63,19 +64,19 @@ public interface RaftMessageClientService {
      * @param request  request data
      * @return a future with result
      */
-    CompletableFuture<RpcRequests.AppendEntriesResponse> appendEntries(final Endpoint endpoint, final RpcRequests.AppendEntriesRequest request,
-                                  final int timeoutMs);
+    CompletableFuture<RpcRequests.AppendEntriesResponse> appendEntries(final Endpoint endpoint,
+                                                                       final RpcRequests.AppendEntriesRequest request,
+                                                                       final int timeoutMs);
 
     /**
      * Sends a install-snapshot request and handle the response with done.
      *
      * @param endpoint destination address (ip, port)
      * @param request  request data
-     * @param done     callback
      * @return a future result
      */
-    CompletableFuture<RpcRequests.InstallSnapshotResponse> installSnapshot(final Endpoint endpoint, final RpcRequests.InstallSnapshotRequest request,
-                                    final RpcRequests.InstallSnapshotResponse done);
+    CompletableFuture<RpcRequests.InstallSnapshotResponse> installSnapshot(final Endpoint endpoint,
+                                                                           final RpcRequests.InstallSnapshotRequest request);
 
     /**
      * Get a piece of file data by GetFileRequest, and handle the response with done.
@@ -85,7 +86,8 @@ public interface RaftMessageClientService {
      * @param timeoutMs timeout millis
      * @return a future result
      */
-    CompletableFuture<RpcRequests.GetFileResponse> getFile(final Endpoint endpoint, final RpcRequests.GetFileRequest request, final int timeoutMs);
+    CompletableFuture<RpcRequests.GetFileResponse> getFile(final Endpoint endpoint,
+                                                           final RpcRequests.GetFileRequest request, final int timeoutMs);
 
     /**
      * Send a timeout-now request and handle the response with done.
@@ -95,8 +97,9 @@ public interface RaftMessageClientService {
      * @param timeoutMs timeout millis
      * @return a future result
      */
-    CompletableFuture<RpcRequests.TimeoutNowResponse> timeoutNow(final Endpoint endpoint, final RpcRequests.TimeoutNowRequest request,
-                               final int timeoutMs);
+    CompletableFuture<RpcRequests.TimeoutNowResponse> timeoutNow(final Endpoint endpoint,
+                                                                 final RpcRequests.TimeoutNowRequest request,
+                                                                 final int timeoutMs);
 
     /**
      * Send a read-index request and handle the response with done.
@@ -106,5 +109,7 @@ public interface RaftMessageClientService {
      * @param timeoutMs timeout millis
      * @return a future result
      */
-    CompletableFuture<RpcRequests.ReadIndexResponse> readIndex(final Endpoint endpoint, final RpcRequests.ReadIndexRequest request, final int timeoutMs);
+    CompletableFuture<RpcRequests.ReadIndexResponse> readIndex(final Endpoint endpoint,
+                                                               final RpcRequests.ReadIndexRequest request,
+                                                               final int timeoutMs);
 }

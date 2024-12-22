@@ -1,10 +1,10 @@
 /*
- * Copyright 2017-present Open Networking Foundation
- * Copyright © 2024 anyilanxin xuanhongzhou(anyilanxin@aliyun.com)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -22,36 +22,31 @@ import com.google.common.base.MoreObjects;
 
 /** Internal request message. */
 public final class ProtocolRequest extends ProtocolMessage {
-  private final Address sender;
-  private final String subject;
+    private final Address sender;
+    private final String  subject;
 
-  public ProtocolRequest(
-      final long id, final Address sender, final String subject, final byte[] payload) {
-    super(id, payload);
-    this.sender = sender;
-    this.subject = subject;
-  }
+    public ProtocolRequest(final long id, final Address sender, final String subject, final byte[] payload) {
+        super(id, payload);
+        this.sender = sender;
+        this.subject = subject;
+    }
 
-  @Override
-  public Type type() {
-    return Type.REQUEST;
-  }
+    @Override
+    public Type type() {
+        return Type.REQUEST;
+    }
 
-  public String subject() {
-    return subject;
-  }
+    public String subject() {
+        return subject;
+    }
 
-  public Address sender() {
-    return sender;
-  }
+    public Address sender() {
+        return sender;
+    }
 
-  @Override
-  public String toString() {
-    return MoreObjects.toStringHelper(this)
-        .add("id", id())
-        .add("subject", subject)
-        .add("sender", sender)
-        .add("payload", ArraySizeHashPrinter.of(payload()))
-        .toString();
-  }
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this).add("id", id()).add("subject", subject).add("sender", sender)
+            .add("payload", ArraySizeHashPrinter.of(payload())).toString();
+    }
 }

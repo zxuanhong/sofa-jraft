@@ -54,31 +54,31 @@ public class LogEntry implements Checksum {
     /**
      * read factor for flexible raft
      **/
-    private int readFactor;
+    private int                    readFactor;
     /**
      * write factor for flexible raft
      **/
-    private int writeFactor;
+    private int                    writeFactor;
     /**
      * old read factor for flexible raft
      **/
-    private int oldReadFactor;
+    private int                    oldReadFactor;
     /**
      * old write factor for flexible raft
      **/
-    private int oldWriteFactor;
+    private int                    oldWriteFactor;
     /**
      * enable flexible raft or not
      **/
-    private boolean isEnableFlexible;
+    private boolean                isEnableFlexible;
     /**
      * quorum for log entry
      **/
-    private LogOutter.Quorum quorum;
+    private LogOutter.Quorum       quorum;
     /**
      * old quorum for log entry
      **/
-    private LogOutter.Quorum oldQuorum;
+    private LogOutter.Quorum       oldQuorum;
 
     public List<PeerId> getLearners() {
         return this.learners;
@@ -288,9 +288,9 @@ public class LogEntry implements Checksum {
     public String toString() {
         return "LogEntry [type=" + this.type + ", id=" + this.id + ", peers=" + this.peers + ", oldPeers="
                + this.oldPeers + ", learners=" + this.learners + ", oldLearners=" + this.oldLearners + ", data="
-                + (this.data != null ? this.data.remaining() : 0) + ", readFactor=" + this.readFactor + ", writeFactor="
-                + this.writeFactor + ", oldReadFactor=" + oldReadFactor + ", oldWriteFactor=" + oldWriteFactor
-                + ", quorum=" + quorum + ", oldQuorum=" + oldQuorum + ", isEnableFlexible=" + isEnableFlexible + "]";
+               + (this.data != null ? this.data.remaining() : 0) + ", readFactor=" + this.readFactor + ", writeFactor="
+               + this.writeFactor + ", oldReadFactor=" + oldReadFactor + ", oldWriteFactor=" + oldWriteFactor
+               + ", quorum=" + quorum + ", oldQuorum=" + oldQuorum + ", isEnableFlexible=" + isEnableFlexible + "]";
     }
 
     @Override

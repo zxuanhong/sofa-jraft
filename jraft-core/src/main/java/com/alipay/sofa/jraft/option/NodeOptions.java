@@ -430,7 +430,7 @@ public class NodeOptions extends RpcOptions implements Copiable<NodeOptions> {
         this.initialConf.setReadFactor(readFactor);
         this.initialConf.setWriteFactor(writeFactor);
         this.initialConf.setQuorum(BallotFactory.buildFlexibleQuorum(readFactor, writeFactor, initialConf.getPeers()
-                .size()));
+            .size()));
     }
 
     public void enableFlexibleRaft(boolean enabled) {

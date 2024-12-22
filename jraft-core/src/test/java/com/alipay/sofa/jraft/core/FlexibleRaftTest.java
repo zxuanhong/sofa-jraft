@@ -43,19 +43,19 @@ import static org.junit.Assert.assertTrue;
  * @author Akai
  */
 public class FlexibleRaftTest {
-    private String dataPath;
-    private TestCluster cluster;
-    private final String groupId = "FlexibleRaftTest";
+    private String           dataPath;
+    private TestCluster      cluster;
+    private final String     groupId           = "FlexibleRaftTest";
 
-    private Integer readFactor;
-    private Integer writeFactor;
-    private Boolean enableFlexible;
-    private CliService cliService;
+    private Integer          readFactor;
+    private Integer          writeFactor;
+    private Boolean          enableFlexible;
+    private CliService       cliService;
 
-    private Configuration conf;
+    private Configuration    conf;
 
     @Rule
-    public TestName testName = new TestName();
+    public TestName          testName          = new TestName();
     private static final int LEARNER_PORT_STEP = 100;
 
     @Before

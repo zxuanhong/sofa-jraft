@@ -1,12 +1,12 @@
 /*
- * Copyright 2019-present Open Networking Foundation
- * Copyright © 2024 anyilanxin xuanhongzhou(anyilanxin@aliyun.com)
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,46 +24,42 @@ import java.util.List;
 /** Collection of various helper methods to manipulate strings. */
 public final class StringUtils {
 
-  private StringUtils() {}
-
-  /**
-   * Splits the input string with the given regex and filters empty strings.
-   *
-   * @param input the string to split.
-   * @return the array of strings computed by splitting this string
-   */
-  public static String[] split(final String input, final String regex) {
-    if (input == null) {
-      return null;
-    }
-    final String[] arr = input.split(regex);
-    final List<String> results = new ArrayList<>(arr.length);
-    for (final String a : arr) {
-      if (!a.trim().isEmpty()) {
-        results.add(a);
-      }
-    }
-    return results.toArray(new String[0]);
-  }
-
-  /**
-   * Small utility to print diagnostic information about {@link ByteBuffer}
-   *
-   * @param buffer the buffer to print-out
-   * @return diagnostic information about the buffer
-   */
-  public static String printShortBuffer(final ByteBuffer buffer) {
-    if (buffer == null) {
-      return "null";
+    private StringUtils() {
     }
 
-    return MoreObjects.toStringHelper(buffer.getClass())
-        .add("position", buffer.position())
-        .add("remaining", buffer.remaining())
-        .add("limit", buffer.limit())
-        .add("capacity", buffer.capacity())
-        .add("mark", buffer.mark())
-        .add("hash", buffer.hashCode())
-        .toString();
-  }
+    /**
+     * Splits the input string with the given regex and filters empty strings.
+     *
+     * @param input the string to split.
+     * @return the array of strings computed by splitting this string
+     */
+    public static String[] split(final String input, final String regex) {
+        if (input == null) {
+            return null;
+        }
+        final String[] arr = input.split(regex);
+        final List<String> results = new ArrayList<>(arr.length);
+        for (final String a : arr) {
+            if (!a.trim().isEmpty()) {
+                results.add(a);
+            }
+        }
+        return results.toArray(new String[0]);
+    }
+
+    /**
+     * Small utility to print diagnostic information about {@link ByteBuffer}
+     *
+     * @param buffer the buffer to print-out
+     * @return diagnostic information about the buffer
+     */
+    public static String printShortBuffer(final ByteBuffer buffer) {
+        if (buffer == null) {
+            return "null";
+        }
+
+        return MoreObjects.toStringHelper(buffer.getClass()).add("position", buffer.position())
+            .add("remaining", buffer.remaining()).add("limit", buffer.limit()).add("capacity", buffer.capacity())
+            .add("mark", buffer.mark()).add("hash", buffer.hashCode()).toString();
+    }
 }

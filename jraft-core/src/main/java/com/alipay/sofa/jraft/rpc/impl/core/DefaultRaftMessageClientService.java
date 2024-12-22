@@ -55,16 +55,17 @@ import java.util.function.Function;
  * @author jiachun.fjc
  */
 public class DefaultRaftMessageClientService implements RaftMessageClientService {
-    private NodeOptions nodeOptions;
-    private final ReplicatorGroup rgGroup;
+    private NodeOptions              nodeOptions;
+    private final ReplicatorGroup    rgGroup;
     final PartitionManagementService partitionManagementService;
-    private final RaftServerService raftServerService;
-    private final MessagingService messagingService;
-    ThreadContext threadContext = new SingleThreadContext("sdfsdfsdf-%d");
+    private final RaftServerService  raftServerService;
+    private final MessagingService   messagingService;
+    ThreadContext                    threadContext = new SingleThreadContext("sdfsdfsdf-%d");
 
     @Override
     public boolean isConnected(Endpoint endpoint) {
-        Member member = partitionManagementService.getMembershipService().getMember(Address.from(endpoint.getIp(), endpoint.getPort()));
+        Member member = partitionManagementService.getMembershipService().getMember(
+            Address.from(endpoint.getIp(), endpoint.getPort()));
         return member.isActive();
     }
 
@@ -73,8 +74,7 @@ public class DefaultRaftMessageClientService implements RaftMessageClientService
         return isConnected(endpoint);
     }
 
-    public DefaultRaftMessageClientService(final ReplicatorGroup rgGroup,
-                                           final NodeOptions nodeOptions,
+    public DefaultRaftMessageClientService(final ReplicatorGroup rgGroup, final NodeOptions nodeOptions,
                                            final PartitionManagementService partitionManagementService,
                                            final RaftServerService raftServerService) {
         this.rgGroup = rgGroup;
@@ -100,7 +100,6 @@ public class DefaultRaftMessageClientService implements RaftMessageClientService
         messagingService.unregisterHandler("readIndex");
     }
 
-
     private void register() {
         messagingService.registerHandler("preVote", this::handlePreVoteRequest, threadContext);
         messagingService.registerHandler("requestVote", this::handleRequestVote, threadContext);
@@ -110,7 +109,6 @@ public class DefaultRaftMessageClientService implements RaftMessageClientService
         messagingService.registerHandler("timeoutNow", this::handleTimeoutNow, threadContext);
         messagingService.registerHandler("readIndex", this::handleReadIndex, threadContext);
     }
-
 
     @Override
     public CompletableFuture<RequestVoteResponse> preVote(Endpoint endpoint, RequestVoteRequest request) {
@@ -134,13 +132,13 @@ public class DefaultRaftMessageClientService implements RaftMessageClientService
 
     byte[] handlePreVoteRequest(Address address, byte[] request) {
         try {
-            RequestVoteResponse requestVoteResponse = raftServerService.handlePreVoteRequest(RequestVoteRequest.parseFrom(request));
+            RequestVoteResponse requestVoteResponse = raftServerService.handlePreVoteRequest(RequestVoteRequest
+                .parseFrom(request));
             return requestVoteResponse.toByteArray();
         } catch (InvalidProtocolBufferException e) {
             throw new RuntimeException(e);
         }
     }
-
 
     @Override
     public CompletableFuture<RequestVoteResponse> requestVote(Endpoint endpoint, RequestVoteRequest request) {
@@ -164,13 +162,13 @@ public class DefaultRaftMessageClientService implements RaftMessageClientService
 
     byte[] handleRequestVote(Address address, byte[] request) {
         try {
-            RequestVoteResponse requestVoteResponse = raftServerService.handleRequestVoteRequest(RequestVoteRequest.parseFrom(request));
+            RequestVoteResponse requestVoteResponse = raftServerService.handleRequestVoteRequest(RequestVoteRequest
+                .parseFrom(request));
             return requestVoteResponse.toByteArray();
         } catch (InvalidProtocolBufferException e) {
             throw new RuntimeException(e);
         }
     }
-
 
     @Override
     public CompletableFuture<AppendEntriesResponse> appendEntries(Endpoint endpoint, AppendEntriesRequest request, int timeoutMs) {
@@ -194,16 +192,16 @@ public class DefaultRaftMessageClientService implements RaftMessageClientService
 
     byte[] handleAppendEntries(Address address, byte[] request) {
         try {
-            AppendEntriesResponse requestVoteResponse = raftServerService.handleAppendEntriesRequest(AppendEntriesRequest.parseFrom(request));
+            AppendEntriesResponse requestVoteResponse = raftServerService
+                .handleAppendEntriesRequest(AppendEntriesRequest.parseFrom(request));
             return requestVoteResponse.toByteArray();
         } catch (InvalidProtocolBufferException e) {
             throw new RuntimeException(e);
         }
     }
 
-
     @Override
-    public CompletableFuture<InstallSnapshotResponse> installSnapshot(Endpoint endpoint, InstallSnapshotRequest request, InstallSnapshotResponse done) {
+    public CompletableFuture<InstallSnapshotResponse> installSnapshot(Endpoint endpoint, InstallSnapshotRequest request) {
         CompletableFuture<InstallSnapshotResponse> future = new CompletableFuture<>();
         messagingService.sendAndReceive(
                 Address.from(endpoint.getIp(), endpoint.getPort()),
@@ -224,13 +222,13 @@ public class DefaultRaftMessageClientService implements RaftMessageClientService
 
     byte[] handleInstallSnapshot(Address address, byte[] request) {
         try {
-            InstallSnapshotResponse response = raftServerService.handleInstallSnapshot(InstallSnapshotRequest.parseFrom(request));
+            InstallSnapshotResponse response = raftServerService.handleInstallSnapshot(InstallSnapshotRequest
+                .parseFrom(request));
             return response.toByteArray();
         } catch (InvalidProtocolBufferException e) {
             throw new RuntimeException(e);
         }
     }
-
 
     @Override
     public CompletableFuture<GetFileResponse> getFile(Endpoint endpoint, GetFileRequest request, int timeoutMs) {
@@ -261,7 +259,6 @@ public class DefaultRaftMessageClientService implements RaftMessageClientService
         }
     }
 
-
     @Override
     public CompletableFuture<TimeoutNowResponse> timeoutNow(Endpoint endpoint, TimeoutNowRequest request, int timeoutMs) {
         CompletableFuture<TimeoutNowResponse> future = new CompletableFuture<>();
@@ -284,13 +281,13 @@ public class DefaultRaftMessageClientService implements RaftMessageClientService
 
     byte[] handleTimeoutNow(Address address, byte[] request) {
         try {
-            TimeoutNowResponse response = raftServerService.handleTimeoutNowRequest(TimeoutNowRequest.parseFrom(request));
+            TimeoutNowResponse response = raftServerService.handleTimeoutNowRequest(TimeoutNowRequest
+                .parseFrom(request));
             return response.toByteArray();
         } catch (InvalidProtocolBufferException e) {
             throw new RuntimeException(e);
         }
     }
-
 
     @Override
     public CompletableFuture<ReadIndexResponse> readIndex(Endpoint endpoint, ReadIndexRequest request, int timeoutMs) {

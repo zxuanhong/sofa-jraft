@@ -1,12 +1,12 @@
 /*
- * Copyright 2016-present Open Networking Foundation
- * Copyright © 2024 anyilanxin xuanhongzhou(anyilanxin@aliyun.com)
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,53 +22,51 @@ import java.io.IOException;
 /** Top level exception for MessagingService failures. */
 public class MessagingException extends IOException {
 
-  public MessagingException(final String message) {
-    super(message);
-  }
-
-  public MessagingException(final String message, final Throwable cause) {
-    super(message, cause);
-  }
-
-  /** Exception indicating no remote registered remote handler. */
-  public static class NoRemoteHandler extends MessagingException {
-    public NoRemoteHandler(final String subject) {
-      super(
-          String.format(
-              "No remote message handler registered for this message, subject %s", subject));
-    }
-  }
-
-  /** Exception indicating handler failure. */
-  public static class RemoteHandlerFailure extends MessagingException {
-    public RemoteHandlerFailure(final String message) {
-      super(String.format("Remote handler failed to handle message, cause: %s", message));
-    }
-  }
-
-  /**
-   * Exception indicating failure due to invalid message structure such as an incorrect preamble.
-   */
-  public static class ProtocolException extends MessagingException {
-    public ProtocolException() {
-      super("Failed to process message due to invalid message structure");
-    }
-  }
-
-  public static class NoSuchMemberException extends MessagingException {
-    public NoSuchMemberException(final Address address) {
-      super("Failed to handle message, host %s is not a known cluster member".formatted(address));
+    public MessagingException(final String message) {
+        super(message);
     }
 
-    public NoSuchMemberException(final String message) {
-      super(message);
+    public MessagingException(final String message, final Throwable cause) {
+        super(message, cause);
     }
-  }
 
-  /** Exception indicating a connection was closed unexpectedly. */
-  public static class ConnectionClosed extends MessagingException {
-    public ConnectionClosed(final String message) {
-      super(message);
+    /** Exception indicating no remote registered remote handler. */
+    public static class NoRemoteHandler extends MessagingException {
+        public NoRemoteHandler(final String subject) {
+            super(String.format("No remote message handler registered for this message, subject %s", subject));
+        }
     }
-  }
+
+    /** Exception indicating handler failure. */
+    public static class RemoteHandlerFailure extends MessagingException {
+        public RemoteHandlerFailure(final String message) {
+            super(String.format("Remote handler failed to handle message, cause: %s", message));
+        }
+    }
+
+    /**
+     * Exception indicating failure due to invalid message structure such as an incorrect preamble.
+     */
+    public static class ProtocolException extends MessagingException {
+        public ProtocolException() {
+            super("Failed to process message due to invalid message structure");
+        }
+    }
+
+    public static class NoSuchMemberException extends MessagingException {
+        public NoSuchMemberException(final Address address) {
+            super("Failed to handle message, host %s is not a known cluster member".formatted(address));
+        }
+
+        public NoSuchMemberException(final String message) {
+            super(message);
+        }
+    }
+
+    /** Exception indicating a connection was closed unexpectedly. */
+    public static class ConnectionClosed extends MessagingException {
+        public ConnectionClosed(final String message) {
+            super(message);
+        }
+    }
 }

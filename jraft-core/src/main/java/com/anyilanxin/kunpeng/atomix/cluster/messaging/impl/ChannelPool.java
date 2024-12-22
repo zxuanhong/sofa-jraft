@@ -1,10 +1,10 @@
 /*
- * Copyright 2018-present Open Networking Foundation
- * Copyright © 2024 anyilanxin xuanhongzhou(anyilanxin@aliyun.com)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -36,12 +36,12 @@ import org.slf4j.LoggerFactory;
  * Internal Netty channel pool.
  */
 class ChannelPool {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ChannelPool.class);
+    private static final Logger                                                      LOGGER   = LoggerFactory
+                                                                                                  .getLogger(ChannelPool.class);
 
-    private final Function<Address, CompletableFuture<Channel>> factory;
-    private final int size;
-    private final Map<Tuple<Address, InetAddress>, List<CompletableFuture<Channel>>> channels =
-            Maps.newConcurrentMap();
+    private final Function<Address, CompletableFuture<Channel>>                      factory;
+    private final int                                                                size;
+    private final Map<Tuple<Address, InetAddress>, List<CompletableFuture<Channel>>> channels = Maps.newConcurrentMap();
 
     ChannelPool(final Function<Address, CompletableFuture<Channel>> factory, final int size) {
         this.factory = factory;
@@ -168,10 +168,8 @@ class ChannelPool {
         return future;
     }
 
-    private static void removeChannel(
-            final List<CompletableFuture<Channel>> channelPool,
-            final int offset,
-            final CompletableFuture<Channel> finalFuture) {
+    private static void removeChannel(final List<CompletableFuture<Channel>> channelPool, final int offset,
+                                      final CompletableFuture<Channel> finalFuture) {
         final var currentFuture = channelPool.get(offset);
         // check if new channel is already replaced before removing it.
         if (finalFuture == currentFuture) {
@@ -179,10 +177,8 @@ class ChannelPool {
         }
     }
 
-    private void completeFuture(
-            final CompletableFuture<Channel> future,
-            final Channel recursiveResult,
-            final Throwable recursiveError) {
+    private void completeFuture(final CompletableFuture<Channel> future, final Channel recursiveResult,
+                                final Throwable recursiveError) {
         if (recursiveError == null) {
             future.complete(recursiveResult);
         } else {

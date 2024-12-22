@@ -1,18 +1,18 @@
 /*
- * Copyright © 2024 anyilanxin xuanhongzhou(anyilanxin@aliyun.com)
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Affero General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Affero General Public License for more details.
- *
- * You should have received a copy of the GNU Affero General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package com.anyilanxin.kunpeng.util;
 
@@ -24,24 +24,25 @@ import org.slf4j.Logger;
 
 public final class VersionUtil {
 
-  public static final Logger LOG = Loggers.FILE_LOGGER;
+    public static final Logger  LOG                        = Loggers.FILE_LOGGER;
 
-  public static final String VERSION_OVERRIDE_ENV_NAME = "ZEEBE_VERSION_OVERRIDE";
-  private static final String VERSION_PROPERTIES_PATH = "/kunpeng.properties";
-  private static final String VERSION_PROPERTY_NAME = "kunpeng.version";
-  private static final String LAST_VERSION_PROPERTY_NAME = "kunpeng.last.version";
-  private static final String VERSION_DEV = "development";
+    public static final String  VERSION_OVERRIDE_ENV_NAME  = "ZEEBE_VERSION_OVERRIDE";
+    private static final String VERSION_PROPERTIES_PATH    = "/kunpeng.properties";
+    private static final String VERSION_PROPERTY_NAME      = "kunpeng.version";
+    private static final String LAST_VERSION_PROPERTY_NAME = "kunpeng.last.version";
+    private static final String VERSION_DEV                = "development";
 
-  private static String version;
-  private static String versionLowerCase;
-  private static String lastVersion;
+    private static String       version;
+    private static String       versionLowerCase;
+    private static String       lastVersion;
 
-  private VersionUtil() {}
+    private VersionUtil() {
+    }
 
-  /**
-   * @return the current version or 'development' if none can be determined.
-   */
-  public static String getVersion() {
+    /**
+     * @return the current version or 'development' if none can be determined.
+     */
+    public static String getVersion() {
     if (version != null) {
       return version;
     }
@@ -62,42 +63,41 @@ public final class VersionUtil {
     return version;
   }
 
-  /**
-   * @return the current version if it can be parsed as a semantic version, otherwise empty.
-   */
-  public static Optional<SemanticVersion> getSemanticVersion() {
-    return SemanticVersion.parse(getVersion());
-  }
-
-  public static String getVersionLowerCase() {
-    if (versionLowerCase == null) {
-      versionLowerCase = getVersion().toLowerCase();
-    }
-    return versionLowerCase;
-  }
-
-  /**
-   * @return the previous stable version or null if none was found.
-   */
-  public static String getPreviousVersion() {
-    if (lastVersion == null) {
-      lastVersion = readProperty(LAST_VERSION_PROPERTY_NAME);
+    /**
+     * @return the current version if it can be parsed as a semantic version, otherwise empty.
+     */
+    public static Optional<SemanticVersion> getSemanticVersion() {
+        return SemanticVersion.parse(getVersion());
     }
 
-    return lastVersion;
-  }
-
-  private static String readProperty(final String property) {
-    try (final InputStream lastVersionFileStream =
-        VersionUtil.class.getResourceAsStream(VERSION_PROPERTIES_PATH)) {
-      final Properties props = new Properties();
-      props.load(lastVersionFileStream);
-
-      return props.getProperty(property);
-    } catch (final IOException e) {
-      LOG.error(String.format("Can't read version file: %s", VERSION_PROPERTIES_PATH), e);
+    public static String getVersionLowerCase() {
+        if (versionLowerCase == null) {
+            versionLowerCase = getVersion().toLowerCase();
+        }
+        return versionLowerCase;
     }
 
-    return null;
-  }
+    /**
+     * @return the previous stable version or null if none was found.
+     */
+    public static String getPreviousVersion() {
+        if (lastVersion == null) {
+            lastVersion = readProperty(LAST_VERSION_PROPERTY_NAME);
+        }
+
+        return lastVersion;
+    }
+
+    private static String readProperty(final String property) {
+        try (final InputStream lastVersionFileStream = VersionUtil.class.getResourceAsStream(VERSION_PROPERTIES_PATH)) {
+            final Properties props = new Properties();
+            props.load(lastVersionFileStream);
+
+            return props.getProperty(property);
+        } catch (final IOException e) {
+            LOG.error(String.format("Can't read version file: %s", VERSION_PROPERTIES_PATH), e);
+        }
+
+        return null;
+    }
 }

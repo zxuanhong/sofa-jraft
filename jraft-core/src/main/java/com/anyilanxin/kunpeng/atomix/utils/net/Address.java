@@ -1,12 +1,12 @@
 /*
- * Copyright 2015-present Open Networking Foundation
- * Copyright © 2024 anyilanxin xuanhongzhou(anyilanxin@aliyun.com)
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,12 +28,11 @@ import java.util.Objects;
  * Representation of a network address.
  */
 public final class Address {
-    private static final int DEFAULT_PORT = 5679;
-    private static final InetAddress DEFAULT_ADVERTISED_HOST =
-            AddressInitializations.computeDefaultAdvertisedHost();
+    private static final int           DEFAULT_PORT            = 5679;
+    private static final InetAddress   DEFAULT_ADVERTISED_HOST = AddressInitializations.computeDefaultAdvertisedHost();
 
-    private final String host;
-    private final int port;
+    private final String               host;
+    private final int                  port;
     private volatile InetSocketAddress socketAddress;
 
     public Address(final String host, final int port) {
@@ -73,8 +72,7 @@ public final class Address {
      */
     public static Address from(final String address) {
         try {
-            final HostAndPort parsedAddress =
-                    HostAndPort.fromString(address).withDefaultPort(DEFAULT_PORT);
+            final HostAndPort parsedAddress = HostAndPort.fromString(address).withDefaultPort(DEFAULT_PORT);
             return new Address(parsedAddress.getHost(), parsedAddress.getPort());
         } catch (final IllegalStateException e) {
             return from(DEFAULT_PORT);
@@ -221,7 +219,6 @@ public final class Address {
      * Address type.
      */
     public enum Type {
-        IPV4,
-        IPV6,
+        IPV4, IPV6,
     }
 }

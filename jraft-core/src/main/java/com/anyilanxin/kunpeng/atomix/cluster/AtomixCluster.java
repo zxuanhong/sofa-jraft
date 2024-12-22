@@ -1,12 +1,12 @@
 /*
- * Copyright 2018-present Open Networking Foundation
- * Copyright © 2024 anyilanxin xuanhongzhou(anyilanxin@aliyun.com)
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -84,39 +84,33 @@ import org.slf4j.LoggerFactory;
  */
 public class AtomixCluster implements BootstrapService, Managed<Void> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AtomixCluster.class);
-    protected final ManagedMessagingService messagingService;
-    protected final ManagedUnicastService unicastService;
-    protected final NodeDiscoveryProvider discoveryProvider;
-    protected final GroupMembershipProtocol membershipProtocol;
-    protected final ManagedClusterMembershipService membershipService;
+    private static final Logger                        LOGGER        = LoggerFactory.getLogger(AtomixCluster.class);
+    protected final ManagedMessagingService            messagingService;
+    protected final ManagedUnicastService              unicastService;
+    protected final NodeDiscoveryProvider              discoveryProvider;
+    protected final GroupMembershipProtocol            membershipProtocol;
+    protected final ManagedClusterMembershipService    membershipService;
     protected final ManagedClusterCommunicationService communicationService;
-    protected final ManagedClusterEventService eventService;
-    protected volatile CompletableFuture<Void> openFuture;
-    protected volatile CompletableFuture<Void> closeFuture;
-    protected final ThreadContext threadContext = new SingleThreadContext("atomix-cluster-%d");
-    private final AtomicBoolean started = new AtomicBoolean();
+    protected final ManagedClusterEventService         eventService;
+    protected volatile CompletableFuture<Void>         openFuture;
+    protected volatile CompletableFuture<Void>         closeFuture;
+    protected final ThreadContext                      threadContext = new SingleThreadContext("atomix-cluster-%d");
+    private final AtomicBoolean                        started       = new AtomicBoolean();
 
     public AtomixCluster(final ClusterConfig config, final Version version) {
         this(config, version, null, null);
     }
 
-    protected AtomixCluster(
-            final ClusterConfig config,
-            final Version version,
-            final ManagedMessagingService messagingService,
-            final ManagedUnicastService unicastService) {
-        this.messagingService =
-                messagingService != null ? messagingService : buildMessagingService(config);
+    protected AtomixCluster(final ClusterConfig config, final Version version,
+                            final ManagedMessagingService messagingService, final ManagedUnicastService unicastService) {
+        this.messagingService = messagingService != null ? messagingService : buildMessagingService(config);
         this.unicastService = unicastService != null ? unicastService : buildUnicastService(config);
 
         discoveryProvider = buildLocationProvider(config);
         membershipProtocol = buildMembershipProtocol(config);
-        membershipService =
-                buildClusterMembershipService(config, this, discoveryProvider, membershipProtocol, version);
-        communicationService =
-                buildClusterMessagingService(
-                        getMembershipService(), getMessagingService(), getUnicastService());
+        membershipService = buildClusterMembershipService(config, this, discoveryProvider, membershipProtocol, version);
+        communicationService = buildClusterMessagingService(getMembershipService(), getMessagingService(),
+            getUnicastService());
         eventService = buildClusterEventService(getMembershipService(), getMessagingService());
     }
 
@@ -284,16 +278,16 @@ public class AtomixCluster implements BootstrapService, Managed<Void> {
      * Builds a default messaging service.
      */
     protected static ManagedMessagingService buildMessagingService(final ClusterConfig config) {
-        return new NettyMessagingService(
-                config.getClusterId(), config.getNodeConfig().getAddress(), config.getMessagingConfig());
+        return new NettyMessagingService(config.getClusterId(), config.getNodeConfig().getAddress(),
+            config.getMessagingConfig());
     }
 
     /**
      * Builds a default unicast service.
      */
     protected static ManagedUnicastService buildUnicastService(final ClusterConfig config) {
-        return new NettyUnicastService(
-                config.getClusterId(), config.getNodeConfig().getAddress(), config.getMessagingConfig());
+        return new NettyUnicastService(config.getClusterId(), config.getNodeConfig().getAddress(),
+            config.getMessagingConfig());
     }
 
     /**
@@ -320,46 +314,34 @@ public class AtomixCluster implements BootstrapService, Managed<Void> {
     /**
      * Builds a cluster service.
      */
-    protected static ManagedClusterMembershipService buildClusterMembershipService(
-            final ClusterConfig config,
-            final BootstrapService bootstrapService,
-            final NodeDiscoveryProvider discoveryProvider,
-            final GroupMembershipProtocol membershipProtocol,
-            final Version version) {
+    protected static ManagedClusterMembershipService buildClusterMembershipService(final ClusterConfig config,
+                                                                                   final BootstrapService bootstrapService,
+                                                                                   final NodeDiscoveryProvider discoveryProvider,
+                                                                                   final GroupMembershipProtocol membershipProtocol,
+                                                                                   final Version version) {
         // If the local node has not be configured, create a default node.
-        final Member localMember =
-                Member.builder()
-                        .withId(config.getNodeConfig().getId())
-                        .withAddress(config.getNodeConfig().getAddress())
-                        .withHostId(config.getNodeConfig().getHostId())
-                        .withRackId(config.getNodeConfig().getRackId())
-                        .withZoneId(config.getNodeConfig().getZoneId())
-                        .withProperties(config.getNodeConfig().getProperties())
-                        .build();
-        return new DefaultClusterMembershipService(
-                localMember,
-                version,
-                new DefaultNodeDiscoveryService(bootstrapService, localMember, discoveryProvider),
-                bootstrapService,
-                membershipProtocol);
+        final Member localMember = Member.builder().withId(config.getNodeConfig().getId())
+            .withAddress(config.getNodeConfig().getAddress()).withHostId(config.getNodeConfig().getHostId())
+            .withRackId(config.getNodeConfig().getRackId()).withZoneId(config.getNodeConfig().getZoneId())
+            .withProperties(config.getNodeConfig().getProperties()).build();
+        return new DefaultClusterMembershipService(localMember, version, new DefaultNodeDiscoveryService(
+            bootstrapService, localMember, discoveryProvider), bootstrapService, membershipProtocol);
     }
 
     /**
      * Builds a cluster messaging service.
      */
-    protected static ManagedClusterCommunicationService buildClusterMessagingService(
-            final ClusterMembershipService membershipService,
-            final MessagingService messagingService,
-            final UnicastService unicastService) {
-        return new DefaultClusterCommunicationService(
-                membershipService, messagingService, unicastService);
+    protected static ManagedClusterCommunicationService buildClusterMessagingService(final ClusterMembershipService membershipService,
+                                                                                     final MessagingService messagingService,
+                                                                                     final UnicastService unicastService) {
+        return new DefaultClusterCommunicationService(membershipService, messagingService, unicastService);
     }
 
     /**
      * Builds a cluster event service.
      */
-    protected static ManagedClusterEventService buildClusterEventService(
-            final ClusterMembershipService membershipService, final MessagingService messagingService) {
+    protected static ManagedClusterEventService buildClusterEventService(final ClusterMembershipService membershipService,
+                                                                         final MessagingService messagingService) {
         return new DefaultClusterEventService(membershipService, messagingService);
     }
 }

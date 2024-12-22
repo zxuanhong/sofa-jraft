@@ -1,12 +1,12 @@
 /*
- * Copyright 2017-present Open Networking Foundation
- * Copyright © 2024 anyilanxin xuanhongzhou(anyilanxin@aliyun.com)
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,21 +28,21 @@ import java.util.concurrent.CompletableFuture;
  */
 public interface Subscription {
 
-  /**
-   * Returns the subscription topic.
-   *
-   * @return the topic to which the subscriber is subscribed
-   */
-  String topic();
+    /**
+     * Returns the subscription topic.
+     *
+     * @return the topic to which the subscriber is subscribed
+     */
+    String topic();
 
-  /**
-   * Closes the subscription, causing it to be unregistered.
-   *
-   * <p>When the subscription is closed, the subscriber will be unregistered and the change will be
-   * propagated to all the members of the cluster. The returned future will be completed once the
-   * change has been propagated to all nodes.
-   *
-   * @return a future to be completed once the subscription has been closed
-   */
-  CompletableFuture<Void> close();
+    /**
+     * Closes the subscription, causing it to be unregistered.
+     *
+     * <p>When the subscription is closed, the subscriber will be unregistered and the change will be
+     * propagated to all the members of the cluster. The returned future will be completed once the
+     * change has been propagated to all nodes.
+     *
+     * @return a future to be completed once the subscription has been closed
+     */
+    CompletableFuture<Void> close();
 }
