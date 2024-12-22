@@ -41,9 +41,6 @@ public final class AsciiStringUtil {
         return UnsafeUtil.moveToString(out);
     }
 
-    public static String unsafeDecode(final byte[] in) {
-        return unsafeDecode(in, 0, in.length);
-    }
 
     public static String unsafeDecode(final ByteString in) {
         final int len = in.size();
