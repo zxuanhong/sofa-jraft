@@ -457,18 +457,19 @@ public class AppendEntriesRequestProcessor extends NodeRequestProcessor<AppendEn
             if (!isHeartbeat) {
                 reqSequence = getAndIncrementSequence(groupId, pair, done.getRpcCtx().getConnection());
             }
-            final Message response = service.handleAppendEntriesRequest(request, new SequenceRpcRequestClosure(done,
-                defaultResp(), groupId, pair, reqSequence, isHeartbeat));
-            if (response != null) {
-                if (isHeartbeat) {
-                    done.getRpcCtx().sendResponse(response);
-                } else {
-                    sendSequenceResponse(groupId, pair, reqSequence, done.getRpcCtx(), response);
-                }
-            }
+//            final Message response = service.handleAppendEntriesRequest(request, new SequenceRpcRequestClosure(done,
+//                defaultResp(), groupId, pair, reqSequence, isHeartbeat));
+//            if (response != null) {
+//                if (isHeartbeat) {
+//                    done.getRpcCtx().sendResponse(response);
+//                } else {
+//                    sendSequenceResponse(groupId, pair, reqSequence, done.getRpcCtx(), response);
+//                }
+//            }
             return null;
         } else {
-            return service.handleAppendEntriesRequest(request, done);
+//            return service.handleAppendEntriesRequest(request, done);
+            return null;
         }
     }
 

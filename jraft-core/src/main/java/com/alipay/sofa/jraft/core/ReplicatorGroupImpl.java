@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import com.alipay.sofa.jraft.rpc.RaftMessageClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -120,8 +121,9 @@ public class ReplicatorGroupImpl implements ReplicatorGroup {
         opts.setReplicatorType(replicatorType);
         opts.setPeerId(peer);
         if (!sync) {
-            final RaftClientService client = opts.getRaftRpcService();
-            if (client != null && !client.checkConnection(peer.getEndpoint(), true)) {
+            RaftMessageClientService raftRpcService = opts.getRaftRpcService();
+//            final RaftClientService client = opts.getRaftRpcService();
+            if (raftRpcService != null && !raftRpcService.checkConnection(peer.getEndpoint(), true)) {
                 LOG.error("Fail to check replicator connection to peer={}, replicatorType={}, groupId={}.", peer,
                     replicatorType, this.commonOptions.getGroupId());
                 this.failureReplicators.put(peer, replicatorType);

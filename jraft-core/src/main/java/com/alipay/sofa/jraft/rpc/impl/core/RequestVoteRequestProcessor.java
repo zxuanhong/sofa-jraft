@@ -50,11 +50,12 @@ public class RequestVoteRequestProcessor extends NodeRequestProcessor<RequestVot
     @Override
     public Message processRequest0(final RaftServerService service, final RequestVoteRequest request,
                                    final RpcRequestClosure done) {
-        if (request.getPreVote()) {
-            return service.handlePreVoteRequest(request);
-        } else {
-            return service.handleRequestVoteRequest(request);
-        }
+//        if (request.getPreVote()) {
+//            return service.handlePreVoteRequest(request);
+//        } else {
+//            return service.handleRequestVoteRequest(request);
+//        }
+        return null;
     }
 
     @Override

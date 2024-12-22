@@ -40,7 +40,7 @@ public class GetFileRequestProcessor extends RpcRequestProcessor<GetFileRequest>
 
     @Override
     public Message processRequest(final GetFileRequest request, final RpcRequestClosure done) {
-        return FileService.getInstance().handleGetFile(request, done);
+        return null;
     }
 
     @Override

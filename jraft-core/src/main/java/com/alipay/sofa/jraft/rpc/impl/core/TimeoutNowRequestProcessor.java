@@ -49,7 +49,8 @@ public class TimeoutNowRequestProcessor extends NodeRequestProcessor<TimeoutNowR
     @Override
     public Message processRequest0(final RaftServerService service, final TimeoutNowRequest request,
                                    final RpcRequestClosure done) {
-        return service.handleTimeoutNowRequest(request, done);
+//        return service.handleTimeoutNowRequest(request, done);
+        return null;
     }
 
     @Override

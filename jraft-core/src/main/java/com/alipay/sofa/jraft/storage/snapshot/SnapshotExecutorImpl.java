@@ -510,7 +510,7 @@ public class SnapshotExecutorImpl implements SnapshotExecutor {
     @Override
     public void installSnapshot(final InstallSnapshotRequest request, final InstallSnapshotResponse.Builder response) {
         final SnapshotMeta meta = request.getMeta();
-        final DownloadingSnapshot ds = new DownloadingSnapshot(request, response, done);
+        final DownloadingSnapshot ds = new DownloadingSnapshot(request, response);
         // DON'T access request, response, and done after this point
         // as the retry snapshot will replace this one.
         if (!registerDownloadingSnapshot(ds)) {
@@ -693,7 +693,7 @@ public class SnapshotExecutorImpl implements SnapshotExecutor {
     private SnapshotCopierOptions newCopierOpts() {
         final SnapshotCopierOptions copierOpts = new SnapshotCopierOptions();
         copierOpts.setNodeOptions(this.node.getOptions());
-        copierOpts.setRaftClientService(this.node.getRpcService());
+//        copierOpts.setRaftClientService(this.node.getRpcService());
         copierOpts.setTimerManager(this.node.getTimerManager());
         copierOpts.setRaftOptions(this.node.getRaftOptions());
         copierOpts.setGroupId(this.node.getGroupId());

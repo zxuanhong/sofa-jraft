@@ -51,18 +51,19 @@ public class ReadIndexRequestProcessor extends NodeRequestProcessor<ReadIndexReq
     @Override
     public Message processRequest0(final RaftServerService service, final ReadIndexRequest request,
                                    final RpcRequestClosure done) {
-        service.handleReadIndexRequest(request, new RpcResponseClosureAdapter<RpcRequests.ReadIndexResponse>() {
-
-            @Override
-            public void run(final Status status) {
-                if (getResponse() != null) {
-                    done.sendResponse(getResponse());
-                } else {
-                    done.run(status);
-                }
-            }
-
-        });
+//        service.handleReadIndexRequest(request, new RpcResponseClosureAdapter<RpcRequests.ReadIndexResponse>() {
+//
+//            @Override
+//            public void run(final Status status) {
+//                if (getResponse() != null) {
+//                    done.sendResponse(getResponse());
+//                } else {
+//                    done.run(status);
+//                }
+//            }
+//
+//        });
+//        return null;
         return null;
     }
 

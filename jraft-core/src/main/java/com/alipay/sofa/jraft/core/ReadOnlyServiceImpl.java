@@ -244,7 +244,8 @@ public class ReadOnlyServiceImpl implements ReadOnlyService, LastAppliedLogIndex
             return;
         }
         final ReadIndexRequest request = rb.build();
-        this.node.handleReadIndexRequest(request, new ReadIndexResponseClosure(states, request));
+        this.node.handleReadIndexRequest(request);
+//        this.node.handleReadIndexRequest(request, new ReadIndexResponseClosure(states, request));
     }
 
     private void executeReadIndexEvents(final List<ReadIndexEvent> events) {

@@ -50,7 +50,7 @@ public class InstallSnapshotRequestProcessor extends NodeRequestProcessor<Instal
     @Override
     public Message processRequest0(final RaftServerService service, final InstallSnapshotRequest request,
                                    final RpcRequestClosure done) {
-        return service.handleInstallSnapshot(request, done);
+        return null;
     }
 
     @Override
