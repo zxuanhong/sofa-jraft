@@ -1050,7 +1050,7 @@ public class NodeImpl implements Node, RaftServerService {
 
         // TODO RPC service and ReplicatorGroup is in cycle dependent, refactor it
         this.replicatorGroup = new ReplicatorGroupImpl();
-        this.rpcService = new DefaultRaftMessageClientService(this.replicatorGroup, this.options, partitionManagementService,this);
+        this.rpcService = new DefaultRaftMessageClientService(this.replicatorGroup, this.options, partitionManagementService, this);
         final ReplicatorGroupOptions rgOpts = new ReplicatorGroupOptions();
         rgOpts.setHeartbeatTimeoutMs(heartbeatTimeout(this.options.getElectionTimeoutMs()));
         rgOpts.setElectionTimeoutMs(this.options.getElectionTimeoutMs());
@@ -1494,9 +1494,10 @@ public class NodeImpl implements Node, RaftServerService {
      * Handle read index request.
      */
     @Override
-    public void handleReadIndexRequest(final ReadIndexRequest request, final RpcResponseClosure<ReadIndexResponse> done) {
+    public RpcRequests.ReadIndexResponse handleReadIndexRequest(final ReadIndexRequest request) {
         final long startMs = Utils.monotonicMs();
         this.readLock.lock();
+        RpcRequests.ReadIndexResponse done = RpcRequests.ReadIndexResponse.getDefaultInstance();
         try {
             switch (this.state) {
                 case STATE_LEADER:
@@ -1645,19 +1646,22 @@ public class NodeImpl implements Node, RaftServerService {
     public RpcRequests.RequestVoteResponse handlePreVoteRequest(final RequestVoteRequest request) {
         boolean doUnlock = true;
         this.writeLock.lock();
+        RequestVoteResponse.Builder builder = RequestVoteResponse.newBuilder();
+        ErrorResponse.Builder errorBuilder = ErrorResponse.newBuilder();
         try {
             if (!this.state.isActive()) {
                 LOG.warn("Node {} is not in active state, currTerm={}.", getNodeId(), this.currTerm);
-                return RpcFactoryHelper //
-                        .responseFactory() //
-                        .newResponse(RequestVoteResponse.getDefaultInstance(), RaftError.EINVAL, "Node %s is not in active state, state %s.", getNodeId(), this.state.name());
+                errorBuilder.setErrorCode(RaftError.EINVAL.getNumber())
+                        .setErrorMsg(String.format("Node %s is not in active state, state %s.", getNodeId(), this.state.name()));
+               return builder.setErrorResponse(errorBuilder.build()).build();
             }
             final PeerId candidateId = new PeerId();
             if (!candidateId.parse(request.getServerId())) {
                 LOG.warn("Node {} received PreVoteRequest from {} serverId bad format.", getNodeId(), request.getServerId());
-                return RpcFactoryHelper //
-                        .responseFactory() //
-                        .newResponse(RequestVoteResponse.getDefaultInstance(), RaftError.EINVAL, "Parse candidateId failed: %s.", request.getServerId());
+
+                errorBuilder.setErrorCode(RaftError.EINVAL.getNumber())
+                        .setErrorMsg(String.format("Parse candidateId failed: %s.", getNodeId(), request.getServerId()));
+                return builder.setErrorResponse(errorBuilder.build()).build();
             }
             boolean granted = false;
             // noinspection ConstantConditions
@@ -1736,19 +1740,23 @@ public class NodeImpl implements Node, RaftServerService {
     public RpcRequests.RequestVoteResponse handleRequestVoteRequest(final RequestVoteRequest request) {
         boolean doUnlock = true;
         this.writeLock.lock();
+        RequestVoteResponse.Builder builder = RequestVoteResponse.newBuilder();
+        ErrorResponse.Builder errorBuilder = ErrorResponse.newBuilder();
         try {
             if (!this.state.isActive()) {
                 LOG.warn("Node {} is not in active state, currTerm={}.", getNodeId(), this.currTerm);
-                return RpcFactoryHelper //
-                        .responseFactory() //
-                        .newResponse(RequestVoteResponse.getDefaultInstance(), RaftError.EINVAL, "Node %s is not in active state, state %s.", getNodeId(), this.state.name());
+                ErrorResponse build = errorBuilder.setErrorCode(RaftError.EINVAL.getNumber())
+                        .setErrorMsg(String.format("Node %s is not in active state, state %s.", getNodeId(), this.state.name()))
+                        .build();
+                return builder.setErrorResponse(build).build();
             }
             final PeerId candidateId = new PeerId();
             if (!candidateId.parse(request.getServerId())) {
                 LOG.warn("Node {} received RequestVoteRequest from {} serverId bad format.", getNodeId(), request.getServerId());
-                return RpcFactoryHelper //
-                        .responseFactory() //
-                        .newResponse(RequestVoteResponse.getDefaultInstance(), RaftError.EINVAL, "Parse candidateId failed: %s.", request.getServerId());
+                ErrorResponse build = errorBuilder.setErrorCode(RaftError.EINVAL.getNumber())
+                        .setErrorMsg(String.format("Parse candidateId failed: %s.", request.getServerId()))
+                        .build();
+                return builder.setErrorResponse(build).build();
             }
 
             // noinspection ConstantConditions
@@ -1865,7 +1873,7 @@ public class NodeImpl implements Node, RaftServerService {
     }
 
     @Override
-    public RpcRequests.AppendEntriesResponse handleAppendEntriesRequest(final AppendEntriesRequest request, final RpcRequestClosure done) {
+    public RpcRequests.AppendEntriesResponse handleAppendEntriesRequest(final AppendEntriesRequest request) {
         boolean doUnlock = true;
         final long startMs = Utils.monotonicMs();
         this.writeLock.lock();
@@ -3227,9 +3235,10 @@ public class NodeImpl implements Node, RaftServerService {
     }
 
     @Override
-    public RpcRequests.TimeoutNowResponse handleTimeoutNowRequest(final TimeoutNowRequest request, final RpcRequestClosure done) {
+    public RpcRequests.TimeoutNowResponse handleTimeoutNowRequest(final TimeoutNowRequest request) {
         boolean doUnlock = true;
         this.writeLock.lock();
+        TimeoutNowResponse resp;
         try {
             if (request.getTerm() != this.currTerm) {
                 final long savedCurrTerm = this.currTerm;
@@ -3251,12 +3260,11 @@ public class NodeImpl implements Node, RaftServerService {
             }
 
             final long savedTerm = this.currTerm;
-            final TimeoutNowResponse resp = TimeoutNowResponse.newBuilder() //
+            resp = TimeoutNowResponse.newBuilder() //
                     .setTerm(this.currTerm + 1) //
                     .setSuccess(true) //
                     .build();
             // Parallelize response and election
-            done.sendResponse(resp);
             doUnlock = false;
             electSelf();
             LOG.info("Node {} received TimeoutNowRequest from {}, term={}.", getNodeId(), request.getServerId(), savedTerm);
@@ -3265,31 +3273,42 @@ public class NodeImpl implements Node, RaftServerService {
                 this.writeLock.unlock();
             }
         }
-        return null;
+        return resp;
     }
 
     @Override
-    public RpcRequests.InstallSnapshotResponse handleInstallSnapshot(final InstallSnapshotRequest request, final RpcRequestClosure done) {
+    public RpcRequests.InstallSnapshotResponse handleInstallSnapshot(final InstallSnapshotRequest request) {
+        InstallSnapshotResponse defaultInstance = InstallSnapshotResponse.getDefaultInstance();
         if (this.snapshotExecutor == null) {
-            return RpcFactoryHelper //
-                    .responseFactory() //
-                    .newResponse(InstallSnapshotResponse.getDefaultInstance(), RaftError.EINVAL, "Not supported snapshot");
+            ErrorResponse defaultInstance1 = ErrorResponse.newBuilder()
+                    .setErrorCode(RaftError.EINVAL.getNumber())
+                    .setErrorMsg("Not supported snapshot")
+                    .build();
+            return defaultInstance.toBuilder().setErrorResponse(defaultInstance1).build();
+//            return RpcFactoryHelper //
+//                    .responseFactory() //
+//                    .newResponse(InstallSnapshotResponse.getDefaultInstance(), RaftError.EINVAL, "Not supported snapshot");
         }
         final PeerId serverId = new PeerId();
         if (!serverId.parse(request.getServerId())) {
             LOG.warn("Node {} ignore InstallSnapshotRequest from {} bad server id.", getNodeId(), request.getServerId());
-            return RpcFactoryHelper //
-                    .responseFactory() //
-                    .newResponse(InstallSnapshotResponse.getDefaultInstance(), RaftError.EINVAL, "Parse serverId failed: %s", request.getServerId());
+
+            ErrorResponse defaultInstance1 = ErrorResponse.newBuilder()
+                    .setErrorCode(RaftError.EINVAL.getNumber())
+                    .setErrorMsg("Parse serverId failed:" + request.getServerId())
+                    .build();
+            return defaultInstance.toBuilder().setErrorResponse(defaultInstance1).build();
         }
 
         this.writeLock.lock();
         try {
             if (!this.state.isActive()) {
                 LOG.warn("Node {} ignore InstallSnapshotRequest as it is not in active state {}.", getNodeId(), this.state);
-                return RpcFactoryHelper //
-                        .responseFactory() //
-                        .newResponse(InstallSnapshotResponse.getDefaultInstance(), RaftError.EINVAL, "Node %s:%s is not in active state, state %s.", this.groupId, this.serverId, this.state.name());
+                ErrorResponse defaultInstance1 = ErrorResponse.newBuilder()
+                        .setErrorCode(RaftError.EINVAL.getNumber())
+                        .setErrorMsg(String.format("Node %s:%s is not in active state, state %s.", this.groupId, this.serverId, this.state.name()))
+                        .build();
+                return defaultInstance.toBuilder().setErrorResponse(defaultInstance1).build();
             }
 
             if (request.getTerm() < this.currTerm) {
@@ -3321,7 +3340,7 @@ public class NodeImpl implements Node, RaftServerService {
             if (LOG.isInfoEnabled()) {
                 LOG.info("Node {} received InstallSnapshotRequest from {}, lastIncludedLogIndex={}, lastIncludedLogTerm={}, lastLogId={}.", getNodeId(), request.getServerId(), request.getMeta().getLastIncludedIndex(), request.getMeta().getLastIncludedTerm(), this.logManager.getLastLogId(false));
             }
-            this.snapshotExecutor.installSnapshot(request, InstallSnapshotResponse.newBuilder(), done);
+            this.snapshotExecutor.installSnapshot(request, InstallSnapshotResponse.newBuilder());
             return null;
         } finally {
             this.metrics.recordLatency("install-snapshot", Utils.monotonicMs() - startMs);

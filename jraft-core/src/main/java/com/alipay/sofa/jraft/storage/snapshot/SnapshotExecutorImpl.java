@@ -96,11 +96,10 @@ public class SnapshotExecutorImpl implements SnapshotExecutor {
         RpcRequestClosure               done;
 
         public DownloadingSnapshot(final InstallSnapshotRequest request,
-                                   final InstallSnapshotResponse.Builder responseBuilder, final RpcRequestClosure done) {
+                                   final InstallSnapshotResponse.Builder responseBuilder) {
             super();
             this.request = request;
             this.responseBuilder = responseBuilder;
-            this.done = done;
         }
     }
 
@@ -509,8 +508,7 @@ public class SnapshotExecutorImpl implements SnapshotExecutor {
     }
 
     @Override
-    public void installSnapshot(final InstallSnapshotRequest request, final InstallSnapshotResponse.Builder response,
-                                final RpcRequestClosure done) {
+    public void installSnapshot(final InstallSnapshotRequest request, final InstallSnapshotResponse.Builder response) {
         final SnapshotMeta meta = request.getMeta();
         final DownloadingSnapshot ds = new DownloadingSnapshot(request, response, done);
         // DON'T access request, response, and done after this point

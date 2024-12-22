@@ -76,8 +76,7 @@ public interface SnapshotExecutor extends Lifecycle<SnapshotExecutorOptions>, De
      *    a new RPC with the same or newer snapshot arrives
      * - Busy: the state machine is saving or loading snapshot
      */
-    void installSnapshot(final InstallSnapshotRequest request, final InstallSnapshotResponse.Builder response,
-                         final RpcRequestClosure done);
+    void installSnapshot(final InstallSnapshotRequest request, final InstallSnapshotResponse.Builder response);
 
     /**
      * Interrupt the downloading if possible.
