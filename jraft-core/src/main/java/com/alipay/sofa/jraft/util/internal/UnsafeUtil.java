@@ -347,11 +347,7 @@ public final class UnsafeUtil {
      * Returns the system {@link ClassLoader}.
      */
     public static ClassLoader getSystemClassLoader() {
-        if (System.getSecurityManager() == null) {
-            return ClassLoader.getSystemClassLoader();
-        } else {
-            return AccessController.doPrivileged((PrivilegedAction<ClassLoader>) ClassLoader::getSystemClassLoader);
-        }
+        return ClassLoader.getSystemClassLoader();
     }
 
     /**

@@ -85,10 +85,6 @@ public final class SignalHelper {
         private final sun.misc.Signal          target;
         private final List<JRaftSignalHandler> handlers;
 
-        public static void addSignal(final SignalHandlerAdapter adapter) {
-            sun.misc.Signal.handle(adapter.target, adapter);
-        }
-
         public SignalHandlerAdapter(sun.misc.Signal target, List<JRaftSignalHandler> handlers) {
             this.target = target;
             this.handlers = handlers;

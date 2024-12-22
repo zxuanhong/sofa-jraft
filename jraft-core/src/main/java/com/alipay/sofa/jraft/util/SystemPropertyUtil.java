@@ -69,11 +69,7 @@ public final class SystemPropertyUtil {
 
         String value = null;
         try {
-            if (System.getSecurityManager() == null) {
-                value = System.getProperty(key);
-            } else {
-                value = AccessController.doPrivileged((PrivilegedAction<String>) () -> System.getProperty(key));
-            }
+            value = System.getProperty(key);
         } catch (Exception e) {
             if (LOG.isWarnEnabled()) {
                 LOG.warn("Unable to retrieve a system property '{}'; default values will be used, {}.", key, e);
