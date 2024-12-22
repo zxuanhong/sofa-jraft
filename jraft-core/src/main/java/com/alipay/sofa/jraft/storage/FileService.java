@@ -83,26 +83,27 @@ public final class FileService {
      * Handle GetFileRequest, run the response or set the response with done.
      */
     public RpcRequests.GetFileResponse handleGetFile(final GetFileRequest request) {
+        GetFileResponse.Builder responseBuilder = GetFileResponse.newBuilder();
+        RpcRequests.ErrorResponse.Builder errorBuilder = RpcRequests.ErrorResponse.newBuilder();
         if (request.getCount() <= 0 || request.getOffset() < 0) {
-            return RpcFactoryHelper //
-                .responseFactory() //
-                .newResponse(GetFileResponse.getDefaultInstance(), RaftError.EREQUEST, "Invalid request: %s", request);
+            errorBuilder.setErrorCode(RaftError.EREQUEST.getNumber())
+                    .setErrorMsg(String.format("Invalid request: %s", request));
+            return responseBuilder.setErrorResponse(errorBuilder.build()).build();
         }
         final FileReader reader = this.fileReaderMap.get(request.getReaderId());
         if (reader == null) {
-            return RpcFactoryHelper //
-                .responseFactory() //
-                .newResponse(GetFileResponse.getDefaultInstance(), RaftError.ENOENT, "Fail to find reader=%d",
-                    request.getReaderId());
+            errorBuilder.setErrorCode(RaftError.ENOENT.getNumber())
+                    .setErrorMsg(String.format("Fail to find reader=%d",
+                            request.getReaderId()));
+            return responseBuilder.setErrorResponse(errorBuilder.build()).build();
         }
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("GetFile from {} path={} filename={} offset={} count={}", done.getRpcCtx().getRemoteAddress(),
+            LOG.debug("GetFile path={} filename={} offset={} count={}",
                 reader.getPath(), request.getFilename(), request.getOffset(), request.getCount());
         }
 
         final ByteBufferCollector dataBuffer = ByteBufferCollector.allocate();
-        final GetFileResponse.Builder responseBuilder = GetFileResponse.newBuilder();
         try {
             final int read = reader
                 .readFile(dataBuffer, request.getFilename(), request.getOffset(), request.getCount());
@@ -119,17 +120,15 @@ public final class FileService {
             }
             return responseBuilder.build();
         } catch (final RetryAgainException e) {
-            return RpcFactoryHelper //
-                .responseFactory() //
-                .newResponse(GetFileResponse.getDefaultInstance(), RaftError.EAGAIN,
-                    "Fail to read from path=%s filename=%s with error: %s", reader.getPath(), request.getFilename(),
-                    e.getMessage());
+            errorBuilder.setErrorCode(RaftError.EAGAIN.getNumber())
+                    .setErrorMsg(String.format("Fail to read from path=%s filename=%s with error: %s", reader.getPath(), request.getFilename(),
+                            e.getMessage()));
+            return responseBuilder.setErrorResponse(errorBuilder.build()).build();
         } catch (final IOException e) {
             LOG.error("Fail to read file path={} filename={}", reader.getPath(), request.getFilename(), e);
-            return RpcFactoryHelper //
-                .responseFactory() //
-                .newResponse(GetFileResponse.getDefaultInstance(), RaftError.EIO,
-                    "Fail to read from path=%s filename=%s", reader.getPath(), request.getFilename());
+            errorBuilder.setErrorCode(RaftError.EIO.getNumber())
+                    .setErrorMsg(String.format("Fail to read from path=%s filename=%s", reader.getPath(), request.getFilename()));
+            return responseBuilder.setErrorResponse(errorBuilder.build()).build();
         }
     }
 
